@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stefashka — Startseite</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --rose:#AD6D7D;
+    --rose-soft:#C89AA5;
+
+    --blue:#33506A;
+    --blue-soft:#5D7A93;
+
+    --olive:#6E7A3E;
+    --olive-soft:#93A063;
+
+    --gold:#BA7C3B;
+    --gold-soft:#D0A468;
+
+    --ink:#1B1B1B;
+    --gray:#7A7A7A;
+    --line:#E9E6E2;
+    --paper:#FFFFFF;
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+
+  html,body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  a{ color:inherit; text-decoration:none; }
+
+  .wrap{
+    max-width:1200px;
+    margin:0 auto;
+    padding:0 48px;
+  }
+
+  /* Hero */
+  .hero{
+    text-align:center;
+    padding:110px 0 60px;
+  }
+  .hero h1{
+    font-family:'Archivo Black',sans-serif;
+    text-transform:uppercase;
+    line-height:0.98;
+    font-size:clamp(42px, 7vw, 82px);
+    color:var(--rose);
+    letter-spacing:-0.5px;
+  }
+
+  /* Section label row */
+  .section-row{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    padding:64px 0 22px;
+    margin-top:56px;
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+  }
+  .section-row .count{
+    font-size:12px;
+    font-weight:600;
+    letter-spacing:1.4px;
+    color:var(--ink);
+    text-transform:uppercase;
+  }
+  .section-row .hint{
+    font-size:13px;
+    color:var(--gray);
+    font-weight:400;
+  }
+
+  /* Grid of world tiles */
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:52px 40px;
+    padding:48px 0 110px;
+  }
+  @media (max-width:820px){
+    .grid{ grid-template-columns:1fr; }
+    .wrap{ padding:0 24px; }
+  }
+
+  .card{
+    display:block;
+  }
+
+  .card .panel{
+    position:relative;
+    aspect-ratio:5/4;
+    border-radius:3px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    background-color:var(--tone);
+    transition:transform .5s cubic-bezier(.2,.7,.2,1);
+  }
+  .card:hover .panel{ transform:scale(1.015); }
+
+  /* fine grain texture, kept very subtle so the color reads as flat/matte, not glossy */
+  .card .panel::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    opacity:.5;
+    mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.35'/></svg>");
+  }
+  .card .panel::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:linear-gradient(155deg, rgba(255,255,255,.05), rgba(0,0,0,.10));
+  }
+  .card .panel svg{
+    width:19%;
+    height:19%;
+    position:relative;
+    z-index:2;
+    stroke:rgba(255,255,255,.92);
+    fill:none;
+    stroke-width:2.6;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+    overflow:visible;
+  }
+
+  .card .body{
+    padding:22px 2px 0;
+  }
+  .card .tag{
+    display:inline-block;
+    font-size:11px;
+    font-weight:600;
+    letter-spacing:1.6px;
+    text-transform:uppercase;
+    margin-bottom:11px;
+  }
+  .card h3{
+    font-family:'Archivo Black',sans-serif;
+    text-transform:uppercase;
+    font-size:20px;
+    letter-spacing:.2px;
+    color:var(--ink);
+    margin-bottom:9px;
+  }
+  .card p.desc{
+    color:var(--gray);
+    font-size:14.5px;
+    line-height:1.65;
+    max-width:400px;
+    font-weight:400;
+    margin-bottom:15px;
+  }
+  .card .more{
+    font-size:13px;
+    font-weight:600;
+    letter-spacing:.3px;
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+  }
+  .card .more svg{
+    width:13px; height:13px;
+    stroke-width:2.2;
+    transition:transform .25s ease;
+  }
+  .card:hover .more svg{ transform:translateX(4px); }
+
+  /* Per-world colors */
+  .rezepte .panel{ --tone:var(--rose-soft); }
+  .rezepte .tag, .rezepte .more{ color:var(--rose); }
+
+  .hunde .panel{ --tone:var(--blue-soft); }
+  .hunde .tag, .hunde .more{ color:var(--blue); }
+
+  .kraeuter .panel{ --tone:var(--olive-soft); }
+  .kraeuter .tag, .kraeuter .more{ color:var(--olive); }
+
+  .tanz .panel{ --tone:var(--gold-soft); }
+  .tanz .tag, .tanz .more{ color:var(--gold); }
+
+  footer{
+    border-top:1px solid var(--line);
+    padding:32px 0;
+  }
+  footer .wrap{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    color:var(--gray);
+    font-size:12.5px;
+  }
+  footer .dot{
+    display:inline-flex;
+    gap:7px;
+    align-items:center;
+  }
+  footer .dot span{
+    width:6px;height:6px;border-radius:50%;
+  }
+  .dot .c1{ background:var(--rose); }
+  .dot .c2{ background:var(--blue); }
+  .dot .c3{ background:var(--olive); }
+  .dot .c4{ background:var(--gold); }
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="wrap">
+    <h1>Stefashkas<br>Welten</h1>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="section-row">
+    <div class="count">4 Welten</div>
+    <div class="hint">Wähle eine Welt, um einzutauchen</div>
+  </div>
+
+  <div class="grid">
+
+    <!-- REZEPTWELT -->
+    <a class="card rezepte" href="rezeptwelt.html">
+      <div class="panel">
+        <svg viewBox="0 0 100 100">
+          <path d="M28 20v22c0 7 5 12 11 12h2c6 0 11-5 11-12V20"/>
+          <path d="M28 20v10M39 20v10"/>
+          <path d="M39 54v34"/>
+          <path d="M68 20c-7 0-12 8-12 18s5 16 12 16 12-6 12-16-5-18-12-18z"/>
+          <path d="M68 54v34"/>
+        </svg>
+      </div>
+      <div class="body">
+        <span class="tag">Kochen &amp; Backen</span>
+        <h3>Stefashkas Rezeptwelt</h3>
+        <p class="desc">Gesammelt aus Kochzeitschriften, PDFs und Instagram – nachgekocht, angepasst, aufgeschrieben.</p>
+        <span class="more">Rezepte entdecken
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </span>
+      </div>
+    </a>
+
+    <!-- HUNDEWELT -->
+    <a class="card hunde" href="hundewelt.html">
+      <div class="panel">
+        <svg viewBox="0 0 100 100">
+          <path d="M22 68c0-16 8-30 20-34"/>
+          <path d="M78 68c0-16-8-30-20-34"/>
+          <path d="M42 34c3-8 5-14 8-14s5 6 8 14"/>
+          <path d="M22 68c0 8 6 14 14 14h28c8 0 14-6 14-14"/>
+          <circle cx="42" cy="46" r="2.4" fill="rgba(255,255,255,.92)" stroke="none"/>
+          <circle cx="58" cy="46" r="2.4" fill="rgba(255,255,255,.92)" stroke="none"/>
+          <path d="M46 56c1.5 1.5 6.5 1.5 8 0"/>
+        </svg>
+      </div>
+      <div class="body">
+        <span class="tag">Vierbeiner &amp; Alltag</span>
+        <h3>Stefashkas Hundewelt</h3>
+        <p class="desc">Erziehung, Ausflüge, Ausrüstung und die kleinen Momente mit Hund im Alltag.</p>
+        <span class="more">Hundewelt entdecken
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </span>
+      </div>
+    </a>
+
+    <!-- KRÄUTERWELT -->
+    <a class="card kraeuter" href="kraeuterwelt.html">
+      <div class="panel">
+        <svg viewBox="0 0 100 100">
+          <path d="M50 82V32"/>
+          <path d="M50 68c0-10-9-16-19-16 0 10 9 16 19 16z"/>
+          <path d="M50 52c0-10 9-16 19-16 0 10-9 16-19 16z"/>
+          <path d="M50 38c0-8-7-13-15-13 0 8 7 13 15 13z"/>
+        </svg>
+      </div>
+      <div class="body">
+        <span class="tag">Garten &amp; Küche</span>
+        <h3>Stefashkas Kräuterwelt</h3>
+        <p class="desc">Kräuter anbauen, ernten und verarbeiten – von der Fensterbank bis ins Beet.</p>
+        <span class="more">Kräuterwelt entdecken
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </span>
+      </div>
+    </a>
+
+    <!-- TANZWELT -->
+    <a class="card tanz" href="tanzwelt.html">
+      <div class="panel">
+        <svg viewBox="0 0 100 100">
+          <circle cx="52" cy="18" r="6" fill="rgba(255,255,255,.92)" stroke="none"/>
+          <path d="M52 24v20"/>
+          <path d="M52 30c-8-2-14-8-16-16"/>
+          <path d="M52 34c9 0 15-6 17-14"/>
+          <path d="M52 44c-3 10-10 18-20 24"/>
+          <path d="M52 44c6 8 8 18 6 30"/>
+        </svg>
+      </div>
+      <div class="body">
+        <span class="tag">Bewegung &amp; Rhythmus</span>
+        <h3>Stefashkas Tanzwelt</h3>
+        <p class="desc">Tanzstile, Choreografien und Fortschritte – von der ersten Figur bis zur Performance.</p>
+        <span class="more">Tanzwelt entdecken
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </span>
+      </div>
+    </a>
+
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Stefashka — stefashka.de</span>
+    <span class="dot"><span class="c1"></span><span class="c2"></span><span class="c3"></span><span class="c4"></span></span>
+  </div>
+</footer>
+
+</body>
+</html>
