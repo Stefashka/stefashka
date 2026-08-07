@@ -1,0 +1,2024 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hundebetreuung — Gassizeiten</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192-yellow.png">
+<link rel="icon" href="icon-192-yellow.png">
+<meta name="theme-color" content="#171514">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Hunde">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Fredoka:wght@600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --text: #171514;
+    --muted: #83807c;
+    --border: #e4e0dc;
+    --bg: #fff;
+    --accent: #537393;
+    --shadow: 23,21,20;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html {
+    overflow-x: hidden;
+  }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    color: var(--text);
+    background: var(--bg);
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 48px 24px 100px;
+    line-height: 1.5;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  .word-wall {
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    margin-top: -48px;
+    margin-bottom: 56px;
+    background: var(--text);
+    padding: 48px 24px 64px;
+    position: relative;
+    z-index: 1;
+  }
+  /* Pop-Effekt beim Reinscrollen. Die "pre-reveal"-Klasse wird nur per JS
+     gesetzt, niemals als Standard - so bleibt die Text Wall immer sichtbar,
+     falls JS aus irgendeinem Grund nicht laufen sollte. */
+  .word-wall.pre-reveal {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  .word-wall.pre-reveal.in-view {
+    animation: wallPopIn 0.6s cubic-bezier(.34,1.56,.64,1) forwards;
+  }
+  @keyframes wallPopIn {
+    0% { opacity: 0; transform: scale(0.96); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+  .scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 4px;
+    width: 0%;
+    background: linear-gradient(90deg, #f5ec00, #ff8a00, #e53935);
+    z-index: 4000;
+    pointer-events: none;
+  }
+  .wall-signature {
+    position: absolute;
+    left: 10px;
+    bottom: 26px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+  }
+  .wall-signature svg {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+    fill: #6b4423;
+  }
+  .wall-signature span {
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    font-size: 0.8rem;
+    letter-spacing: 0.02em;
+    word-spacing: normal;
+    color: #fff;
+  }
+  .word-wall p {
+    max-width: 640px;
+    margin: 0 auto;
+    font-family: 'Fredoka', 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 2.3rem;
+    line-height: 1.08;
+    color: #fff;
+    letter-spacing: -0.01em;
+    word-spacing: 0.14em;
+  }
+  .wall-word {
+    display: inline-block;
+    cursor: default;
+    color: #fff;
+    transition: color 0.35s ease, transform 0.35s ease;
+  }
+  @media (max-width: 480px) {
+    .word-wall {
+      padding: 32px 16px 76px;
+    }
+    .word-wall p { font-size: 1.2rem; }
+    .wauzi-bubble {
+      padding: 18px 26px;
+      border-width: 4px;
+    }
+    .wauzi-bubble .text {
+      font-size: 1.4rem;
+      white-space: normal;
+      max-width: 68vw;
+      text-align: center;
+    }
+    /* Die wiederverwendete Sprechblase mit dem längeren Leckerli-Text
+       braucht auf dem Handy deutlich kompaktere Maße als "Wuff! Wuff!". */
+    .wauzi-bubble.long-text {
+      padding: 12px 18px;
+      border-width: 3px;
+    }
+    .wauzi-bubble.long-text .text {
+      font-size: 0.95rem;
+      max-width: 56vw;
+    }
+    .paw-trail-print {
+      width: 23px;
+      height: 23px;
+    }
+    .scroll-progress {
+      display: none;
+    }
+  }
+  .empty-state {
+    text-align: center;
+    padding: 40px 0;
+    margin-top: auto;
+  }
+  .empty-dog {
+    width: 140px;
+    height: auto;
+    fill: #d3cdc4;
+    margin-bottom: 24px;
+  }
+  .empty-state .empty {
+    padding: 0;
+  }
+  .input-row {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 64px;
+    flex-wrap: wrap;
+    align-items: flex-end;
+  }
+  input[type="text"],
+  input[type="date"] {
+    flex: 1;
+    min-width: 140px;
+    padding: 10px 2px;
+    border: none;
+    border-bottom: 1px solid var(--border);
+    border-radius: 0;
+    font-size: 0.95rem;
+    font-family: inherit;
+    color: var(--text);
+    background: transparent;
+  }
+  input[type="text"]:focus,
+  input[type="date"]:focus {
+    outline: none;
+    border-bottom-color: #d4c800;
+  }
+  button {
+    padding: 11px 22px;
+    border: 1px solid var(--text);
+    background: var(--text);
+    color: #fff;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    font-family: inherit;
+    cursor: pointer;
+  }
+  button:hover { opacity: 0.85; }
+  #addBtn {
+    font-family: 'Anton', 'Fredoka', 'Inter', sans-serif;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    font-size: 0.95rem;
+    border: 2px solid var(--text);
+    padding: 12px 26px;
+  }
+  button:disabled { opacity: 0.5; cursor: default; }
+  .dog-field {
+    position: relative;
+    flex: 1;
+    min-width: 140px;
+  }
+  .dog-field input[type="text"] {
+    width: 100%;
+    text-transform: uppercase;
+  }
+  .dog-dropdown {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    list-style: none;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 10;
+    display: none;
+    box-shadow: 0 8px 20px rgba(var(--shadow), 0.1);
+  }
+  .dog-dropdown.open { display: block; }
+  .dog-dropdown li {
+    padding: 10px 14px;
+    font-size: 0.9rem;
+    cursor: pointer;
+  }
+  .dog-dropdown li:hover {
+    background: #f5ec00;
+    color: var(--text);
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .dog-section {
+    background: #f7f5f3;
+    border: 1px solid rgba(var(--shadow), 0.06);
+    border-left: 8px solid var(--text);
+    border-radius: 10px;
+    padding: 32px 28px;
+    margin-bottom: 40px;
+    box-shadow: 0 1px 3px rgba(var(--shadow), 0.04), 0 10px 28px rgba(var(--shadow), 0.05);
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+    animation: fadeIn 0.3s ease;
+  }
+  .dog-section:hover {
+    box-shadow: 0 2px 6px rgba(var(--shadow), 0.06), 0 16px 36px rgba(var(--shadow), 0.08);
+    transform: translateY(-2px);
+  }
+  .dog-section.dragging {
+    opacity: 0.4;
+  }
+  .dog-section.drag-over {
+    outline: 3px dashed var(--text);
+    outline-offset: 4px;
+  }
+  /* Einblenden beim Reinscrollen - "pre-reveal" wird nur per JS gesetzt,
+     niemals als Standard, damit Karten ohne JS trotzdem sichtbar bleiben. */
+  .dog-section.pre-reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.6s cubic-bezier(.16,.84,.44,1), transform 0.6s cubic-bezier(.16,.84,.44,1);
+  }
+  .dog-section.pre-reveal.in-view {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .dog-heading-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 28px;
+  }
+  .dog-heading-main {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .drag-handle {
+    cursor: grab;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    opacity: 0.6;
+    transition: opacity 0.15s;
+  }
+  .drag-handle:hover { opacity: 1; }
+  .drag-handle:active {
+    cursor: grabbing;
+  }
+  .dog-heading {
+    font-family: 'Anton', 'Fredoka', 'Inter', sans-serif;
+    font-size: 1.7rem;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.01em;
+    color: var(--text);
+  }
+  .dog-actions {
+    display: flex;
+    gap: 2px;
+  }
+  .today-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: none;
+    color: var(--text);
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    padding: 4px 12px 4px 8px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .today-btn:hover {
+    background: rgba(var(--shadow), 0.06);
+    opacity: 1;
+  }
+  .icon-btn {
+    background: none;
+    border: none;
+    padding: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background 0.15s, color 0.15s;
+  }
+  .icon-btn:hover {
+    color: var(--text);
+    background: rgba(245, 236, 0, 0.35);
+    opacity: 1;
+  }
+  .icon-btn.danger:hover {
+    color: #b03a3a;
+  }
+  .icon-btn:disabled {
+    opacity: 0.3;
+    cursor: default;
+    background: none;
+    color: var(--muted);
+  }
+  .reorder-controls {
+    display: flex;
+    align-items: center;
+    gap: 0;
+  }
+  .list-label-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+  .bulk-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--muted);
+    font-size: 0.78rem;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+  .bulk-btn:hover { color: var(--text); }
+  .rate-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 28px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .rate-row label {
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  .rate-row .rate-field {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  input[type="number"] {
+    width: 60px;
+    padding: 4px 2px;
+    border: none;
+    border-bottom: 1px solid var(--border);
+    border-radius: 0;
+    font-size: 0.95rem;
+    font-weight: 600;
+    font-family: inherit;
+    text-align: right;
+    background: transparent;
+    -moz-appearance: textfield;
+  }
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type="number"]:focus {
+    outline: none;
+    border-bottom-color: #d4c800;
+  }
+  /* Ersatz für die Zahlenfelder auf dem Handy - sieht wie das normale Feld
+     aus, öffnet aber per Tap ein Eingabe-Fenster statt der Tastatur (das
+     würde auf iOS sonst ein ungewolltes Rein-Zoomen auslösen). */
+  .value-edit-btn {
+    border: none;
+    border-bottom: 1px solid var(--border);
+    border-radius: 0;
+    background: transparent;
+    font-family: inherit;
+    text-align: right;
+    cursor: pointer;
+  }
+  .rate-field .value-edit-btn {
+    padding: 4px 2px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .amount-override .value-edit-btn {
+    padding: 2px 2px;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--muted);
+  }
+  .open-summary {
+    margin-bottom: 28px;
+  }
+  .open-summary .label {
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .open-summary .amount {
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: var(--text);
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+  .open-summary .days {
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+  .list-label {
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  ul.entries { list-style: none; margin-bottom: 8px; }
+  .entry {
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    animation: fadeIn 0.25s ease;
+  }
+  .entry-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .entry .date-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .entry .date {
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
+  .amount-override {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+  }
+  .amount-override input[type="number"] {
+    width: 46px;
+    padding: 2px 2px;
+    border: none;
+    border-bottom: 1px solid var(--border);
+    border-radius: 0;
+    font-size: 0.78rem;
+    font-weight: 500;
+    font-family: inherit;
+    text-align: right;
+    color: var(--muted);
+    background: transparent;
+  }
+  .amount-override input[type="number"]:focus {
+    outline: none;
+    border-bottom-color: #d4c800;
+  }
+  .amount-override span {
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+  .entry .actions {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+  }
+  .empty {
+    color: var(--muted);
+    font-size: 0.9rem;
+    padding: 8px 0;
+  }
+  details.billed-details {
+    margin-top: 20px;
+  }
+  details.billed-details summary {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+    color: var(--muted);
+    cursor: pointer;
+    list-style: none;
+  }
+  details.billed-details summary::-webkit-details-marker { display: none; }
+  .chevron-icon {
+    transition: transform 0.15s ease;
+    flex-shrink: 0;
+  }
+  details.billed-details[open] summary .chevron-icon {
+    transform: rotate(90deg);
+  }
+  details.billed-details ul.entries {
+    margin-top: 12px;
+  }
+
+  .page-content {
+    position: relative;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  #dogSections {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(var(--shadow), 0.42);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease;
+    z-index: 1000;
+  }
+  .modal-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .modal-box {
+    background: #fff;
+    border-radius: 16px;
+    padding: 28px;
+    max-width: 360px;
+    width: 100%;
+    box-shadow: 0 24px 60px rgba(var(--shadow), 0.22);
+    transform: translateY(10px) scale(0.98);
+    transition: transform 0.15s ease;
+  }
+  .modal-overlay.open .modal-box {
+    transform: translateY(0) scale(1);
+  }
+  .modal-message {
+    font-size: 0.95rem;
+    color: var(--text);
+    margin-bottom: 20px;
+    white-space: pre-wrap;
+    line-height: 1.5;
+  }
+  .modal-input {
+    display: block;
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 16px;
+    font-family: inherit;
+    margin-bottom: 20px;
+    color: var(--text);
+    background: transparent;
+  }
+  .modal-input:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+  .modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+  .modal-cancel {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+  .modal-cancel:hover { opacity: 1; background: rgba(var(--shadow), 0.04); }
+
+  .cursor-follower {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 22px;
+    height: 22px;
+    pointer-events: none;
+    z-index: 3000;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    will-change: transform;
+  }
+  .cursor-follower.active {
+    opacity: 1;
+  }
+  .cursor-follower svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+    fill: #6b4423;
+  }
+  @media (pointer: coarse) {
+    .cursor-follower { display: none; }
+  }
+  .terrier-run {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 64px;
+    height: 36px;
+    z-index: 2950;
+    pointer-events: none;
+  }
+  .terrier-run svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  .kacki-poop {
+    position: fixed;
+    right: 22px;
+    bottom: 22px;
+    width: 46px;
+    height: 46px;
+    z-index: 2900;
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.3) translateY(20px);
+  }
+  .kacki-poop svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+    fill: #6b4423;
+  }
+  .kacki-poop.bounce {
+    animation: kackiBounce 0.9s ease;
+  }
+  @keyframes kackiBounce {
+    0% { transform: scale(0.3) translateY(20px); opacity: 0; }
+    30% { transform: scale(1.25) translateY(-16px); opacity: 1; }
+    50% { transform: scale(1) translateY(0); opacity: 1; }
+    75% { transform: scale(1.06) translateY(-6px); opacity: 1; }
+    100% { transform: scale(0.9) translateY(0); opacity: 0; }
+  }
+  .paw-trail-print {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 39px;
+    height: 39px;
+    z-index: 2500;
+    pointer-events: none;
+    opacity: 0;
+    animation: pawTrailPop 1s ease forwards;
+  }
+  .paw-trail-print svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+    fill: #171514;
+  }
+  @keyframes pawTrailPop {
+    0% { opacity: 0; transform: translate(-50%, -50%) scale(0.4) rotate(var(--rot, 0deg)); }
+    25% { opacity: 1; transform: translate(-50%, -50%) scale(1.05) rotate(var(--rot, 0deg)); }
+    70% { opacity: 1; transform: translate(-50%, -50%) scale(1) rotate(var(--rot, 0deg)); }
+    100% { opacity: 0; transform: translate(-50%, -50%) scale(0.9) rotate(var(--rot, 0deg)); }
+  }
+  .heart-rise {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 20px;
+    height: 20px;
+    z-index: 2600;
+    pointer-events: none;
+    opacity: 0;
+    animation: heartRise 1.1s ease-out forwards;
+  }
+  .heart-rise svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+    fill: #e5484d;
+  }
+  @keyframes heartRise {
+    0% { opacity: 0; transform: translate(-50%, -50%) scale(0.4); }
+    15% { opacity: 1; transform: translate(-50%, calc(-50% - 10px)) scale(1); }
+    75% { opacity: 1; }
+    100% { opacity: 0; transform: translate(calc(-50% + var(--drift, 0px)), calc(-50% - 90px)) scale(0.8); }
+  }
+  .treat-pop {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: min(420px, 84vw);
+    z-index: 3200;
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, -50%) scale(0.3) rotate(-4deg);
+  }
+  .treat-pop.show {
+    animation: treatPopBounce 1.9s ease forwards;
+  }
+  @keyframes treatPopBounce {
+    0% { opacity: 0; transform: translate(-50%, -50%) scale(0.3) rotate(-4deg); }
+    15% { opacity: 1; transform: translate(-50%, -50%) scale(1.08) rotate(2deg); }
+    25% { opacity: 1; transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+    82% { opacity: 1; transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+    100% { opacity: 0; transform: translate(-50%, -50%) scale(0.92) rotate(0deg); }
+  }
+  .schnuffi-card {
+    position: fixed;
+    top: 50%;
+    left: 0;
+    width: 100vw;
+    background: #fff;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 26px 20px;
+    text-align: center;
+    z-index: 3100;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-50%) scale(0.9);
+  }
+  .schnuffi-card .heart {
+    flex-shrink: 0;
+    display: flex;
+  }
+  .schnuffi-card .heart svg {
+    width: 26px;
+    height: 26px;
+    fill: var(--text);
+  }
+  .schnuffi-card .text {
+    font-family: 'Anton', 'Fredoka', 'Inter', sans-serif;
+    font-size: 1.4rem;
+    line-height: 1.25;
+    text-transform: uppercase;
+    color: var(--text);
+  }
+  .schnuffi-card.show {
+    animation: schnuffiPop 2.6s ease forwards;
+  }
+  @keyframes schnuffiPop {
+    0% { opacity: 0; transform: translateY(-50%) scale(0.9); }
+    15% { opacity: 1; transform: translateY(-50%) scale(1.02); }
+    25% { opacity: 1; transform: translateY(-50%) scale(1); }
+    85% { opacity: 1; transform: translateY(-50%) scale(1); }
+    100% { opacity: 0; transform: translateY(-50%) scale(0.96); }
+  }
+  .wauzi-bubble {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    background: #fff;
+    border: 5px solid var(--text);
+    border-radius: 40px;
+    padding: 26px 44px;
+    z-index: 3100;
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, -50%) scale(0.3) rotate(-3deg);
+  }
+  .wauzi-bubble .text {
+    font-family: 'Anton', 'Fredoka', 'Inter', sans-serif;
+    font-size: 2.2rem;
+    text-transform: uppercase;
+    color: var(--text);
+    white-space: nowrap;
+  }
+  .wauzi-bubble::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -28px;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    border-top: 26px solid var(--text);
+  }
+  .wauzi-bubble::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -20px;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-top: 20px solid #fff;
+  }
+  .wauzi-bubble.show {
+    animation: wauziPop 2.2s ease forwards;
+  }
+  @keyframes wauziPop {
+    0% { opacity: 0; transform: translate(-50%, -50%) scale(0.3) rotate(-3deg); }
+    15% { opacity: 1; transform: translate(-50%, -50%) scale(1.08) rotate(2deg); }
+    25% { opacity: 1; transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+    82% { opacity: 1; transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+    100% { opacity: 0; transform: translate(-50%, -50%) scale(0.9) rotate(0deg); }
+  }
+</style>
+</head>
+<body>
+
+<div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
+<div class="page-content">
+
+<div class="word-wall" aria-hidden="true">
+  <p id="wallWords"></p>
+  <div class="wall-signature" aria-hidden="true">
+    <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <ellipse cx="32" cy="50" rx="22" ry="12"/>
+      <ellipse cx="32" cy="36" rx="16" ry="10"/>
+      <ellipse cx="32" cy="24" rx="10" ry="8"/>
+      <ellipse cx="30" cy="14" rx="6" ry="5"/>
+    </svg>
+    <span>by Stefashka</span>
+  </div>
+</div>
+
+<div class="input-row">
+  <div class="dog-field">
+    <input type="text" id="dogInput" placeholder="Name des Hundes" autocomplete="off">
+    <ul class="dog-dropdown" id="dogDropdown"></ul>
+  </div>
+  <input type="date" id="dateInput">
+  <button id="addBtn">Tag hinzufügen</button>
+</div>
+
+<div id="dogSections"></div>
+
+</div>
+
+<img class="treat-pop" id="treatPop" src="schmackofatz-compressed.png" alt="" aria-hidden="true">
+
+<div class="schnuffi-card" id="schnuffiCard" aria-hidden="true">
+  <span class="heart">
+    <svg viewBox="0 0 32 28" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M16 27 C6 19 0 13.5 0 7.8 C0 2.8 3.8 0 7.8 0 C11 0 13.9 1.9 16 5.2 C18.1 1.9 21 0 24.2 0 C28.2 0 32 2.8 32 7.8 C32 13.5 26 19 16 27 Z"/>
+    </svg>
+  </span>
+  <span class="text">In honor of Schnuffi</span>
+</div>
+
+<div class="wauzi-bubble" id="wauziBubble" aria-hidden="true">
+  <span class="text">Wuff! Wuff!</span>
+</div>
+
+<div class="kacki-poop" id="kackiPoop" aria-hidden="true">
+  <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <ellipse cx="32" cy="50" rx="22" ry="12"/>
+    <ellipse cx="32" cy="36" rx="16" ry="10"/>
+    <ellipse cx="32" cy="24" rx="10" ry="8"/>
+    <ellipse cx="30" cy="14" rx="6" ry="5"/>
+  </svg>
+</div>
+
+<div class="cursor-follower" id="cursorFollower">
+  <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <ellipse cx="32" cy="50" rx="22" ry="12"/>
+    <ellipse cx="32" cy="36" rx="16" ry="10"/>
+    <ellipse cx="32" cy="24" rx="10" ry="8"/>
+    <ellipse cx="30" cy="14" rx="6" ry="5"/>
+  </svg>
+</div>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <p class="modal-message" id="modalMessage"></p>
+    <input type="text" class="modal-input" id="modalInput" style="display:none;">
+    <div class="modal-actions">
+      <button class="modal-cancel" id="modalCancel">Abbrechen</button>
+      <button id="modalConfirm">OK</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script>
+  // ---- Supabase-Verbindung ----
+  // In try/catch, damit ein Ladeproblem der externen Supabase-Bibliothek
+  // nicht das gesamte restliche Script (Text Wall, Buttons, ...) mit sich reißt.
+  const SUPABASE_URL = 'https://dczolqwshfapsnpwsasy.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_xG0wEf8XnASCRpENcnvg6w_RMTDiJVS';
+  // Eigener Name (nicht "supabase"), weil die von unpkg geladene Bibliothek
+  // selbst schon eine globale Variable "supabase" anlegt - gleicher Name
+  // hätte einen SyntaxError durch doppelte Deklaration verursacht.
+  let sbClient = null;
+  try {
+    sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  } catch (err) {
+    console.error('Supabase-Client konnte nicht erstellt werden:', err);
+  }
+
+  const ENTRIES_TABLE = 'hundebetreuung_entries';
+  const SETTINGS_TABLE = 'hundebetreuung_settings';
+  const SETTINGS_ID = 'global';
+
+  // Wandelt eine Zeile aus der Datenbank in das Objektformat um, mit dem der
+  // Rest der App (unverändert) arbeitet.
+  function rowToEntry(row) {
+    return {
+      id: row.id,
+      dog: row.dog,
+      date: row.date,
+      billed: row.billed,
+      ...(row.custom_amount !== null && row.custom_amount !== undefined ? { customAmount: row.custom_amount } : {})
+    };
+  }
+
+  async function loadAllFromSupabase() {
+    if (!sbClient) {
+      await showAlert('Verbindung zur Datenbank konnte nicht aufgebaut werden. Bitte Seite neu laden.');
+      return;
+    }
+    const { data: entryRows, error: entriesError } = await sbClient
+      .from(ENTRIES_TABLE)
+      .select('*')
+      .order('date', { ascending: true });
+    if (entriesError) {
+      await showAlert('Fehler beim Laden der Einträge: ' + entriesError.message);
+    }
+    entries = (entryRows || []).map(rowToEntry);
+
+    const { data: settingsRow, error: settingsError } = await sbClient
+      .from(SETTINGS_TABLE)
+      .select('*')
+      .eq('id', SETTINGS_ID)
+      .maybeSingle();
+    if (settingsError) {
+      await showAlert('Fehler beim Laden der Einstellungen: ' + settingsError.message);
+    }
+    rates = (settingsRow && settingsRow.rates) || {};
+    dogOrder = (settingsRow && settingsRow.dog_order) || [];
+  }
+
+  async function saveSettings() {
+    const { error } = await sbClient
+      .from(SETTINGS_TABLE)
+      .update({ rates, dog_order: dogOrder })
+      .eq('id', SETTINGS_ID);
+    if (error) {
+      await showAlert('Fehler beim Speichern der Einstellungen: ' + error.message);
+    }
+  }
+
+  let entries = [];
+  let rates = {};
+  let dogOrder = [];
+
+  const dogInput = document.getElementById('dogInput');
+  const dateInput = document.getElementById('dateInput');
+  const addBtn = document.getElementById('addBtn');
+  const dogDropdown = document.getElementById('dogDropdown');
+  const dogSectionsEl = document.getElementById('dogSections');
+
+  // ---- Scroll-Reveal für Hunde-Karten ----
+  // "revealedDogs" merkt sich, welche Karten schon einmal ins Bild gescrollt
+  // sind, damit sie bei jedem render() (z.B. nach Klick auf einen Button)
+  // nicht erneut unsichtbar starten und neu einfaden.
+  const revealedDogs = new Set();
+  const dogRevealObserver = ('IntersectionObserver' in window)
+    ? new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+            if (entry.target.dataset.dogName) revealedDogs.add(entry.target.dataset.dogName);
+            dogRevealObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15 })
+    : null;
+
+  // ---- Custom modal (replaces alert/confirm/prompt) ----
+  const modalOverlay = document.getElementById('modalOverlay');
+  const modalMessage = document.getElementById('modalMessage');
+  const modalInput = document.getElementById('modalInput');
+  const modalCancel = document.getElementById('modalCancel');
+  const modalConfirm = document.getElementById('modalConfirm');
+  let modalResolve = null;
+
+  function openModal({ message, showInput = false, inputValue = '', confirmText = 'OK', cancelText = 'Abbrechen', showCancel = true }) {
+    modalMessage.textContent = message;
+    modalInput.style.display = showInput ? 'block' : 'none';
+    modalInput.value = inputValue;
+    modalConfirm.textContent = confirmText;
+    modalCancel.textContent = cancelText;
+    modalCancel.style.display = showCancel ? 'inline-block' : 'none';
+    modalOverlay.classList.add('open');
+    if (showInput) {
+      setTimeout(() => { modalInput.focus(); modalInput.select(); }, 10);
+    } else {
+      setTimeout(() => modalConfirm.focus(), 10);
+    }
+    return new Promise(resolve => { modalResolve = resolve; });
+  }
+
+  function closeModal(result) {
+    modalOverlay.classList.remove('open');
+    if (modalResolve) {
+      modalResolve(result);
+      modalResolve = null;
+    }
+  }
+
+  modalConfirm.addEventListener('click', () => {
+    closeModal(modalInput.style.display !== 'none' ? modalInput.value : true);
+  });
+  modalCancel.addEventListener('click', () => closeModal(null));
+  modalOverlay.addEventListener('click', (ev) => {
+    if (ev.target === modalOverlay) closeModal(null);
+  });
+  modalInput.addEventListener('keydown', (ev) => {
+    if (ev.key === 'Enter') {
+      ev.preventDefault();
+      closeModal(modalInput.value);
+    }
+  });
+
+  function showAlert(message) {
+    return openModal({ message, showInput: false, confirmText: 'OK', showCancel: false });
+  }
+  async function showConfirm(message) {
+    const result = await openModal({ message, showInput: false, confirmText: 'Löschen', cancelText: 'Abbrechen', showCancel: true });
+    return result === true;
+  }
+  function showPrompt(message, defaultValue) {
+    return openModal({ message, showInput: true, inputValue: defaultValue, confirmText: 'Speichern', cancelText: 'Abbrechen', showCancel: true });
+  }
+  function showCopyFallback(text) {
+    return openModal({ message: 'Automatisches Kopieren hat nicht geklappt – Text ist markiert, einfach Strg/Cmd+C drücken:', showInput: true, inputValue: text, confirmText: 'Schließen', showCancel: false });
+  }
+
+  // ---- Dog name dropdown ----
+  function populateDogDropdown(dogs) {
+    dogDropdown.innerHTML = '';
+    dogs.forEach(dog => {
+      const li = document.createElement('li');
+      li.textContent = dog;
+      li.onclick = () => {
+        dogInput.value = dog;
+        dogDropdown.classList.remove('open');
+        dogInput.focus();
+      };
+      dogDropdown.appendChild(li);
+    });
+  }
+
+  dogInput.addEventListener('focus', () => {
+    if (dogDropdown.children.length) dogDropdown.classList.add('open');
+  });
+  dogInput.addEventListener('click', () => {
+    if (dogDropdown.children.length) dogDropdown.classList.add('open');
+  });
+  document.addEventListener('click', (ev) => {
+    if (!ev.target.closest('.dog-field')) dogDropdown.classList.remove('open');
+  });
+
+  function formatDate(iso) {
+    const [y, m, d] = iso.split('-');
+    return `${d}.${m}.${y}`;
+  }
+
+  // Erkennt echte Smartphones (Touch + schmaler Screen). Wird u.a. genutzt,
+  // um bei Zahlenfeldern das nervige Rein-Zoomen von iOS zu vermeiden -
+  // stattdessen öffnet dort ein Eingabe-Fenster (wie beim Umbenennen).
+  function isMobileDevice() {
+    return window.matchMedia('(pointer: coarse)').matches && window.innerWidth <= 480;
+  }
+
+  function todayIso() {
+    const d = new Date();
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const dd = String(d.getDate()).padStart(2, '0');
+    return `${d.getFullYear()}-${mm}-${dd}`;
+  }
+
+  dateInput.value = todayIso();
+
+  [dogInput, dateInput].forEach(el => {
+    el.addEventListener('keydown', (ev) => {
+      if (ev.key === 'Enter') {
+        ev.preventDefault();
+        addBtn.click();
+      }
+    });
+  });
+
+  function getRate(dog) {
+    const r = rates[dog];
+    return typeof r === 'number' ? r : 10;
+  }
+
+  function entryAmount(e, rate) {
+    return typeof e.customAmount === 'number' ? e.customAmount : rate;
+  }
+
+
+  function getOrderedDogs() {
+    const existing = [...new Set(entries.map(e => e.dog))];
+    const known = dogOrder.filter(d => existing.includes(d));
+    const unknown = existing.filter(d => !dogOrder.includes(d)).sort((a, b) => a.localeCompare(b));
+    const combined = [...known, ...unknown];
+    const changed = combined.length !== dogOrder.length || combined.some((d, i) => d !== dogOrder[i]);
+    dogOrder = combined;
+    if (changed) saveSettings();
+    return combined;
+  }
+
+  function moveDog(draggedDog, targetDog) {
+    if (draggedDog === targetDog) return;
+    const newOrder = dogOrder.filter(d => d !== draggedDog);
+    const targetIndex = newOrder.indexOf(targetDog);
+    if (targetIndex === -1) {
+      newOrder.push(draggedDog);
+    } else {
+      newOrder.splice(targetIndex, 0, draggedDog);
+    }
+    dogOrder = newOrder;
+    saveSettings();
+    render();
+  }
+
+  function moveDogStep(dog, direction) {
+    const idx = dogOrder.indexOf(dog);
+    if (idx === -1) return;
+    const newIdx = idx + direction;
+    if (newIdx < 0 || newIdx >= dogOrder.length) return;
+    const newOrder = [...dogOrder];
+    [newOrder[idx], newOrder[newIdx]] = [newOrder[newIdx], newOrder[idx]];
+    dogOrder = newOrder;
+    saveSettings();
+    render();
+  }
+
+  function render() {
+    const dogs = getOrderedDogs();
+
+    populateDogDropdown(dogs);
+
+    dogSectionsEl.innerHTML = '';
+
+    if (dogs.length === 0) {
+      const emptyState = document.createElement('div');
+      emptyState.className = 'empty-state';
+      emptyState.innerHTML = `
+        <svg class="empty-dog" viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M126,158 Q152,152 150,128 Q149,116 138,120 Q136,138 122,148 Z"/>
+          <path d="M70,210 Q56,150 78,105 Q100,82 122,105 Q144,150 130,210 Z"/>
+          <path d="M72,48 Q52,52 50,78 Q49,96 62,94 Q76,90 78,66 Q79,56 72,48 Z"/>
+          <path d="M128,48 Q148,52 150,78 Q151,96 138,94 Q124,90 122,66 Q121,56 128,48 Z"/>
+          <circle cx="100" cy="68" r="30"/>
+          <ellipse cx="100" cy="92" rx="15" ry="11"/>
+        </svg>
+        <p class="empty">Noch keine Einträge. Trage oben einen Hundenamen und ein Datum ein.</p>
+      `;
+      dogSectionsEl.appendChild(emptyState);
+      return;
+    }
+
+    dogs.forEach((dog, i) => dogSectionsEl.appendChild(renderDogSection(dog, i, dogs.length)));
+  }
+
+  const sortByDate = (a, b) => a.date.localeCompare(b.date);
+
+  async function renameDog(oldName) {
+    const input = await showPrompt('Neuer Name für ' + oldName + ':', oldName);
+    if (input === null) return;
+    const newName = input.trim();
+    if (!newName || newName === oldName) return;
+
+    const { error } = await sbClient.from(ENTRIES_TABLE).update({ dog: newName }).eq('dog', oldName);
+    if (error) {
+      await showAlert('Fehler beim Umbenennen: ' + error.message);
+      return;
+    }
+    entries.forEach(e => { if (e.dog === oldName) e.dog = newName; });
+    if (rates[oldName] !== undefined) {
+      if (rates[newName] === undefined) rates[newName] = rates[oldName];
+      delete rates[oldName];
+    }
+    dogOrder = dogOrder.map(d => d === oldName ? newName : d);
+    await saveSettings();
+    render();
+  }
+
+  async function deleteDog(dog) {
+    const count = entries.filter(e => e.dog === dog).length;
+    const ok = await showConfirm(`"${dog}" inklusive aller ${count} Einträge wirklich löschen?`);
+    if (!ok) return;
+
+    const { error } = await sbClient.from(ENTRIES_TABLE).delete().eq('dog', dog);
+    if (error) {
+      await showAlert('Fehler beim Löschen: ' + error.message);
+      return;
+    }
+    entries = entries.filter(e => e.dog !== dog);
+    delete rates[dog];
+    dogOrder = dogOrder.filter(d => d !== dog);
+    await saveSettings();
+    render();
+  }
+
+  async function markAllBilled(dog) {
+    const { error } = await sbClient.from(ENTRIES_TABLE).update({ billed: true }).eq('dog', dog).eq('billed', false);
+    if (error) {
+      await showAlert('Fehler beim Markieren: ' + error.message);
+      return;
+    }
+    entries.forEach(e => { if (e.dog === dog && !e.billed) e.billed = true; });
+    render();
+  }
+
+  async function addToday(dog) {
+    const today = todayIso();
+    if (entries.some(e => e.dog === dog && e.date === today)) {
+      await showAlert(`Für ${dog} existiert für heute bereits ein Eintrag.`);
+      return;
+    }
+    const { data, error } = await sbClient.from(ENTRIES_TABLE).insert({ dog, date: today, billed: false }).select().single();
+    if (error) {
+      await showAlert('Fehler beim Speichern: ' + error.message);
+      return;
+    }
+    entries.push(rowToEntry(data));
+    render();
+  }
+
+  function copyTextToClipboard(text) {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.style.position = 'fixed';
+    textarea.style.top = '0';
+    textarea.style.left = '0';
+    textarea.style.opacity = '0';
+    document.body.appendChild(textarea);
+    textarea.focus();
+    textarea.select();
+    let success = false;
+    try {
+      success = document.execCommand('copy');
+    } catch (err) {
+      success = false;
+    }
+    document.body.removeChild(textarea);
+    return success;
+  }
+
+  async function copyMessage(dog, open, rate) {
+    if (open.length === 0) {
+      await showAlert(`Keine offenen Tage für ${dog}.`);
+      return;
+    }
+    const total = open.reduce((sum, e) => sum + entryAmount(e, rate), 0);
+    const dates = open.map(e => formatDate(e.date)).join(', ');
+    const text = `Offene Tage für ${dog}: ${dates} – macht ${total.toLocaleString('de-DE')} €`;
+
+    let copied = false;
+    if (navigator.clipboard && navigator.clipboard.writeText && window.isSecureContext) {
+      try {
+        await navigator.clipboard.writeText(text);
+        copied = true;
+      } catch (err) {
+        copied = false;
+      }
+    }
+    if (!copied) {
+      copied = copyTextToClipboard(text);
+    }
+
+    if (copied) {
+      await showAlert('Nachricht in die Zwischenablage kopiert:\n\n' + text);
+    } else {
+      await showCopyFallback(text);
+    }
+  }
+
+  // ---- Icons ----
+  const ICONS = {
+    copy: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>',
+    pencil: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>',
+    trash: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>',
+    check: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>',
+    undo: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>',
+    grip: '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><circle cx="9" cy="6" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="9" cy="18" r="1.5"/><circle cx="15" cy="6" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="15" cy="18" r="1.5"/></svg>',
+    chevron: '<svg class="chevron-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>',
+    plus: '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>',
+    up: '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>',
+    down: '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>'
+  };
+
+  function makeIconBtn(iconKey, title, danger) {
+    const btn = document.createElement('button');
+    btn.className = 'icon-btn' + (danger ? ' danger' : '');
+    btn.innerHTML = ICONS[iconKey];
+    btn.title = title;
+    btn.setAttribute('aria-label', title);
+    return btn;
+  }
+
+  function renderDogSection(dog, index, totalDogs) {
+    const dogEntries = entries.filter(e => e.dog === dog);
+    const open = dogEntries.filter(e => !e.billed).sort(sortByDate);
+    const billed = dogEntries.filter(e => e.billed).sort(sortByDate);
+    const rate = getRate(dog);
+
+    const wrap = document.createElement('div');
+    wrap.className = 'dog-section';
+    if (dogRevealObserver && !revealedDogs.has(dog)) {
+      wrap.classList.add('pre-reveal');
+      wrap.dataset.dogName = dog;
+      dogRevealObserver.observe(wrap);
+    }
+
+    wrap.addEventListener('dragover', (ev) => {
+      ev.preventDefault();
+      wrap.classList.add('drag-over');
+    });
+    wrap.addEventListener('dragleave', () => wrap.classList.remove('drag-over'));
+    wrap.addEventListener('drop', (ev) => {
+      ev.preventDefault();
+      wrap.classList.remove('drag-over');
+      const draggedDog = ev.dataTransfer.getData('text/plain');
+      moveDog(draggedDog, dog);
+    });
+
+    const headingRow = document.createElement('div');
+    headingRow.className = 'dog-heading-row';
+
+    const headingMain = document.createElement('div');
+    headingMain.className = 'dog-heading-main';
+
+    const dragHandle = document.createElement('span');
+    dragHandle.className = 'drag-handle';
+    dragHandle.innerHTML = ICONS.grip;
+    dragHandle.title = 'Ziehen zum Umsortieren';
+    dragHandle.draggable = true;
+    dragHandle.addEventListener('dragstart', (ev) => {
+      ev.dataTransfer.setData('text/plain', dog);
+      ev.dataTransfer.effectAllowed = 'move';
+      wrap.classList.add('dragging');
+    });
+    dragHandle.addEventListener('dragend', () => wrap.classList.remove('dragging'));
+    headingMain.appendChild(dragHandle);
+
+    const reorderControls = document.createElement('div');
+    reorderControls.className = 'reorder-controls';
+
+    const upBtn = makeIconBtn('up', 'Nach oben verschieben');
+    upBtn.disabled = index === 0;
+    upBtn.onclick = () => moveDogStep(dog, -1);
+
+    const downBtn = makeIconBtn('down', 'Nach unten verschieben');
+    downBtn.disabled = index === totalDogs - 1;
+    downBtn.onclick = () => moveDogStep(dog, 1);
+
+    reorderControls.appendChild(upBtn);
+    reorderControls.appendChild(downBtn);
+    headingMain.appendChild(reorderControls);
+
+    const heading = document.createElement('div');
+    heading.className = 'dog-heading';
+    heading.textContent = dog;
+    headingMain.appendChild(heading);
+
+    const todayBtn = document.createElement('button');
+    todayBtn.className = 'today-btn';
+    todayBtn.innerHTML = ICONS.plus + ' Heute';
+    todayBtn.title = 'Eintrag für heute hinzufügen';
+    todayBtn.onclick = () => addToday(dog);
+    headingMain.appendChild(todayBtn);
+
+    headingRow.appendChild(headingMain);
+
+    const dogActions = document.createElement('div');
+    dogActions.className = 'dog-actions';
+
+    const copyBtn = makeIconBtn('copy', 'Nachricht kopieren');
+    copyBtn.onclick = () => copyMessage(dog, open, rate);
+
+    const renameBtn = makeIconBtn('pencil', 'Umbenennen');
+    renameBtn.onclick = () => renameDog(dog);
+
+    const deleteDogBtn = makeIconBtn('trash', 'Hund löschen', true);
+    deleteDogBtn.onclick = () => deleteDog(dog);
+
+    dogActions.appendChild(copyBtn);
+    dogActions.appendChild(renameBtn);
+    dogActions.appendChild(deleteDogBtn);
+    headingRow.appendChild(dogActions);
+
+    wrap.appendChild(headingRow);
+
+    const rateRow = document.createElement('div');
+    rateRow.className = 'rate-row';
+    const rateLabel = document.createElement('label');
+    rateLabel.textContent = 'Tagessatz';
+    const rateField = document.createElement('div');
+    rateField.className = 'rate-field';
+    if (isMobileDevice()) {
+      // Auf dem Handy kein direktes Zahlenfeld (löst sonst das nervige
+      // Rein-Zoomen von iOS aus) - stattdessen öffnet ein Tap das schon
+      // bestehende Eingabe-Fenster, wie beim Umbenennen eines Hundes.
+      const rateBtn = document.createElement('button');
+      rateBtn.type = 'button';
+      rateBtn.className = 'value-edit-btn';
+      rateBtn.textContent = rate + ' €';
+      rateBtn.onclick = async () => {
+        const input = await showPrompt('Tagessatz für ' + dog + ':', String(rate));
+        if (input === null) return;
+        const val = parseFloat(input.replace(',', '.').trim());
+        rates[dog] = isNaN(val) ? 0 : val;
+        await saveSettings();
+        render();
+      };
+      rateField.appendChild(rateBtn);
+    } else {
+      const rateInput = document.createElement('input');
+      rateInput.type = 'number';
+      rateInput.min = '0';
+      rateInput.step = '1';
+      rateInput.value = rate;
+      rateInput.addEventListener('change', async () => {
+        const val = parseFloat(rateInput.value);
+        rates[dog] = isNaN(val) ? 0 : val;
+        await saveSettings();
+        render();
+      });
+      const rateCurrency = document.createElement('span');
+      rateCurrency.textContent = '€';
+      rateField.appendChild(rateInput);
+      rateField.appendChild(rateCurrency);
+    }
+    rateRow.appendChild(rateLabel);
+    rateRow.appendChild(rateField);
+    wrap.appendChild(rateRow);
+
+    const openAmount = open.reduce((sum, e) => sum + entryAmount(e, rate), 0);
+
+    const summary = document.createElement('div');
+    summary.className = 'open-summary';
+    summary.innerHTML = `
+      <div class="label">Noch offen</div>
+      <div class="amount">${openAmount.toLocaleString('de-DE')} €</div>
+      <div class="days">${open.length} ${open.length === 1 ? 'Tag' : 'Tage'}</div>
+    `;
+    wrap.appendChild(summary);
+
+    if (open.length > 0) {
+      const listLabelRow = document.createElement('div');
+      listLabelRow.className = 'list-label-row';
+
+      const listLabel = document.createElement('div');
+      listLabel.className = 'list-label';
+      listLabel.textContent = 'Offene Tage';
+      listLabelRow.appendChild(listLabel);
+
+      const markAllBtn = document.createElement('button');
+      markAllBtn.className = 'bulk-btn';
+      markAllBtn.textContent = 'Alle als berechnet markieren';
+      markAllBtn.onclick = () => markAllBilled(dog);
+      listLabelRow.appendChild(markAllBtn);
+
+      wrap.appendChild(listLabelRow);
+    }
+
+    const openList = document.createElement('ul');
+    openList.className = 'entries';
+    if (open.length === 0) {
+      openList.innerHTML = '<li class="empty">Keine offenen Tage.</li>';
+    } else {
+      open.forEach(e => openList.appendChild(renderEntry(e, rate)));
+    }
+    wrap.appendChild(openList);
+
+    const details = document.createElement('details');
+    details.className = 'billed-details';
+    const summaryEl = document.createElement('summary');
+    summaryEl.innerHTML = `${ICONS.chevron} Berechnet (${billed.length})`;
+    details.appendChild(summaryEl);
+    const billedList = document.createElement('ul');
+    billedList.className = 'entries';
+    if (billed.length === 0) {
+      billedList.innerHTML = '<li class="empty">Noch keine Tage berechnet.</li>';
+    } else {
+      billed.forEach(e => billedList.appendChild(renderEntry(e, rate)));
+    }
+    details.appendChild(billedList);
+    wrap.appendChild(details);
+
+    return wrap;
+  }
+
+  function renderEntry(e, rate) {
+    const li = document.createElement('li');
+    li.className = 'entry';
+
+    const dateGroup = document.createElement('div');
+    dateGroup.className = 'date-group';
+
+    const dateSpan = document.createElement('span');
+    dateSpan.className = 'date';
+    dateSpan.textContent = formatDate(e.date);
+    dateGroup.appendChild(dateSpan);
+
+    const amountOverride = document.createElement('div');
+    amountOverride.className = 'amount-override';
+    const currentAmount = typeof e.customAmount === 'number' ? e.customAmount : rate;
+
+    async function applyAmountChange(rawVal) {
+      const val = (rawVal || '').trim();
+      const newCustomAmount = parseFloat(val.replace(',', '.'));
+      const clearOverride = val === '' || isNaN(newCustomAmount) || newCustomAmount === rate;
+      const { error } = await sbClient
+        .from(ENTRIES_TABLE)
+        .update({ custom_amount: clearOverride ? null : newCustomAmount })
+        .eq('id', e.id);
+      if (error) {
+        await showAlert('Fehler beim Speichern: ' + error.message);
+        return;
+      }
+      if (clearOverride) {
+        delete e.customAmount;
+      } else {
+        e.customAmount = newCustomAmount;
+      }
+      render();
+    }
+
+    if (isMobileDevice()) {
+      // Gleiche Idee wie beim Tagessatz: kein direktes Zahlenfeld auf dem
+      // Handy, sondern ein Tap öffnet das Eingabe-Fenster.
+      const amountBtn = document.createElement('button');
+      amountBtn.type = 'button';
+      amountBtn.className = 'value-edit-btn';
+      amountBtn.title = 'Abweichender Betrag für diesen Tag';
+      amountBtn.textContent = currentAmount + ' €';
+      amountBtn.onclick = async () => {
+        const input = await showPrompt('Betrag für ' + formatDate(e.date) + ':', String(currentAmount));
+        if (input === null) return;
+        await applyAmountChange(input);
+      };
+      amountOverride.appendChild(amountBtn);
+    } else {
+      const amountInput = document.createElement('input');
+      amountInput.type = 'number';
+      amountInput.min = '0';
+      amountInput.step = '1';
+      amountInput.title = 'Abweichender Betrag für diesen Tag';
+      amountInput.value = currentAmount;
+      amountInput.addEventListener('change', () => applyAmountChange(amountInput.value));
+      const amountCurrency = document.createElement('span');
+      amountCurrency.textContent = '€';
+      amountOverride.appendChild(amountInput);
+      amountOverride.appendChild(amountCurrency);
+    }
+    dateGroup.appendChild(amountOverride);
+
+    const actions = document.createElement('div');
+    actions.className = 'actions';
+
+    const toggleBtn = makeIconBtn(e.billed ? 'undo' : 'check', e.billed ? 'Als offen markieren' : 'Als berechnet markieren');
+    toggleBtn.onclick = async () => {
+      const newBilled = !e.billed;
+      const { error } = await sbClient.from(ENTRIES_TABLE).update({ billed: newBilled }).eq('id', e.id);
+      if (error) {
+        await showAlert('Fehler beim Speichern: ' + error.message);
+        return;
+      }
+      e.billed = newBilled;
+      render();
+    };
+
+    const deleteBtn = makeIconBtn('trash', 'Löschen', true);
+    deleteBtn.onclick = async () => {
+      const ok = await showConfirm(`Eintrag vom ${formatDate(e.date)} wirklich löschen?`);
+      if (!ok) return;
+      const { error } = await sbClient.from(ENTRIES_TABLE).delete().eq('id', e.id);
+      if (error) {
+        await showAlert('Fehler beim Löschen: ' + error.message);
+        return;
+      }
+      entries = entries.filter(x => x.id !== e.id);
+      render();
+    };
+
+    actions.appendChild(toggleBtn);
+    actions.appendChild(deleteBtn);
+
+    const entryRow = document.createElement('div');
+    entryRow.className = 'entry-row';
+    entryRow.appendChild(dateGroup);
+    entryRow.appendChild(actions);
+    li.appendChild(entryRow);
+
+    return li;
+  }
+
+  addBtn.addEventListener('click', async () => {
+    const dog = dogInput.value.trim();
+    const val = dateInput.value;
+    if (!dog || !val) return;
+    if (entries.some(e => e.dog === dog && e.date === val)) {
+      await showAlert('Für diesen Hund existiert an diesem Tag bereits ein Eintrag.');
+      return;
+    }
+    const { data, error } = await sbClient.from(ENTRIES_TABLE).insert({ dog, date: val, billed: false }).select().single();
+    if (error) {
+      await showAlert('Fehler beim Speichern: ' + error.message);
+      return;
+    }
+    entries.push(rowToEntry(data));
+    dateInput.value = todayIso();
+    dateInput.focus();
+    render();
+  });
+
+  (async () => {
+    try {
+      await loadAllFromSupabase();
+    } catch (err) {
+      console.error('Fehler beim Laden:', err);
+    }
+    render();
+  })();
+
+  // ---- Wall-of-Text: Wörter einzeln als Spans für Hover-Effekt ----
+  const WALL_WORDS = ['Kacki', 'Spaziergang', 'Hiiiieeer', 'Schnuffi', 'Wauzi', 'Schatzi', 'Schmackofatz', 'Leckerli'];
+  const wallWordsEl = document.getElementById('wallWords');
+  if (wallWordsEl) {
+    const repeated = [];
+    for (let i = 0; i < 4; i++) repeated.push(...WALL_WORDS);
+    wallWordsEl.innerHTML = repeated.map(w => `<span class="wall-word">${w}</span>`).join(' ');
+
+    // ---- Pop-Effekt beim Reinscrollen der Text Wall ----
+    const wordWallEl = document.querySelector('.word-wall');
+    if (wordWallEl && 'IntersectionObserver' in window) {
+      wordWallEl.classList.add('pre-reveal');
+      const wallPopObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+            wallPopObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15 });
+      wallPopObserver.observe(wordWallEl);
+    }
+
+    // Signatur (Kacka-Icon + "by Stefashka") in dieselbe Zeile wie das
+    // letzte Wort verschieben, statt als eigene Zeile darunter.
+    const wallSignatureEl = document.querySelector('.wall-signature');
+    if (wallSignatureEl) wallWordsEl.appendChild(wallSignatureEl);
+
+    // Hover-Effekt: nicht nur das einzelne Wort, auch ein paar Nachbarn
+    // werden mit sanft abnehmender Intensität eingefärbt.
+    const WALL_PALETTE = ['#ff3b30', '#ff9500', '#f5ec00', '#34c759', '#0a84ff', '#5e5ce6', '#af52de'];
+    const WALL_RADIUS = 3;
+    const wallSpans = Array.from(wallWordsEl.querySelectorAll('.wall-word'));
+
+    function resetWallWords() {
+      wallSpans.forEach(w => {
+        w.style.color = '#fff';
+        w.style.transform = 'none';
+      });
+    }
+
+    wallSpans.forEach((el, i) => {
+      const hoverColor = WALL_PALETTE[i % WALL_PALETTE.length];
+      el.addEventListener('mouseenter', () => {
+        for (let j = Math.max(0, i - WALL_RADIUS); j <= Math.min(wallSpans.length - 1, i + WALL_RADIUS); j++) {
+          const dist = Math.abs(j - i);
+          const t = 1 - dist / (WALL_RADIUS + 1);
+          const neighbor = wallSpans[j];
+          neighbor.style.color = `color-mix(in srgb, ${hoverColor} ${Math.round(t * 100)}%, #fff)`;
+          neighbor.style.transform = `translateY(${(-3 * t).toFixed(2)}px) scale(${(1 + 0.12 * t).toFixed(3)})`;
+        }
+      });
+      el.addEventListener('mouseleave', () => {
+        for (let j = Math.max(0, i - WALL_RADIUS); j <= Math.min(wallSpans.length - 1, i + WALL_RADIUS); j++) {
+          wallSpans[j].style.color = '#fff';
+          wallSpans[j].style.transform = 'none';
+        }
+      });
+    });
+    wallWordsEl.addEventListener('mouseleave', resetWallWords);
+
+    // ---- Klick auf "Kacki": Icon unten rechts bouncet kurz ----
+    function triggerKackiBounce() {
+      const el = document.getElementById('kackiPoop');
+      if (!el) return;
+      el.classList.remove('bounce');
+      void el.offsetWidth;
+      el.classList.add('bounce');
+    }
+
+    // ---- Klick auf "Spaziergang": Pfotenabdrücke ziehen kurz einen Pfad ----
+    const PAW_SVG = `<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <ellipse cx="32" cy="44" rx="17" ry="14"/>
+      <ellipse cx="12" cy="26" rx="7" ry="9"/>
+      <ellipse cx="27" cy="12" rx="7" ry="9"/>
+      <ellipse cx="41" cy="12" rx="7" ry="9"/>
+      <ellipse cx="54" cy="26" rx="7" ry="9"/>
+    </svg>`;
+
+    function getWordWallRect() {
+      const wall = document.querySelector('.word-wall');
+      return wall ? wall.getBoundingClientRect() : null;
+    }
+
+    // Verschiebt einen Punkt nach oben oder unten aus dem Wall-of-Text-Banner
+    // heraus, falls er (mit etwas Puffer) darin liegen würde.
+    function avoidWordWall(x, y, wallRect) {
+      if (!wallRect) return y;
+      const pad = 14;
+      if (y >= wallRect.top - pad && y <= wallRect.bottom + pad) {
+        const distTop = Math.abs(y - wallRect.top);
+        const distBottom = Math.abs(wallRect.bottom - y);
+        return distTop < distBottom ? wallRect.top - pad : wallRect.bottom + pad;
+      }
+      return y;
+    }
+
+    function spawnPawTrail() {
+      const steps = 14;
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      const wallRect = getWordWallRect();
+
+      let x = 16 + Math.random() * (vw - 32);
+      let y = 16 + Math.random() * (vh - 32);
+      y = avoidWordWall(x, y, wallRect);
+
+      const angle = Math.random() * Math.PI * 2;
+      const stepLen = 130;
+      for (let i = 0; i < steps; i++) {
+        const jitterAngle = angle + (Math.random() - 0.5) * 0.5;
+        x += Math.cos(jitterAngle) * stepLen;
+        y += Math.sin(jitterAngle) * stepLen * 0.75;
+        x = Math.max(16, Math.min(vw - 16, x));
+        y = Math.max(16, Math.min(vh - 16, y));
+        y = avoidWordWall(x, y, wallRect);
+        const delay = i * 110;
+        const paw = document.createElement('div');
+        paw.className = 'paw-trail-print';
+        paw.style.left = x + 'px';
+        paw.style.top = y + 'px';
+        paw.style.setProperty('--rot', (i % 2 === 0 ? -18 : 18) + 'deg');
+        paw.style.animationDelay = delay + 'ms';
+        paw.innerHTML = PAW_SVG;
+        document.body.appendChild(paw);
+        setTimeout(() => paw.remove(), delay + 1050);
+      }
+    }
+
+    // ---- Klick auf "Schmackofatz": großes Foto ploppt über der Wall auf ----
+    let treatPopFailed = false;
+    const treatPopImg = document.getElementById('treatPop');
+    if (treatPopImg) {
+      // Falls das Bild schon vor dem Ausführen dieses Scripts fehlgeschlagen
+      // ist (z.B. schnelles 404 auf dem Handy), kommt das "error"-Event u.U.
+      // zu früh und wir würden es sonst verpassen - daher zusätzlich sofort prüfen.
+      if (treatPopImg.complete && treatPopImg.naturalWidth === 0) {
+        treatPopFailed = true;
+      }
+      treatPopImg.addEventListener('error', () => { treatPopFailed = true; });
+    }
+
+    function triggerTreatPop() {
+      const treatPop = document.getElementById('treatPop');
+      if (!treatPop || treatPopFailed) return;
+      const wallRect = getWordWallRect();
+      const centerY = wallRect ? wallRect.top + wallRect.height / 2 : window.innerHeight / 2;
+      const centerX = wallRect ? wallRect.left + wallRect.width / 2 : window.innerWidth / 2;
+      treatPop.style.left = centerX + 'px';
+      treatPop.style.top = centerY + 'px';
+      treatPop.classList.remove('show');
+      void treatPop.offsetWidth;
+      treatPop.classList.add('show');
+    }
+
+    // ---- Klick auf "Schnuffi": kleine gelbe Karte "In honor of Schnuffi" ----
+    function triggerSchnuffiCard() {
+      const card = document.getElementById('schnuffiCard');
+      if (!card) return;
+      const wallRect = getWordWallRect();
+      const centerY = wallRect ? wallRect.top + wallRect.height / 2 : window.innerHeight / 2;
+      card.style.top = centerY + 'px';
+      card.classList.remove('show');
+      void card.offsetWidth;
+      card.classList.add('show');
+    }
+
+    // ---- Klick auf "Wauzi": große Sprechblase mit "Wuff! Wuff!" ----
+    // (wird auch für die mobile Leckerli-Sprechblase wiederverwendet, daher
+    // optionaler Text-Parameter statt fest "Wuff! Wuff!"; isMobileDevice()
+    // ist weiter oben im Script global definiert)
+    function triggerWauziBubble(text) {
+      const bubble = document.getElementById('wauziBubble');
+      if (!bubble) return;
+      const textEl = bubble.querySelector('.text');
+      if (textEl) textEl.textContent = text || 'Wuff! Wuff!';
+      bubble.classList.toggle('long-text', !!text);
+      const wallRect = getWordWallRect();
+      const centerY = wallRect ? wallRect.top + wallRect.height / 2 : window.innerHeight / 2;
+      const centerX = wallRect ? wallRect.left + wallRect.width / 2 : window.innerWidth / 2;
+      bubble.style.top = centerY + 'px';
+      bubble.style.left = centerX + 'px';
+      bubble.classList.remove('show');
+      void bubble.offsetWidth;
+      bubble.classList.add('show');
+    }
+
+    // ---- Klick auf "Schatzi": kleine rote Herzchen steigen über dem Wort auf ----
+    const HEART_SVG = `<svg viewBox="0 0 32 28" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M16 27 C6 19 0 13.5 0 7.8 C0 2.8 3.8 0 7.8 0 C11 0 13.9 1.9 16 5.2 C18.1 1.9 21 0 24.2 0 C28.2 0 32 2.8 32 7.8 C32 13.5 26 19 16 27 Z"/>
+    </svg>`;
+
+    function spawnHearts(target) {
+      const rect = target.getBoundingClientRect();
+      const originX = rect.left + rect.width / 2;
+      const originY = rect.top;
+      const count = 6;
+      for (let i = 0; i < count; i++) {
+        const heart = document.createElement('div');
+        heart.className = 'heart-rise';
+        heart.style.left = (originX + (Math.random() - 0.5) * 16) + 'px';
+        heart.style.top = originY + 'px';
+        heart.style.setProperty('--drift', ((Math.random() - 0.5) * 60).toFixed(0) + 'px');
+        heart.style.animationDelay = (i * 90) + 'ms';
+        heart.innerHTML = HEART_SVG;
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), i * 90 + 1200);
+      }
+    }
+
+    // ---- Klick auf "Hiiiieeer": kleiner Terrier läuft unten am Banner entlang ----
+    const TERRIER_SVG = `<svg viewBox="0 0 90 50" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M16 24 Q6 12 14 4 Q20 9 17 20 Z" fill="#f7f3ea"/>
+      <ellipse cx="42" cy="30" rx="24" ry="13" fill="#f7f3ea"/>
+      <rect x="22" y="38" width="7" height="12" rx="3.5" fill="#f7f3ea"/>
+      <rect x="35" y="40" width="7" height="10" rx="3.5" fill="#f7f3ea"/>
+      <rect x="51" y="40" width="7" height="10" rx="3.5" fill="#f7f3ea"/>
+      <rect x="61" y="38" width="7" height="12" rx="3.5" fill="#f7f3ea"/>
+      <circle cx="66" cy="20" r="12" fill="#f7f3ea"/>
+      <ellipse cx="78" cy="23" rx="7" ry="5" fill="#f7f3ea"/>
+      <path d="M60 9 L64 0 L71 8 Z" fill="#2a2a2a"/>
+      <circle cx="68" cy="17" r="1.6" fill="#171514"/>
+      <circle cx="83" cy="23" r="1.8" fill="#171514"/>
+    </svg>`;
+
+    function runTerrier() {
+      const wallRect = getWordWallRect();
+      if (!wallRect) return;
+      const dogWidth = 64;
+      const dogHeight = 36;
+      const startX = wallRect.left - dogWidth;
+      const endX = wallRect.right + dogWidth;
+      const y = wallRect.bottom - dogHeight - 8;
+      const duration = 2300;
+
+      const dog = document.createElement('div');
+      dog.className = 'terrier-run';
+      dog.innerHTML = TERRIER_SVG;
+      dog.style.top = y + 'px';
+      document.body.appendChild(dog);
+
+      const startTime = performance.now();
+      function step(now) {
+        const t = Math.min(1, (now - startTime) / duration);
+        const x = startX + (endX - startX) * t;
+        const bob = Math.sin(t * Math.PI * 12) * 3;
+        dog.style.transform = `translate(${x}px, ${bob}px)`;
+        if (t < 1) {
+          requestAnimationFrame(step);
+        } else {
+          dog.remove();
+        }
+      }
+      requestAnimationFrame(step);
+    }
+
+    wallWordsEl.addEventListener('click', (ev) => {
+      const target = ev.target.closest('.wall-word');
+      if (!target) return;
+      const word = target.textContent.trim();
+      if (word === 'Kacki') {
+        triggerKackiBounce();
+      } else if (word === 'Spaziergang') {
+        spawnPawTrail();
+      } else if (word === 'Schmackofatz' || word === 'Leckerli') {
+        if (isMobileDevice()) {
+          triggerWauziBubble('Du hast schon zu viel Leckerli gehabt');
+        } else {
+          triggerTreatPop();
+        }
+      } else if (word === 'Schatzi') {
+        spawnHearts(target);
+      } else if (word === 'Hiiiieeer') {
+        runTerrier();
+      } else if (word === 'Schnuffi') {
+        triggerSchnuffiCard();
+      } else if (word === 'Wauzi') {
+        triggerWauziBubble();
+      }
+    });
+  }
+
+  // ---- Scroll-Fortschrittsbalken ----
+  (function () {
+    const scrollProgressEl = document.getElementById('scrollProgress');
+    if (!scrollProgressEl) return;
+
+    function updateOnScroll() {
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const pct = docHeight > 0 ? Math.min(100, Math.max(0, (window.scrollY / docHeight) * 100)) : 0;
+      scrollProgressEl.style.width = pct + '%';
+      requestAnimationFrame(updateOnScroll);
+    }
+    requestAnimationFrame(updateOnScroll);
+  })();
+
+  // ---- Verzögerter Cursor-Begleiter (nur bei echter Maus) ----
+  if (window.matchMedia('(pointer: fine)').matches) {
+    const cursorFollower = document.getElementById('cursorFollower');
+    let mouseX = 0;
+    let mouseY = 0;
+    let posX = 0;
+    let posY = 0;
+    let started = false;
+    const TRAIL_OFFSET_X = 18;
+    const TRAIL_OFFSET_Y = 22;
+    const EASE = 0.055;
+
+    window.addEventListener('mousemove', (ev) => {
+      mouseX = ev.clientX;
+      mouseY = ev.clientY;
+      if (!started) {
+        posX = mouseX;
+        posY = mouseY;
+        started = true;
+        cursorFollower.classList.add('active');
+      }
+    });
+
+    function animateFollower() {
+      const targetX = mouseX + TRAIL_OFFSET_X;
+      const targetY = mouseY + TRAIL_OFFSET_Y;
+      posX += (targetX - posX) * EASE;
+      posY += (targetY - posY) * EASE;
+      cursorFollower.style.transform = `translate(${posX - 11}px, ${posY - 11}px)`;
+      requestAnimationFrame(animateFollower);
+    }
+    animateFollower();
+  }
+</script>
+
+</body>
+</html>
