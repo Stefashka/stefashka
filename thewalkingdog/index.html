@@ -114,15 +114,6 @@
     transition: color 0.35s ease, transform 0.35s ease;
   }
   @media (max-width: 480px) {
-    /* overflow-x:hidden auf html bricht auf iOS position:fixed (Streifen
-       würde beim Scrollen mitwandern). Auf dem Handy braucht es das nicht,
-       weil die Text Wall hier ohnehin mit einem exakten, festen Wert
-       (-24px, siehe .word-wall unten) bündig bleibt statt mit vw-Werten,
-       die Rundungs-Überlauf verursachen könnten - daher hier sicher
-       abschaltbar. */
-    html {
-      overflow-x: visible;
-    }
     .word-wall {
       /* 100vw + calc(50% - 50vw) kann auf dem Handy je nach Browser durch
          Rundungs-/Scrollbar-Eigenheiten leicht daneben liegen und dadurch
@@ -162,8 +153,21 @@
     }
     /* Auf dem Handy keinen scroll-abhängigen Fortschrittsbalken, sondern
        eine feste, dünne Farbverlauf-Linie ganz oben über der Text Wall. */
+    /* Auf dem Handy keine per JS/position:fixed gesteuerte Leiste (das
+       verursacht auf iOS Probleme beim Scrollen), sondern einfach eine
+       feste Farbverlauf-Linie direkt oben auf der Text Wall selbst -
+       die scrollt ganz normal mit, weil sie Teil des Banners ist. */
     .scroll-progress {
-      width: 100% !important;
+      display: none;
+    }
+    .word-wall::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #f5ec00, #ff8a00, #e53935);
     }
   }
   .empty-state {
