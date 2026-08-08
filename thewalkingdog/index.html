@@ -115,6 +115,15 @@
   }
   @media (max-width: 480px) {
     .word-wall {
+      /* 100vw + calc(50% - 50vw) kann auf dem Handy je nach Browser durch
+         Rundungs-/Scrollbar-Eigenheiten leicht daneben liegen und dadurch
+         links und rechts ungleich viel schwarzen Rand lassen. Auf dem Handy
+         ist body sowieso genau so breit wie der Viewport (max-width:600px
+         greift nicht), daher reicht es hier, exakt das eigene Padding von
+         body (24px) auszugleichen - das ist immer symmetrisch. */
+      width: auto;
+      margin-left: -24px;
+      margin-right: -24px;
       padding: 32px 16px 76px;
     }
     .word-wall p { font-size: 1.2rem; }
@@ -142,14 +151,17 @@
       width: 23px;
       height: 23px;
     }
+    /* Auf dem Handy keinen scroll-abhängigen Fortschrittsbalken, sondern
+       eine feste, dünne Farbverlauf-Linie ganz oben über der Text Wall. */
     .scroll-progress {
-      display: none;
+      width: 100% !important;
     }
   }
   .empty-state {
     text-align: center;
-    padding: 40px 0;
-    margin-top: auto;
+    padding: 40px 0 0;
+    margin-top: 35vh;
+    width: 100%;
   }
   .empty-dog {
     width: 140px;
@@ -1317,8 +1329,9 @@
       return;
     }
     const total = open.reduce((sum, e) => sum + entryAmount(e, rate), 0);
-    const dates = open.map(e => formatDate(e.date)).join(', ');
-    const text = `Offene Tage für ${dog}: ${dates} – macht ${total.toLocaleString('de-DE')} €`;
+    const dates = open.map(e => '• ' + formatDate(e.date)).join('\n');
+    const dogName = dog.charAt(0).toUpperCase() + dog.slice(1);
+    const text = `Hallo ❤️\n\n${dogName} war an folgenden Tagen bei mir:\n\n${dates}\n\nHunde-Tante Steffi freut sich über einen Energieausgleich von ${total.toLocaleString('de-DE')} €.\n\nIn Bar oder gerne auch per Paypal 🙏`;
 
     let copied = false;
     if (navigator.clipboard && navigator.clipboard.writeText && window.isSecureContext) {
