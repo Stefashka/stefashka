@@ -175,10 +175,23 @@
       left: -12px;
     }
   }
+  /* Echter Footer: direktes Geschwisterelement von .page-content in body.
+     Weil body eine Flex-Spalte ist und .page-content flex:1 hat, wächst
+     .page-content und drückt diesen Footer automatisch ganz ans Ende der
+     Seite - egal ob die Seite kurz ist (dann sitzt er am unteren
+     Bildschirmrand) oder lang (dann steht er einfach ganz unten, wie ein
+     normaler Footer). Keine vh-Rechnerei mehr nötig. */
+  .page-footer {
+    display: none;
+  }
+  .page-footer.show {
+    display: block;
+    text-align: center;
+    padding: 40px 0;
+  }
   .empty-state {
     text-align: center;
-    padding: 40px 0 0;
-    margin-top: 35vh;
+    padding: 40px 0;
     width: 100%;
   }
   .empty-dog {
@@ -186,6 +199,7 @@
     height: auto;
     fill: #d3cdc4;
     margin-bottom: 24px;
+    touch-action: manipulation;
   }
   .empty-state .empty {
     padding: 0;
@@ -586,6 +600,43 @@
     margin-top: 12px;
   }
 
+  /* Schloss-Symbol oben rechts zeigt nur den Sperrstatus an (kein Button -
+     entsperrt wird per Doppelklick auf den grauen Hund oder auf dieses
+     Schloss-Symbol selbst - so muss man dafür nicht extra zum Hund
+     runterscrollen). */
+  .lock-status {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(23, 21, 20, 0.07);
+    border-radius: 50%;
+    color: var(--muted);
+    z-index: 2000;
+    touch-action: manipulation;
+  }
+  .lock-status.unlocked {
+    color: #2e7d32;
+    background: rgba(46, 125, 50, 0.12);
+  }
+  /* Solange gesperrt: alle bearbeitenden Bereiche optisch ausgegraut UND
+     tatsächlich nicht klickbar (pointer-events), nicht nur kosmetisch. */
+  body.locked .input-row,
+  body.locked .rate-field,
+  body.locked .amount-override,
+  body.locked .today-btn,
+  body.locked .dog-actions .icon-btn,
+  body.locked .actions .icon-btn,
+  body.locked .bulk-btn,
+  body.locked .drag-handle,
+  body.locked .reorder-controls .icon-btn {
+    pointer-events: none;
+    opacity: 0.4;
+  }
   .page-content {
     position: relative;
     flex: 1;
@@ -926,6 +977,10 @@
 
 </div>
 
+<div class="page-footer" id="pageFooter"></div>
+
+<div class="lock-status" id="lockIcon" aria-hidden="true"></div>
+
 <img class="treat-pop" id="treatPop" src="/thewalkingdog/leckerli-foto.png" alt="" aria-hidden="true">
 
 <div class="schnuffi-card" id="schnuffiCard" aria-hidden="true">
@@ -1043,11 +1098,56 @@
   let rates = {};
   let dogOrder = [];
 
+  // ---- Trick-17-Sperre: Formular ist erst nach Doppelklick auf den
+  // grauen Hund unten bearbeitbar. Das ist bewusst KEIN echter Login
+  // (client-seitig, für jeden mit den Entwicklertools umgehbar) - nur ein
+  // Schutz gegen versehentliches/spontanes Eintragen durch Leute, die
+  // nur den Link haben. Der Zustand bleibt pro Gerät/Browser über
+  // localStorage gespeichert, damit man nicht bei jedem Besuch neu
+  // entsperren muss.
+  const UNLOCK_KEY = 'gassizeitenUnlocked';
+  let isUnlocked = false;
+  try { isUnlocked = localStorage.getItem(UNLOCK_KEY) === '1'; } catch (err) { isUnlocked = false; }
+
+  function requireUnlocked() {
+    return isUnlocked;
+  }
+
+  function setUnlocked(val) {
+    isUnlocked = val;
+    try { localStorage.setItem(UNLOCK_KEY, val ? '1' : '0'); } catch (err) { /* ignore */ }
+    document.body.classList.toggle('locked', !isUnlocked);
+    updateLockIcon();
+    render();
+  }
+
+  function updateLockIcon() {
+    const icon = document.getElementById('lockIcon');
+    if (!icon) return;
+    icon.innerHTML = isUnlocked ? LOCK_OPEN_SVG : LOCK_CLOSED_SVG;
+    icon.title = isUnlocked
+      ? 'Entsperrt - Formular ist bearbeitbar (zum Sperren 2x auf den Hund klicken)'
+      : 'Gesperrt - zum Bearbeiten 2x auf den Hund unten klicken';
+    icon.classList.toggle('unlocked', isUnlocked);
+  }
+
+  const LOCK_CLOSED_SVG = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>';
+  const LOCK_OPEN_SVG = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 7.6-1.8"/></svg>';
+
+  document.addEventListener('dblclick', (ev) => {
+    if (ev.target.closest('.empty-dog') || ev.target.closest('#lockIcon')) {
+      setUnlocked(!isUnlocked);
+    }
+  });
+
+  document.body.classList.toggle('locked', !isUnlocked);
+
   const dogInput = document.getElementById('dogInput');
   const dateInput = document.getElementById('dateInput');
   const addBtn = document.getElementById('addBtn');
   const dogDropdown = document.getElementById('dogDropdown');
   const dogSectionsEl = document.getElementById('dogSections');
+  const pageFooterEl = document.getElementById('pageFooter');
 
   // ---- Scroll-Reveal für Hunde-Karten ----
   // "revealedDogs" merkt sich, welche Karten schon einmal ins Bild gescrollt
@@ -1203,6 +1303,7 @@
   }
 
   function moveDog(draggedDog, targetDog) {
+    if (!requireUnlocked()) return;
     if (draggedDog === targetDog) return;
     const newOrder = dogOrder.filter(d => d !== draggedDog);
     const targetIndex = newOrder.indexOf(targetDog);
@@ -1217,6 +1318,7 @@
   }
 
   function moveDogStep(dog, direction) {
+    if (!requireUnlocked()) return;
     const idx = dogOrder.indexOf(dog);
     if (idx === -1) return;
     const newIdx = idx + direction;
@@ -1228,6 +1330,17 @@
     render();
   }
 
+  const EMPTY_DOG_SVG = `
+    <svg class="empty-dog" viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M126,158 Q152,152 150,128 Q149,116 138,120 Q136,138 122,148 Z"/>
+      <path d="M70,210 Q56,150 78,105 Q100,82 122,105 Q144,150 130,210 Z"/>
+      <path d="M72,48 Q52,52 50,78 Q49,96 62,94 Q76,90 78,66 Q79,56 72,48 Z"/>
+      <path d="M128,48 Q148,52 150,78 Q151,96 138,94 Q124,90 122,66 Q121,56 128,48 Z"/>
+      <circle cx="100" cy="68" r="30"/>
+      <ellipse cx="100" cy="92" rx="15" ry="11"/>
+    </svg>
+  `;
+
   function render() {
     const dogs = getOrderedDogs();
 
@@ -1236,29 +1349,39 @@
     dogSectionsEl.innerHTML = '';
 
     if (dogs.length === 0) {
+      // Ohne Hunde soll der Hund nicht ganz unten im Footer sitzen (das
+      // wäre zu weit weg vom Eingabeformular) - stattdessen wie ursprünglich
+      // direkt in #dogSections, also gleich unter der Eingabezeile.
       const emptyState = document.createElement('div');
       emptyState.className = 'empty-state';
       emptyState.innerHTML = `
-        <svg class="empty-dog" viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <path d="M126,158 Q152,152 150,128 Q149,116 138,120 Q136,138 122,148 Z"/>
-          <path d="M70,210 Q56,150 78,105 Q100,82 122,105 Q144,150 130,210 Z"/>
-          <path d="M72,48 Q52,52 50,78 Q49,96 62,94 Q76,90 78,66 Q79,56 72,48 Z"/>
-          <path d="M128,48 Q148,52 150,78 Q151,96 138,94 Q124,90 122,66 Q121,56 128,48 Z"/>
-          <circle cx="100" cy="68" r="30"/>
-          <ellipse cx="100" cy="92" rx="15" ry="11"/>
-        </svg>
+        ${EMPTY_DOG_SVG}
         <p class="empty">Noch keine Einträge. Trage oben einen Hundenamen und ein Datum ein.</p>
       `;
       dogSectionsEl.appendChild(emptyState);
+      if (pageFooterEl) {
+        pageFooterEl.classList.remove('show');
+        pageFooterEl.innerHTML = '';
+      }
       return;
     }
 
     dogs.forEach((dog, i) => dogSectionsEl.appendChild(renderDogSection(dog, i, dogs.length)));
+
+    // Sobald es Hunde gibt, sitzt der graue Hund als permanenter Footer
+    // (siehe #pageFooter in body, direktes Geschwisterelement von
+    // .page-content) ganz unten auf der Seite und rutscht automatisch
+    // weiter nach unten, wenn oben mehr Hunde-Karten dazukommen.
+    if (pageFooterEl) {
+      pageFooterEl.innerHTML = `<div class="empty-state">${EMPTY_DOG_SVG}</div>`;
+      pageFooterEl.classList.add('show');
+    }
   }
 
   const sortByDate = (a, b) => a.date.localeCompare(b.date);
 
   async function renameDog(oldName) {
+    if (!requireUnlocked()) return;
     const input = await showPrompt('Neuer Name für ' + oldName + ':', oldName);
     if (input === null) return;
     const newName = input.trim();
@@ -1280,6 +1403,7 @@
   }
 
   async function deleteDog(dog) {
+    if (!requireUnlocked()) return;
     const count = entries.filter(e => e.dog === dog).length;
     const ok = await showConfirm(`"${dog}" inklusive aller ${count} Einträge wirklich löschen?`);
     if (!ok) return;
@@ -1297,6 +1421,7 @@
   }
 
   async function markAllBilled(dog) {
+    if (!requireUnlocked()) return;
     const { error } = await sbClient.from(ENTRIES_TABLE).update({ billed: true }).eq('dog', dog).eq('billed', false);
     if (error) {
       await showAlert('Fehler beim Markieren: ' + error.message);
@@ -1307,6 +1432,7 @@
   }
 
   async function addToday(dog) {
+    if (!requireUnlocked()) return;
     const today = todayIso();
     if (entries.some(e => e.dog === dog && e.date === today)) {
       await showAlert(`Für ${dog} existiert für heute bereits ein Eintrag.`);
@@ -1502,6 +1628,7 @@
       rateBtn.className = 'value-edit-btn';
       rateBtn.textContent = rate + ' €';
       rateBtn.onclick = async () => {
+        if (!requireUnlocked()) return;
         const input = await showPrompt('Tagessatz für ' + dog + ':', String(rate));
         if (input === null) return;
         const val = parseFloat(input.replace(',', '.').trim());
@@ -1517,6 +1644,7 @@
       rateInput.step = '1';
       rateInput.value = rate;
       rateInput.addEventListener('change', async () => {
+        if (!requireUnlocked()) { render(); return; }
         const val = parseFloat(rateInput.value);
         rates[dog] = isNaN(val) ? 0 : val;
         await saveSettings();
@@ -1604,6 +1732,7 @@
     const currentAmount = typeof e.customAmount === 'number' ? e.customAmount : rate;
 
     async function applyAmountChange(rawVal) {
+      if (!requireUnlocked()) { render(); return; }
       const val = (rawVal || '').trim();
       const newCustomAmount = parseFloat(val.replace(',', '.'));
       const clearOverride = val === '' || isNaN(newCustomAmount) || newCustomAmount === rate;
@@ -1657,6 +1786,7 @@
 
     const toggleBtn = makeIconBtn(e.billed ? 'undo' : 'check', e.billed ? 'Als offen markieren' : 'Als berechnet markieren');
     toggleBtn.onclick = async () => {
+      if (!requireUnlocked()) return;
       const newBilled = !e.billed;
       const { error } = await sbClient.from(ENTRIES_TABLE).update({ billed: newBilled }).eq('id', e.id);
       if (error) {
@@ -1669,6 +1799,7 @@
 
     const deleteBtn = makeIconBtn('trash', 'Löschen', true);
     deleteBtn.onclick = async () => {
+      if (!requireUnlocked()) return;
       const ok = await showConfirm(`Eintrag vom ${formatDate(e.date)} wirklich löschen?`);
       if (!ok) return;
       const { error } = await sbClient.from(ENTRIES_TABLE).delete().eq('id', e.id);
@@ -1693,6 +1824,7 @@
   }
 
   addBtn.addEventListener('click', async () => {
+    if (!requireUnlocked()) return;
     const dog = dogInput.value.trim();
     const val = dateInput.value;
     if (!dog || !val) return;
@@ -1710,6 +1842,8 @@
     dateInput.focus();
     render();
   });
+
+  updateLockIcon();
 
   (async () => {
     try {
