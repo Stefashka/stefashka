@@ -440,6 +440,7 @@ Resources:`;for(let t of c){if(!t||typeof t!=`string`)throw Error(`@supabase/aut
     min-height:100vh;background:transparent;color:var(--ink);
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
     font-size:17px;line-height:1.5;-webkit-font-smoothing:antialiased;
+    -webkit-text-size-adjust:100%;
   }
   .wrap{max-width:980px;margin:0 auto;padding:26px 20px 80px}
 
@@ -502,6 +503,7 @@ Resources:`;for(let t of c){if(!t||typeof t!=`string`)throw Error(`@supabase/aut
   .btn:focus-visible,.icon-btn:focus-visible{outline:3px solid rgba(217,45,32,.45);outline-offset:2px}
   .icon-btn{background:none;border:none;color:var(--ink-3);font-size:20px;line-height:1;padding:8px 10px;border-radius:9px}
   .icon-btn:hover{color:var(--accent);background:var(--accent-soft)}
+  .icon-btn .tx{display:none}
 
   /* ---------- Tabelle ---------- */
   .month-nav{display:flex;align-items:center;gap:8px}
@@ -572,15 +574,95 @@ Resources:`;for(let t of c){if(!t||typeof t!=`string`)throw Error(`@supabase/aut
   #ring.big{width:56px;height:56px;margin:-28px 0 0 -28px;background:rgba(217,45,32,.12)}
   @media (hover:none){#ring{display:none}}
 
-  @media (max-width:700px){
-    .wrap{padding:16px 14px 60px}
-    .hero{padding:18px 20px}
-    h1{font-size:23px}
-    .card{padding:20px 16px}
-    .card.collapsible{padding:14px 16px}
-    .month-nav .lbl{min-width:120px;font-size:17px}
-    table{min-width:640px}
+  /* ================= Smartphone ================= */
+  @media (max-width:720px){
+    .wrap{padding:14px 12px 56px}
+
+    /* Kopf */
+    .hero{flex-direction:column;align-items:flex-start;gap:4px;padding:16px 18px;border-radius:16px}
+    h1{font-size:22px}
+    .sub{font-size:14px}
+    .status{margin-left:0;margin-top:8px;font-size:13px}
+
+    /* Karten */
+    .card{padding:18px 15px 16px;border-radius:16px;margin-bottom:14px}
+    .card.collapsible{padding:4px 15px}
+    .card h2{font-size:18px;margin-bottom:16px}
+    .disclosure{font-size:18px;min-height:58px}
+    .disclosure .dstate{font-size:14px}
+    .sec{margin:20px 0 -4px}
+
+    /* Formular: jedes Feld auf voller Breite */
+    .grid{gap:12px}
+    .grid > *{grid-column:1 / -1 !important}
+    .f label{font-size:15px}
+    input[type=text],input[type=date],input[type=number],select,textarea{min-height:52px;font-size:17px}
+    textarea{min-height:104px}
+    .check{min-height:52px;gap:14px}
+    .check input{width:26px;height:26px}
+    .check label{flex:1}
+    .btn{width:100%}
+    .card-head{gap:12px}
+    .card-head h2{width:100%}
+    .seg{width:100%}
+    .seg button{flex:1;padding:12px 8px}
+
+    /* Tabelle wird zu Karten */
+    .tbl-wrap{overflow:visible}
+    table,tbody,tfoot,tr,td{display:block;width:100%}
+    thead{display:none}
+    tbody tr{
+      border:1.5px solid var(--line);border-radius:14px;
+      padding:6px 14px 8px;margin-bottom:12px;background:#fff;
+    }
+    tbody tr:hover td{background:transparent}
+    tbody td{
+      border:none;padding:8px 0;display:flex;align-items:center;
+      gap:8px;text-align:right;
+    }
+    tbody td + td{border-top:1px solid var(--line-2)}
+    tbody td::before{content:attr(data-label);font-size:15px;color:var(--ink-2);flex:none;margin-right:auto;text-align:left}
+    .mini{width:130px;min-height:46px;font-size:17px}
+    tbody td.act{justify-content:flex-end;padding-top:8px}
+    tbody td.act::before{content:""}
+    .icon-btn .x{display:none}
+    .icon-btn .tx{display:inline;font-size:15px;color:var(--accent)}
+    .icon-btn{padding:8px 2px}
+
+    /* Summen */
+    tfoot tr{
+      display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px;
+      padding:14px 2px 0;border-top:2px solid var(--ink);margin-top:4px;
+    }
+    tfoot tr.all-row{border-top:1px solid var(--line);margin-top:10px;padding-top:10px}
+    tfoot td{display:inline;width:auto;border:none;padding:0;font-size:19px}
+    tfoot td:empty{display:none}
+    tfoot td.lbl-total{flex:1;font-size:16px}
+    tfoot td.lbl-all{order:-1;flex:1;font-size:15px}
+    tfoot td.sub-total{width:100%;font-size:14px}
+    tfoot #sumHours::after,tfoot #subHours::after{content:" Std.";font-size:15px;color:var(--ink-3)}
+
+    /* Auswertung */
+    .stats-top{gap:8px 26px;margin-bottom:20px}
+    .stat{min-width:44%}
+    .stat strong{font-size:22px}
+    .month-nav{width:100%;justify-content:space-between}
+    .month-nav .btn{width:auto;min-width:60px}
+    .month-nav .lbl{min-width:0;flex:1}
+    .chart{height:130px;gap:4px}
+    .xaxis{gap:4px}
+    .xaxis div{font-size:10px}
+    .empty{padding:20px 2px}
   }
+
+  @media (max-width:380px){
+    .wrap{padding:12px 10px 50px}
+    h1{font-size:20px}
+    .card{padding:16px 13px 14px}
+    .mini{width:110px}
+    .xaxis div{font-size:9px}
+  }
+
 </style>
 </head>
 <body>
@@ -1057,14 +1139,14 @@ function renderTable(){
   list.forEach(function(e){
     var tr = document.createElement("tr");
     tr.innerHTML =
-      '<td>' + deDate(e.date) + '</td>' +
-      '<td>' + esc(e.name) + (e.special ? ' <span class="muted">(Sonder)</span>' : '') + '</td>' +
-      '<td class="num"><input class="mini" type="number" step="0.25" min="0" value="' + e.hours + '" data-f="hours" aria-label="Stunden"></td>' +
-      '<td class="num">' + (e.sub
+      '<td data-label="Datum">' + deDate(e.date) + '</td>' +
+      '<td data-label="Kurs">' + esc(e.name) + (e.special ? ' <span class="muted">(Sonder)</span>' : '') + '</td>' +
+      '<td class="num" data-label="Stunden"><input class="mini" type="number" step="0.25" min="0" value="' + e.hours + '" data-f="hours" aria-label="Stunden"></td>' +
+      '<td class="num" data-label="Betrag">' + (e.sub
           ? '<span class="muted">–</span>'
           : '<input class="mini" type="number" step="0.01" min="0" value="' + e.amount.toFixed(2) + '" data-f="amount" aria-label="Betrag">') + '</td>' +
-      '<td>' + (e.sub ? '<span class="tag">' + (e.subFor ? esc(e.subFor) : 'vertreten') + '</span>' : '<span class="muted">–</span>') + '</td>' +
-      '<td><button class="icon-btn" title="Eintrag löschen" aria-label="Eintrag löschen">&times;</button></td>';
+      '<td data-label="Vertreten durch">' + (e.sub ? '<span class="tag">' + (e.subFor ? esc(e.subFor) : 'vertreten') + '</span>' : '<span class="muted">–</span>') + '</td>' +
+      '<td class="act"><button class="icon-btn" title="Eintrag löschen" aria-label="Eintrag löschen"><span class="x">&times;</span><span class="tx">Eintrag löschen</span></button></td>';
 
     tr.querySelectorAll("input").forEach(function(inp){
       inp.addEventListener("change", function(){
