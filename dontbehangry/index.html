@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rezepte</title>
+<meta name="description" content="Meine Lieblingsrezepte – Süß, Brot, Deftig und Aufstrich. Für immer gesammelt.">
+<meta name="theme-color" content="#ffffff">
+<link rel="stylesheet" href="/dontbehangry/css/style.css">
+</head>
+<body>
+
+<a class="sprung" href="#inhalt">Zum Inhalt springen</a>
+
+<header class="kopf">
+  <div class="wrap kopf__innen">
+    <a class="marke" href="#/">Rezepte</a>
+    <div class="kopf__knoepfe">
+      <button id="btnEinkauf" class="knopf knopf--rand" type="button" aria-expanded="false" aria-controls="einkauf">
+        Einkaufsliste<span id="einkaufZahl" class="perle" hidden>0</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="inhalt">
+
+  <!-- ─────────── Übersicht ─────────── -->
+  <section id="ansichtListe" class="ansicht">
+    <div class="wrap">
+
+      <div class="intro">
+        <h1 class="intro__titel">Meine Lieblingsrezepte</h1>
+        <p class="intro__text">
+          Gesammelt aus Kochzeitschriften, PDFs und von Instagram –
+          nachgekocht, angepasst, aufgeschrieben.
+        </p>
+      </div>
+
+      <div class="steuerung">
+        <div class="suchfeld">
+          <svg class="suchfeld__lupe" viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5"/><path d="M12.8 12.8 17 17"/></svg>
+          <input type="search" id="suche" placeholder="Rezept, Zutat oder Stichwort …" autocomplete="off" spellcheck="false" aria-label="Rezepte durchsuchen">
+          <button type="button" id="sucheLeeren" class="suchfeld__weg" hidden aria-label="Suche zurücksetzen">&times;</button>
+        </div>
+        <nav class="reiter" id="kategorien" aria-label="Kategorien"></nav>
+      </div>
+
+      <div class="trefferzeile">
+        <span id="treffer" aria-live="polite"></span>
+        <button type="button" id="btnFilter" class="filterAuf" aria-expanded="false" aria-controls="filterFeld">
+          Filter<span id="filterZahl" class="perle perle--klein" hidden>0</span>
+        </button>
+      </div>
+
+      <div id="filterFeld" class="filterFeld" hidden></div>
+
+      <ul class="karten" id="karten"></ul>
+      <p class="hinweisLeer" id="leer" hidden>Dazu ist noch kein Rezept eingepflegt.</p>
+
+    </div>
+  </section>
+
+  <!-- ─────────── Detail ─────────── -->
+  <section id="ansichtDetail" class="ansicht" hidden></section>
+
+</main>
+
+<footer class="fuss">
+  <div class="wrap fuss__innen">
+    <p class="fuss__zeile">Meine Rezeptsammlung · privat geführt, gern geteilt</p>
+    <p class="fuss__klein">
+      Kalorienangaben sind Schätzwerte aus den Zutatenmengen und nicht als Ernährungsberatung gedacht.
+    </p>
+
+    <div class="sicherung">
+      <div class="sicherung__text">
+        <h2 class="sicherung__titel">Sammlung sichern</h2>
+        <p class="sicherung__klein">
+          Legt eine Datei mit allen Rezepten und deinen Einstellungen ab. Einmal im Halbjahr
+          reicht – „für immer“ braucht eine Kopie, die nicht nur auf diesem Rechner liegt.
+        </p>
+      </div>
+      <div class="sicherung__knoepfe">
+        <button type="button" id="btnExport" class="knopf knopf--rand">Sicherung herunterladen</button>
+        <button type="button" id="btnImport" class="knopf knopf--nackt">Sicherung einlesen</button>
+        <input type="file" id="importDatei" accept="application/json,.json" hidden>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ─────────── Einkaufsliste ─────────── -->
+<div id="schleier" class="schleier" hidden></div>
+<aside id="einkauf" class="schublade" hidden aria-label="Einkaufsliste">
+  <div class="schublade__kopf">
+    <h2 class="schublade__titel">Einkaufsliste</h2>
+    <button type="button" id="einkaufZu" class="knopf knopf--nackt" aria-label="Einkaufsliste schließen">&times;</button>
+  </div>
+  <div class="schublade__koerper" id="einkaufKoerper"></div>
+  <div class="schublade__fuss">
+    <button type="button" id="einkaufKopieren" class="knopf knopf--voll">Als Text kopieren</button>
+    <button type="button" id="einkaufLeeren" class="knopf knopf--nackt knopf--warn">Liste leeren</button>
+  </div>
+</aside>
+
+<!-- ─────────── Kochmodus ─────────── -->
+<section id="kochmodus" class="koch" hidden aria-label="Kochmodus"></section>
+
+<!-- ─────────── Timer ─────────── -->
+<div id="timerStapel" class="timerStapel" aria-live="polite"></div>
+
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+<script src="/dontbehangry/js/rezepte.js"></script>
+<script src="/dontbehangry/js/app.js"></script>
+</body>
+</html>
