@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<!-- ══════════════════════════════════════════════════════════════
+     ENTWURFSFASSUNG – Spielwiese für die Gestaltung.
+
+     Vollständige, eigenständige Kopie. Alles liegt hier: Gestaltung,
+     Logik, Rezeptdaten, Bilder, Quellen. Nichts wird geliehen, nichts
+     wirkt auf die veröffentlichte Seite unter /dontbehangry/ zurück.
+
+     Gefällt dir das Ergebnis, kopierst du den ganzen Ordnerinhalt nach
+     dontbehangry/ – mehr nicht. Alle Pfade sind relativ und richten
+     sich nach dem Ort der Datei, der Ordner darf also heißen wie er
+     will.
+
+     Achtung: Rezepte, die du im Original einpflegst, erscheinen hier
+     nicht mehr von selbst – die beiden Sammlungen laufen ab jetzt
+     getrennt.
+     ══════════════════════════════════════════════════════════════ -->
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rezepte – Entwurf</title>
+<meta name="description" content="Meine Lieblingsrezepte – Süß, Brot, Deftig und Aufstrich. Für immer gesammelt.">
+<meta name="theme-color" content="#fdfbf7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#14131a" media="(prefers-color-scheme: dark)">
+
+<!-- Zum Homescreen hinzufügen: eigenes Symbol, Start im Vollbild ohne
+     Browserleiste. Alle Pfade relativ, der Ordner darf weiter heißen
+     wie er will. -->
+<link rel="icon" href="icons/icon-32.png" sizes="32x32">
+<link rel="icon" href="icons/icon-192.png" sizes="192x192">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Rezepte">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+<script>
+/* Fehlt der Schrägstrich am Ende der Adresse – „…/dontbehangry" statt
+   „…/dontbehangry/" – und leitet der Server nicht um, dann löst der
+   Browser jeden relativen Pfad eine Ebene zu hoch auf: css/style.css
+   landet bei /css/style.css, und die Seite kommt nackt an.
+
+   Hier wird die Adresse deshalb einmal richtiggestellt, bevor
+   irgendetwas geladen ist. Ein bloßes Umschreiben der Adresszeile
+   genügt nicht: Der Browser beginnt CSS und JavaScript schon zu holen,
+   bevor dieses Skript läuft, und zwar mit der falschen Adresse. Nur ein
+   echter Neuaufruf räumt das aus.
+
+   Der Preis ist ein zusätzlicher Aufruf – aber nur beim allerersten
+   Mal ohne Schrägstrich. Danach stimmt die Adresse.
+
+   Der Gewinn: Unten stehen keine absoluten Pfade. Der Ordner darf
+   heißen wie er will und beliebig tief liegen, und ein Doppelklick auf
+   index.html funktioniert weiterhin – Adressen mit Dateiendung bleiben
+   unangetastet. */
+(function () {
+  var p = location.pathname;
+  if (!/\/$/.test(p) && !/\.[a-z0-9]+$/i.test(p) && location.protocol !== "file:") {
+    location.replace(p + "/" + location.search + location.hash);
+  }
+})();
+</script>
+
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<a class="sprung" href="#inhalt">Zum Inhalt springen</a>
+
+<header class="kopf">
+  <div class="wrap kopf__innen">
+    <a class="marke" href="#/">Rezepte</a>
+    <div class="kopf__knoepfe">
+      <button id="btnEinkauf" class="knopf knopf--rand" type="button" aria-expanded="false" aria-controls="einkauf">
+        Einkaufsliste<span id="einkaufZahl" class="perle" hidden>0</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="inhalt">
+
+  <!-- ─────────── Übersicht ─────────── -->
+  <section id="ansichtListe" class="ansicht">
+    <div class="wrap">
+
+      <div class="intro">
+        <div class="intro__wort">
+          <h1 class="intro__titel">
+            <span class="intro__vor">Meine</span>
+            <span class="intro__wucht">Lieblingsrezepte</span>
+          </h1>
+          <p class="intro__text">
+            Gesammelt aus Kochzeitschriften, PDFs und von Instagram –
+            nachgekocht, angepasst, aufgeschrieben.
+          </p>
+        </div>
+
+      </div>
+
+      <!-- Laufband wie ein gedrucktes Spruchband. Rein zur Zierde,
+           deshalb für Vorleseprogramme unsichtbar. Der Inhalt steht
+           zweimal da, damit die Schleife ohne Sprung umläuft. -->
+      <div class="laufband" aria-hidden="true">
+        <div class="laufband__zug">
+          <span class="laufband__satz">Meine Küche, meine Regeln <b>·</b> Hunger macht schlechte Entscheidungen <b>·</b> Salz ist keine Meinung <b>·</b> Der Ofen lügt nie <b>·</b> Rezepte sind Vorschläge <b>·</b> Erst essen, dann reden <b>·</b> Wer mitisst, darf nicht meckern <b>·</b> Alles vergeht, manches bei 240 Grad <b>·</b> Abschmecken ist Pflicht <b>·</b> </span>
+          <span class="laufband__satz">Meine Küche, meine Regeln <b>·</b> Hunger macht schlechte Entscheidungen <b>·</b> Salz ist keine Meinung <b>·</b> Der Ofen lügt nie <b>·</b> Rezepte sind Vorschläge <b>·</b> Erst essen, dann reden <b>·</b> Wer mitisst, darf nicht meckern <b>·</b> Alles vergeht, manches bei 240 Grad <b>·</b> Abschmecken ist Pflicht <b>·</b> </span>
+        </div>
+      </div>
+
+      <!-- Zuletzt gekocht – wird von js/app.js gefüllt oder bleibt leer. -->
+      <section id="zuletzt" class="zuletzt" aria-label="Zuletzt gekocht" hidden></section>
+
+      <div class="steuerung">
+        <div class="suchfeld">
+          <svg class="suchfeld__lupe" viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5"/><path d="M12.8 12.8 17 17"/></svg>
+          <input type="search" id="suche" placeholder="Rezept, Zutat oder Stichwort …" autocomplete="off" spellcheck="false" aria-label="Rezepte durchsuchen">
+          <button type="button" id="sucheLeeren" class="suchfeld__weg" hidden aria-label="Suche zurücksetzen">&times;</button>
+        </div>
+        <nav class="reiter" id="kategorien" aria-label="Kategorien"></nav>
+      </div>
+
+      <div class="trefferzeile">
+        <span id="treffer" aria-live="polite"></span>
+        <button type="button" id="btnFilter" class="filterAuf" aria-expanded="false" aria-controls="filterFeld">
+          Filter<span id="filterZahl" class="perle perle--klein" hidden>0</span>
+        </button>
+      </div>
+
+      <div id="filterFeld" class="filterFeld" hidden></div>
+
+      <ul class="karten" id="karten"></ul>
+      <p class="hinweisLeer" id="leer" hidden>Dazu ist noch kein Rezept eingepflegt.</p>
+
+    </div>
+  </section>
+
+  <!-- ─────────── Detail ─────────── -->
+  <section id="ansichtDetail" class="ansicht" hidden></section>
+
+  <!-- ─────────── Impressum ─────────── -->
+  <section id="ansichtImpressum" class="ansicht" hidden>
+    <div class="wrap">
+      <a class="zurueck" href="#/">← Alle Rezepte</a>
+      <h1 class="rTitel impressum__titel">Impressum</h1>
+
+      <div class="impressum">
+        <div class="impressum__block">
+          <h2 class="impressum__marke">Angaben gemäß § 5 DDG</h2>
+          <p>
+            Stefanie Eichwald<br>
+            Oberhofstraße 55<br>
+            88045 Friedrichshafen<br>
+            Deutschland
+          </p>
+        </div>
+
+        <div class="impressum__block">
+          <h2 class="impressum__marke">Verantwortlich für den Inhalt</h2>
+          <p>Stefanie Eichwald, Anschrift wie oben.</p>
+        </div>
+
+        <div class="impressum__block">
+          <h2 class="impressum__marke">Hosting</h2>
+          <p>
+            Vercel Inc.<br>
+            440 N Barranca Ave #4133<br>
+            Covina, CA 91723, USA
+          </p>
+        </div>
+
+        <div class="impressum__block">
+          <h2 class="impressum__marke">Zu dieser Seite</h2>
+          <p>
+            Private Rezeptsammlung ohne kommerzielle Absicht. Die Rezepte sind
+            nachgekocht und in eigenen Worten aufgeschrieben; wo eine Vorlage
+            zugrunde liegt, ist sie beim Rezept verlinkt. Kalorienangaben sind
+            aus den Zutatenmengen geschätzt und keine Ernährungsberatung.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="fuss">
+  <div class="wrap fuss__innen">
+    <p class="fuss__zeile">Meine Rezeptsammlung · privat geführt, gern geteilt</p>
+    <p class="fuss__klein">
+      Kalorienangaben sind Schätzwerte aus den Zutatenmengen und nicht als Ernährungsberatung gedacht.
+    </p>
+    <p class="fuss__klein"><a class="fuss__link" href="#/impressum">Impressum</a></p>
+
+    <div class="sicherung">
+      <div class="sicherung__text">
+        <h2 class="sicherung__titel">Sammlung sichern</h2>
+        <p class="sicherung__klein">
+          Legt eine Datei mit allen Rezepten und deinen Einstellungen ab. Einmal im Halbjahr
+          reicht – „für immer“ braucht eine Kopie, die nicht nur auf diesem Rechner liegt.
+        </p>
+      </div>
+      <div class="sicherung__knoepfe">
+        <button type="button" id="btnExport" class="knopf knopf--rand">Sicherung herunterladen</button>
+        <button type="button" id="btnImport" class="knopf knopf--nackt">Sicherung einlesen</button>
+        <input type="file" id="importDatei" accept="application/json,.json" hidden>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ─────────── Einkaufsliste ─────────── -->
+<div id="schleier" class="schleier" hidden></div>
+<aside id="einkauf" class="schublade" hidden aria-label="Einkaufsliste">
+  <div class="schublade__kopf">
+    <h2 class="schublade__titel">Einkaufsliste</h2>
+    <button type="button" id="einkaufZu" class="knopf knopf--nackt" aria-label="Einkaufsliste schließen">&times;</button>
+  </div>
+  <div class="schublade__koerper" id="einkaufKoerper"></div>
+  <div class="schublade__fuss">
+    <button type="button" id="einkaufKopieren" class="knopf knopf--voll">Als Text kopieren</button>
+    <button type="button" id="einkaufLeeren" class="knopf knopf--nackt knopf--warn">Liste leeren</button>
+  </div>
+</aside>
+
+<!-- ─────────── Kochmodus ─────────── -->
+<section id="kochmodus" class="koch" hidden aria-label="Kochmodus"></section>
+
+<!-- ─────────── Timer ─────────── -->
+<div id="timerStapel" class="timerStapel" aria-live="polite"></div>
+
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+<script src="js/rezepte.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
