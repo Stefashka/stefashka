@@ -1,0 +1,9 @@
+# Supabase-Projektkonfiguration
+# Wird von der Supabase CLI gelesen. Reicht für das, was die App braucht.
+
+project_id = "dczolqwshfapsnpwsasy"
+
+[functions.generate-words]
+# Die App meldet niemanden an, es gibt also kein JWT zum Prüfen.
+# Der Schutz läuft über ALLOWED_ORIGINS und das Ratenlimit in der Function.
+verify_jwt = false
