@@ -8,7 +8,7 @@
 <meta name="description" content="Das Erklärspiel für Freunde mit fragwürdigem Allgemeinwissen. Kategorie wählen, Handy vor die Brust, raten, kippen.">
 
 <!-- PWA / iOS Home-Bildschirm -->
-<link rel="manifest" href="./manifest.webmanifest">
+<link rel="manifest" href="/bistdudumm/manifest.webmanifest">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -17,19 +17,20 @@
 <meta name="theme-color" content="#FFF4E4" media="(prefers-color-scheme: light)">
 <meta name="format-detection" content="telephone=no">
 
-<link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png">
-<link rel="apple-touch-icon" sizes="167x167" href="./icons/icon-167.png">
-<link rel="apple-touch-icon" sizes="152x152" href="./icons/icon-152.png">
-<link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
-<link rel="icon" type="image/png" sizes="32x32" href="./icons/icon-32.png">
-<link rel="icon" href="./icons/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" sizes="180x180" href="/bistdudumm/icons/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="167x167" href="/bistdudumm/icons/icon-167.png">
+<link rel="apple-touch-icon" sizes="152x152" href="/bistdudumm/icons/icon-152.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/bistdudumm/icons/icon-192.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/bistdudumm/icons/icon-32.png">
+<link rel="icon" href="/bistdudumm/icons/favicon.ico" sizes="any">
 
 <meta property="og:title" content="Bist Du Dumm?!">
 <meta property="og:description" content="Kategorie wählen. Handy vor die Brust. Raten. Kippen. Blamieren.">
-<meta property="og:image" content="./icons/icon-512.png">
+<meta property="og:image" content="/bistdudumm/icons/icon-512.png">
 <meta property="og:type" content="website">
 
-<link rel="stylesheet" href="./css/app.css">
+<link rel="stylesheet" href="/bistdudumm/css/app.css"
+      onerror="var l=document.createElement('link');l.rel='stylesheet';l.href='./css/app.css';document.head.appendChild(l);">
 </head>
 <body>
 
@@ -243,11 +244,15 @@
 
 <div class="toast" id="toast"></div>
 
-<script type="module" src="./js/app.js"></script>
+<!-- Absoluter Pfad wie vereinbart. Das onerror ist nur ein Netz:
+     Sollte der Ordner mal anders heißen oder verschoben werden, lädt die
+     App relativ nach, statt weiß zu bleiben. -->
+<script type="module" src="/bistdudumm/js/app.js"
+        onerror="var s=document.createElement('script');s.type='module';s.src='./js/app.js';document.body.appendChild(s);"></script>
 <script>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./sw.js').catch(() => {});
+      navigator.serviceWorker.register('/bistdudumm/sw.js').catch(() => {});
     });
   }
 </script>
