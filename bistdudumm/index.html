@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="de" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+<meta name="color-scheme" content="dark light">
+<title>Bist Du Dumm?!</title>
+<meta name="description" content="Das Erklärspiel für Freunde mit fragwürdigem Allgemeinwissen. Kategorie wählen, Handy vor die Brust, raten, kippen.">
+
+<!-- PWA / iOS Home-Bildschirm -->
+<link rel="manifest" href="/bistdudumm/manifest.webmanifest">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Bist Du Dumm?!">
+<meta name="theme-color" content="#100823" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#FFF4E4" media="(prefers-color-scheme: light)">
+<meta name="format-detection" content="telephone=no">
+
+<link rel="apple-touch-icon" sizes="180x180" href="/bistdudumm/icons/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="167x167" href="/bistdudumm/icons/icon-167.png">
+<link rel="apple-touch-icon" sizes="152x152" href="/bistdudumm/icons/icon-152.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/bistdudumm/icons/icon-192.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/bistdudumm/icons/icon-32.png">
+<link rel="icon" href="/bistdudumm/icons/favicon.ico" sizes="any">
+
+<meta property="og:title" content="Bist Du Dumm?!">
+<meta property="og:description" content="Kategorie wählen. Handy vor die Brust. Raten. Kippen. Blamieren.">
+<meta property="og:image" content="/bistdudumm/icons/icon-512.png">
+<meta property="og:type" content="website">
+
+<link rel="stylesheet" href="/bistdudumm/css/app.css"
+      onerror="var l=document.createElement('link');l.rel='stylesheet';l.href='./css/app.css';document.head.appendChild(l);">
+</head>
+<body>
+
+<div class="stage-bg" aria-hidden="true">
+  <div class="blob blob-a"></div>
+  <div class="blob blob-b"></div>
+  <div class="blob blob-c"></div>
+</div>
+<div class="grain" aria-hidden="true"></div>
+
+<div id="app">
+
+  <!-- ============================ SPLASH ============================ -->
+  <section class="screen is-active" id="screen-splash">
+    <div class="splash-wrap">
+      <div class="splash-logo">?!</div>
+      <h1 class="splash-title" id="splashTitle" aria-label="Bist Du Dumm?!"></h1>
+      <p class="splash-tag" id="splashTag"></p>
+      <div class="splash-dots" aria-hidden="true"><i></i><i></i><i></i></div>
+    </div>
+  </section>
+
+  <!-- ============================= HOME ============================= -->
+  <section class="screen" id="screen-home">
+    <header class="topbar">
+      <div class="wordmark"><span class="qm">?!</span><span>Bist Du Dumm?!</span></div>
+      <div class="spacer"></div>
+      <button class="icon-btn" id="btnTheme" aria-label="Hell-/Dunkelmodus umschalten">☀️</button>
+      <button class="icon-btn" id="btnBoard" aria-label="Gesamtstand und Statistik">🏆</button>
+      <button class="icon-btn" id="btnSettings" aria-label="Einstellungen">⚙️</button>
+    </header>
+
+    <div class="scroll">
+      <div class="greeting">
+        <div class="h-lg" id="homeGreeting">Such dir was aus.</div>
+        <div class="tiny" id="homeSub">40 Kategorien · 80 Sekunden · null Ausreden</div>
+      </div>
+
+      <button class="btn btn-random" id="btnRandom">
+        <span class="dice">🎲</span><span>Zufallskategorie</span>
+      </button>
+
+      <div id="recentWrap" hidden>
+        <div class="section-head"><span class="eyebrow">Zuletzt gespielt</span></div>
+        <div class="chip-row" id="recentRow"></div>
+      </div>
+
+      <div class="section-head">
+        <span class="eyebrow">Alle Kategorien</span>
+        <span class="tiny" id="catCount"></span>
+      </div>
+
+      <div class="search" style="margin-bottom:12px">
+        <span aria-hidden="true">🔍</span>
+        <input id="catSearch" type="search" placeholder="Kategorie suchen …" autocomplete="off" enterkeyhint="search">
+      </div>
+
+      <div class="grid-cats" id="catGrid"></div>
+
+      <button class="add-cat" id="btnAddCat">＋ Eigene Kategorie</button>
+
+      <p class="tiny" style="text-align:center;margin-top:22px;opacity:.6">
+        v<span id="verLabel"></span> · Handy quer halten macht den Begriff größer
+      </p>
+    </div>
+  </section>
+
+  <!-- ============================= PREP ============================= -->
+  <section class="screen" id="screen-prep">
+   <div id="prepRotor">
+    <div class="prep-inner">
+      <div class="prep-cat" id="prepCat"><span>🎲</span><span>Kategorie</span></div>
+      <div class="prep-team" id="prepTeam" hidden></div>
+
+      <div id="prepStage"></div>
+
+      <h2 class="h-lg" id="prepTitle">Halte das Handy vor deine Brust</h2>
+      <p class="body" id="prepSub">Display nach außen. Ja, wirklich außen.</p>
+
+      <p class="prep-status" id="prepStatus"></p>
+
+      <div class="prep-actions-box" id="prepActions">
+        <button class="btn btn-primary" id="btnPrepStart">Los geht’s</button>
+        <button class="btn btn-ghost btn-sm" id="btnPrepBack">Andere Kategorie</button>
+      </div>
+    </div>
+   </div>
+
+    <!-- Dreht NICHT mit: bleibt lesbar, solange das Handy noch hochkant ist -->
+    <div class="turn-hint" id="turnHint" hidden>
+      <span class="turn-icon" aria-hidden="true">⟳</span>
+      <span>Handy quer drehen</span>
+    </div>
+  </section>
+
+  <!-- ============================= RUNDE ============================ -->
+  <section class="screen" id="screen-round">
+    <div class="round-bg" id="roundBg"></div>
+    <div class="round-layer">
+     <div id="roundRotor">
+      <div class="round-hud">
+        <button class="hud-x" id="btnRoundExit" aria-label="Runde pausieren oder abbrechen">✕</button>
+        <div class="hud-pill"><span aria-hidden="true">✅</span><span class="n" id="hudScore">0</span></div>
+        <div class="hud-pill hud-cat" id="hudCat"></div>
+        <div class="timer" id="timer">
+          <svg viewBox="0 0 54 54" width="54" height="54">
+            <circle class="bg" cx="27" cy="27" r="23"></circle>
+            <circle class="fg" cx="27" cy="27" r="23" stroke-dasharray="144.5" stroke-dashoffset="0"></circle>
+          </svg>
+          <div class="t" id="timerText">80</div>
+        </div>
+      </div>
+
+      <div class="round-stage" id="roundStage">
+        <div class="word-box">
+          <div class="word" id="wordEl">Loren Ipsum</div>
+          <div class="word-count" id="wordCount"></div>
+        </div>
+      </div>
+
+      <div id="roundFoot">
+        <div class="round-hint" id="roundHint">
+          <span class="rh hit"><b>↓</b> Runter = richtig</span>
+          <span class="rh miss"><b>↑</b> Hoch = passen</span>
+        </div>
+        <div class="fallback" id="fallbackBtns" hidden>
+          <button class="fb-miss" id="btnMiss">⏭ Passen</button>
+          <button class="fb-hit" id="btnHit">✅ Richtig</button>
+        </div>
+      </div>
+
+      <!-- Pause / Abbruch – liegt im Rotor, dreht also bei Querhaltung mit -->
+      <div class="pause" id="pauseOverlay" hidden>
+        <div class="pause-card">
+          <div class="h-lg" id="pauseTitle">Kurze Pause</div>
+          <p class="body" id="pauseSub">Das Wort ist versteckt. Keine Sorge.</p>
+          <div class="count-num pause-count" id="pauseCount" hidden>3</div>
+          <div class="pause-actions" id="pauseActions">
+            <button class="btn btn-primary" id="btnResume">Weiterspielen</button>
+            <button class="btn btn-ghost btn-sm" id="btnFinishNow">Jetzt auswerten</button>
+            <button class="btn btn-ghost btn-sm" id="btnDiscard" style="color:var(--bad)">Runde verwerfen</button>
+          </div>
+        </div>
+      </div>
+     </div>
+    </div>
+
+    <div class="flash" id="flash"><div class="stamp" id="flashText"></div></div>
+    <div class="confetti" id="confetti" aria-hidden="true"></div>
+  </section>
+
+  <!-- =========================== AUSWERTUNG ========================= -->
+  <section class="screen" id="screen-result">
+    <header class="topbar">
+      <button class="icon-btn" id="btnResultHome" aria-label="Zur Übersicht">✕</button>
+      <div class="spacer"></div>
+      <div class="tiny" id="resultCat"></div>
+    </header>
+    <div class="scroll">
+      <div class="result-hero">
+        <div class="eyebrow" id="resultShout">Zeit um!</div>
+        <div class="result-score" id="resultScore">0</div>
+        <div class="h-lg result-verdict" id="resultVerdict">Totalschaden</div>
+        <div class="body result-line" id="resultLine"></div>
+      </div>
+
+      <div id="teamAssignWrap" hidden style="margin-top:18px">
+        <div class="section-head"><span class="eyebrow">Punkte für</span></div>
+        <div class="team-assign" id="teamAssign"></div>
+      </div>
+
+      <div class="section-head">
+        <span class="eyebrow">Begriffe dieser Runde</span>
+        <span class="tiny" id="resultCounts"></span>
+      </div>
+      <div class="wordlist" id="resultWords"></div>
+
+      <div style="display:grid;gap:10px;margin-top:22px">
+        <button class="btn btn-primary" id="btnNewCat">Neue Kategorie wählen</button>
+        <div class="btn-row">
+          <button class="btn btn-ghost btn-sm" id="btnAgain">Nochmal</button>
+          <button class="btn btn-ghost btn-sm" id="btnToBoard">Gesamtstand</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== GESAMTSTAND / STATISTIK ================= -->
+  <section class="screen" id="screen-board">
+    <header class="topbar">
+      <button class="icon-btn" id="btnBoardBack" aria-label="Zurück">‹</button>
+      <div class="spacer"></div>
+      <div class="wordmark"><span>Auswertung</span></div>
+      <div class="spacer"></div>
+      <button class="icon-btn" id="btnTeams" aria-label="Teams verwalten">👥</button>
+    </header>
+    <div class="scroll">
+      <div class="seg" id="boardTabs" style="margin-bottom:16px">
+        <button data-tab="totals" class="is-on">Gesamtstand</button>
+        <button data-tab="stats">Statistik</button>
+      </div>
+      <div id="boardTotals"></div>
+      <div id="boardStats" hidden></div>
+    </div>
+  </section>
+
+</div>
+
+<!-- =============================== SHEET =============================== -->
+<div class="sheet-backdrop" id="sheetBackdrop"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true">
+  <div class="sheet-grip"></div>
+  <div class="sheet-head">
+    <div class="h-md" id="sheetTitle">Titel</div>
+    <button class="icon-btn" id="sheetClose" aria-label="Schließen">✕</button>
+  </div>
+  <div class="sheet-body" id="sheetBody"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- Absoluter Pfad wie vereinbart. Das onerror ist nur ein Netz:
+     Sollte der Ordner mal anders heißen oder verschoben werden, lädt die
+     App relativ nach, statt weiß zu bleiben. -->
+<script type="module" src="/bistdudumm/js/app.js"
+        onerror="var s=document.createElement('script');s.type='module';s.src='./js/app.js';document.body.appendChild(s);"></script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/bistdudumm/sw.js').catch(() => {});
+    });
+  }
+</script>
+</body>
+</html>
