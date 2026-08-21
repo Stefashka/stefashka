@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>STEF — BÜCHER</title>
+<meta name="description" content="Sechs Romane, die zu meinen Favoriten gehören — mit Autor:innen, Originaltiteln, Übersetzungen und Auszeichnungen.">
+<meta name="theme-color" content="#F7F6F3">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anybody:ital,wdth,wght@0,75..125,400..900;1,75..125,400..900&family=Space+Grotesk:wght@300..700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     STEF — BÜCHER
+     Unterseite im Design von stefashka.de
+     Tasten: F = Farbe wechseln · C = Chaos an/aus
+     ============================================================ */
+
+  :root{
+    --paper:#F7F6F3;
+    --ink:#111110;
+    --ink-60:rgba(17,17,16,.60);
+    --ink-40:rgba(17,17,16,.40);
+    --line:rgba(17,17,16,.16);
+    --acc:#E6007A;              /* Pink — Grundfarbe der Seite */
+    --gut:clamp(18px,4vw,56px);
+    --rad:0px;
+  }
+
+  *,*::before,*::after{box-sizing:border-box}
+
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto} }
+
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Space Grotesk',ui-sans-serif,system-ui,sans-serif;
+    font-size:clamp(15px,.55vw + 13px,17px);
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+
+  ::selection{background:var(--acc);color:var(--paper)}
+
+  a{color:inherit;text-decoration:none}
+
+  /* ---------- Typo-Bausteine ---------- */
+
+  .display{
+    font-family:'Anybody',Impact,sans-serif;
+    font-weight:800;
+    font-variation-settings:'wdth' 112;
+    text-transform:uppercase;
+    line-height:.86;
+    letter-spacing:-.02em;
+    margin:0;
+  }
+
+  .serif{font-family:'Instrument Serif',Georgia,serif;font-weight:400}
+
+  .label{
+    font-family:'Space Grotesk',sans-serif;
+    font-size:.68rem;
+    font-weight:500;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+  }
+
+  /* ---------- Fortschrittsbalken ---------- */
+
+  #bar{
+    position:fixed;inset:0 auto auto 0;height:3px;width:0%;
+    background:var(--acc);z-index:60;transition:width .08s linear;
+  }
+
+  /* ---------- Kopfzeile ---------- */
+
+  header.top{
+    position:sticky;top:0;z-index:50;
+    display:flex;align-items:center;gap:clamp(10px,2vw,24px);
+    padding:14px var(--gut);
+    background:color-mix(in srgb,var(--paper) 88%,transparent);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .brand{
+    font-family:'Anybody',sans-serif;font-weight:900;
+    font-variation-settings:'wdth' 90;
+    letter-spacing:.02em;font-size:1.05rem;text-transform:uppercase;
+  }
+  .brand span{color:var(--acc)}
+  .top nav{margin-left:auto;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+
+  .key{
+    display:inline-flex;align-items:center;gap:.5em;
+    border:1px solid var(--ink);background:transparent;color:var(--ink);
+    padding:7px 11px;cursor:pointer;
+    font-family:'Space Grotesk',sans-serif;font-size:.66rem;font-weight:500;
+    letter-spacing:.14em;text-transform:uppercase;
+    transition:background .15s,color .15s,transform .15s;
+  }
+  .key kbd{
+    font-family:'Space Grotesk',monospace;font-size:.6rem;
+    border:1px solid currentColor;padding:1px 4px;opacity:.75;
+  }
+  .key:hover,.key:focus-visible{background:var(--ink);color:var(--paper);outline:none}
+  .key[aria-pressed="true"]{background:var(--acc);border-color:var(--acc);color:var(--paper)}
+  .key.ghost{border-color:var(--line)}
+  .key.ghost:hover{border-color:var(--ink)}
+
+  /* ---------- Hero ---------- */
+
+  .hero{
+    padding:clamp(38px,7vw,96px) var(--gut) clamp(26px,4vw,52px);
+    border-bottom:1px solid var(--line);
+  }
+  .eyebrow{
+    display:flex;align-items:center;gap:14px;
+    color:var(--ink-60);margin-bottom:clamp(18px,3vw,34px);
+  }
+  .eyebrow .num{
+    font-family:'Anybody',sans-serif;font-weight:900;font-size:.7rem;
+    background:var(--ink);color:var(--paper);padding:3px 7px;letter-spacing:.1em;
+  }
+  .eyebrow .rule{flex:1;height:1px;background:var(--line)}
+
+  /* Ruhige Überschrift: Serif, gemischte Schreibweise, ein Akzent */
+  h1.hero-title{
+    font-family:'Instrument Serif',Georgia,serif;
+    font-weight:400;
+    text-transform:none;
+    font-size:clamp(2.5rem,6.4vw,5.2rem);
+    line-height:1.02;
+    letter-spacing:-.02em;
+    max-width:20ch;
+    margin:0;
+  }
+  h1.hero-title em{
+    font-style:italic;
+    color:var(--acc);
+  }
+
+  .hero-lede{
+    margin:clamp(22px,3.4vw,40px) 0 0;
+    max-width:52ch;font-size:clamp(1rem,.4vw + .95rem,1.2rem);
+    color:var(--ink-60);
+  }
+  .hero-lede strong{color:var(--ink);font-weight:500}
+
+  /* ---------- Zahlenstreifen ---------- */
+
+  .stats{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+    border-bottom:1px solid var(--line);
+  }
+  .stat{
+    padding:clamp(16px,2.4vw,26px) var(--gut);
+    border-right:1px solid var(--line);
+  }
+  .stat:last-child{border-right:0}
+  .stat b{
+    display:block;font-family:'Anybody',sans-serif;font-weight:900;
+    font-variation-settings:'wdth' 90;
+    font-size:clamp(1.5rem,2.6vw,2.2rem);line-height:1;letter-spacing:-.02em;
+  }
+  .stat span{display:block;margin-top:8px;color:var(--ink-40)}
+  .stat:first-child b{color:var(--acc)}
+
+  /* ---------- Sortierleiste ---------- */
+
+  .toolbar{
+    display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;
+    padding:clamp(16px,2.4vw,22px) var(--gut);
+    border-bottom:1px solid var(--line);
+  }
+  .toolbar .label{color:var(--ink-40)}
+  .sorts{display:flex;gap:6px;flex-wrap:wrap}
+  .sort{
+    background:none;border:0;cursor:pointer;padding:4px 0;
+    font-family:'Space Grotesk',sans-serif;font-size:.7rem;font-weight:500;
+    letter-spacing:.13em;text-transform:uppercase;color:var(--ink-40);
+    border-bottom:2px solid transparent;transition:color .15s,border-color .15s;
+  }
+  .sort:hover{color:var(--ink)}
+  .sort[aria-current="true"]{color:var(--ink);border-color:var(--acc)}
+  .sort + .sort{margin-left:10px}
+
+  /* ---------- Bücherliste ---------- */
+
+  .list{display:flex;flex-direction:column}
+
+  .book{
+    display:grid;
+    grid-template-columns:minmax(190px,22%) 1fr;
+    gap:clamp(20px,4vw,56px);
+    padding:clamp(28px,4.6vw,60px) var(--gut);
+    border-bottom:1px solid var(--line);
+    position:relative;
+    transition:background .25s;
+  }
+  .book:hover{background:color-mix(in srgb,var(--c,var(--acc)) 6%,var(--paper))}
+
+  /* Cover: echtes Bild wenn vorhanden, sonst typografische Variante */
+  .tile img.cover{
+    position:absolute;inset:0;z-index:2;
+    width:100%;height:100%;object-fit:cover;display:block;
+  }
+  .tile.has-cover .idx{
+    background:rgba(17,17,16,.60);color:#F7F6F3;
+    padding:2px 8px;
+  }
+  .tile.has-cover::after{display:none}
+
+  /* typografisches Cover */
+  .tile{
+    position:relative;
+    aspect-ratio:3/4;
+    background:var(--c);
+    color:var(--tint,#F7F6F3);
+    padding:clamp(12px,1.6vw,20px);
+    display:flex;flex-direction:column;justify-content:space-between;
+    overflow:hidden;
+    transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s;
+  }
+  .book:hover .tile{transform:translateY(-5px) rotate(-1.1deg);box-shadow:0 14px 0 -6px rgba(17,17,16,.10)}
+  .tile .idx{
+    position:relative;z-index:3;align-self:flex-start;
+    font-family:'Anybody',sans-serif;font-weight:900;
+    font-variation-settings:'wdth' 80;
+    font-size:clamp(1.5rem,2.6vw,2.1rem);line-height:1;opacity:.9;
+  }
+  .tile .t{
+    font-family:'Instrument Serif',Georgia,serif;
+    font-size:clamp(1.25rem,2.5vw,1.85rem);line-height:1.02;
+    letter-spacing:-.01em;
+  }
+  .tile .a{
+    margin-top:.55em;font-size:.62rem;font-weight:500;
+    letter-spacing:.14em;text-transform:uppercase;opacity:.8;
+  }
+  .tile::after{
+    content:"";position:absolute;inset:auto 0 0 0;height:6px;
+    background:repeating-linear-gradient(90deg,currentColor 0 3px,transparent 3px 9px);
+    opacity:.5;
+  }
+
+  .body{min-width:0}
+
+  .head{
+    display:flex;align-items:flex-start;justify-content:space-between;
+    gap:16px;flex-wrap:wrap;
+  }
+  .book h2{
+    font-family:'Anybody',sans-serif;font-weight:700;
+    font-variation-settings:'wdth' 98;
+    text-transform:uppercase;line-height:1;letter-spacing:-.01em;
+    font-size:clamp(1.35rem,2.7vw,2.15rem);
+    margin:0 0 .34em;max-width:24ch;
+  }
+  .author{
+    font-family:'Instrument Serif',Georgia,serif;font-style:italic;
+    font-size:clamp(1.05rem,1.5vw,1.3rem);color:var(--ink-60);
+  }
+  .author em{font-style:normal;color:var(--ink)}
+
+  .now{
+    display:inline-flex;align-items:center;gap:.55em;flex:none;
+    border:1px solid var(--acc);color:var(--acc);
+    padding:6px 10px;font-size:.62rem;font-weight:500;
+    letter-spacing:.14em;text-transform:uppercase;
+  }
+  .now i{width:7px;height:7px;border-radius:50%;background:var(--acc);animation:pulse 1.9s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.7)}}
+  @media (prefers-reduced-motion:reduce){ .now i{animation:none} }
+
+  .synopsis{
+    margin:clamp(16px,2vw,22px) 0 0;
+    max-width:62ch;font-size:clamp(.98rem,.3vw + .93rem,1.1rem);
+  }
+  .synopsis .q{font-family:'Instrument Serif',Georgia,serif;font-style:italic}
+
+  /* Metadaten */
+  .meta{
+    margin:clamp(20px,2.6vw,28px) 0 0;
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));
+    border-top:1px solid var(--line);
+  }
+  .meta div{
+    padding:14px 20px;
+    border-right:1px solid var(--line);
+  }
+  .meta div:first-child{padding-left:0}
+  .meta div:last-child{border-right:0;padding-right:0}
+  .meta dt{
+    font-size:.6rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--ink-40);margin:0 0 5px;
+  }
+  .meta dd{margin:0;font-size:.9rem;font-variant-numeric:tabular-nums}
+  .meta dd i{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-size:1.02em}
+
+  /* Auszeichnungen */
+  .tags{display:flex;flex-wrap:wrap;gap:6px;margin:clamp(16px,2vw,20px) 0 0;padding:0;list-style:none}
+  .tags li{
+    border:1px solid var(--line);padding:5px 9px;
+    font-size:.6rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--ink-60);
+  }
+  .tags li.win{border-color:var(--c);color:var(--c)}
+
+  /* ---------- Schlussnotiz ---------- */
+
+  .outro{
+    padding:clamp(34px,6vw,80px) var(--gut);
+    border-bottom:1px solid var(--line);
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:clamp(20px,4vw,56px);
+  }
+  .outro h3{
+    font-family:'Anybody',sans-serif;font-weight:900;
+    font-variation-settings:'wdth' 90;
+    text-transform:uppercase;font-size:clamp(1.3rem,2.6vw,2rem);
+    line-height:.96;letter-spacing:-.015em;margin:0;
+  }
+  .outro p{margin:0;color:var(--ink-60);max-width:46ch}
+  .outro ul{margin:0;padding-left:1.1em;color:var(--ink-60)}
+  .outro li + li{margin-top:.4em}
+  .outro b{color:var(--ink);font-weight:500}
+
+  /* ---------- Fußzeile ---------- */
+
+  footer{
+    padding:clamp(26px,4vw,44px) var(--gut) clamp(60px,8vw,90px);
+    display:flex;gap:18px;flex-wrap:wrap;align-items:center;
+    color:var(--ink-40);
+  }
+  footer nav{display:flex;gap:18px;flex-wrap:wrap;margin-left:auto}
+  footer a{border-bottom:1px solid transparent;transition:color .15s,border-color .15s}
+  footer a:hover{color:var(--ink);border-color:var(--acc)}
+
+  /* ---------- CHAOS ---------- */
+
+  body.chaos .tile{transform:rotate(var(--r,2deg))}
+  body.chaos .book:hover .tile{transform:rotate(calc(var(--r,2deg) * -1.4)) translateY(-6px)}
+  body.chaos .book:nth-child(even){transform:rotate(-.35deg)}
+  body.chaos .book:nth-child(odd){transform:rotate(.3deg)}
+  body.chaos .book h2{font-variation-settings:'wdth' 122;letter-spacing:-.03em}
+  body.chaos h1.hero-title{transform:rotate(-.6deg)}
+  body.chaos .tags li{border-style:dashed}
+  body.chaos .meta div{border-right-style:dashed}
+  body.chaos .stat b{transform:rotate(-1.5deg)}
+  body.chaos{transition:none}
+  body.chaos .brand span{animation:blink 1s steps(2) infinite}
+  @keyframes blink{50%{opacity:0}}
+  @media (prefers-reduced-motion:reduce){
+    body.chaos .brand span{animation:none}
+    body.chaos .book:nth-child(even),body.chaos .book:nth-child(odd){transform:none}
+  }
+
+  /* ---------- Responsive ---------- */
+
+  @media (max-width:860px){
+    .book{grid-template-columns:1fr;gap:22px}
+    .tile{aspect-ratio:16/9;max-width:none}
+    .tile .t{font-size:clamp(1.3rem,5vw,1.8rem)}
+    .meta div{border-right:0;border-bottom:1px solid var(--line);padding:12px 0}
+    .meta div:last-child{border-bottom:0}
+  }
+  @media (max-width:560px){
+    .top nav .key.hide-s{display:none}
+    .stats{grid-template-columns:1fr 1fr}
+    .stat{border-bottom:1px solid var(--line)}
+    .stat:nth-child(even){border-right:0}
+    .stat:last-child{grid-column:1 / -1;border-bottom:0}
+  }
+
+  @media print{
+    header.top,.hint,#bar,.toolbar{display:none}
+    .book{break-inside:avoid;border-bottom:1px solid #ccc}
+    body{background:#fff}
+  }
+</style>
+</head>
+<body>
+
+<div id="bar" aria-hidden="true"></div>
+
+<header class="top">
+  <a class="brand" href="https://www.stefashka.de/">STEF<span>.</span></a>
+  <span class="label" style="color:var(--ink-40)">/ BÜCHER</span>
+  <nav aria-label="Navigation">
+    <a class="key ghost hide-s" href="https://www.instagram.com/stefashkaaaaa/" target="_blank" rel="noopener">Instagram →</a>
+    <a class="key" href="https://www.stefashka.de/">← stefashka.de</a>
+  </nav>
+</header>
+
+<main>
+
+  <section class="hero">
+    <div class="eyebrow">
+      <span class="num">04</span>
+      <span class="label">Die Bücher, die hängengeblieben sind</span>
+      <span class="rule"></span>
+      <span class="label">Stand August 2026</span>
+    </div>
+
+    <h1 class="hero-title">
+      Meine <em>sechs</em> Favoriten
+    </h1>
+
+    <p class="hero-lede">
+      Sechs Romane, zusammen <strong>5.625 Seiten</strong>. Hier stehen die Fakten —
+      Titel, Autor:innen, Originalausgaben, Übersetzungen, Auszeichnungen.
+      Die Meinung dazu behalte ich für mich; lies selbst.
+    </p>
+  </section>
+
+  <section class="stats" aria-label="Zahlen">
+    <div class="stat"><b>6</b><span class="label">Romane</span></div>
+    <div class="stat"><b>5.625</b><span class="label">Seiten insgesamt</span></div>
+    <div class="stat"><b>2×</b><span class="label">Pulitzer-Preis</span></div>
+    <div class="stat"><b>2×</b><span class="label">Booker-Shortlist</span></div>
+    <div class="stat"><b>1</b><span class="label">gerade offen</span></div>
+  </section>
+
+  <div class="toolbar">
+    <span class="label">Sortieren</span>
+    <div class="sorts" role="group" aria-label="Sortierung">
+      <button class="sort" data-sort="mine" aria-current="true" type="button">Meine Reihenfolge</button>
+      <button class="sort" data-sort="year" type="button">Erscheinungsjahr</button>
+      <button class="sort" data-sort="pages" type="button">Seitenzahl</button>
+      <button class="sort" data-sort="title" type="button">A–Z</button>
+    </div>
+  </div>
+
+  <!-- COVER-BILDER
+       Jedes Buch hat einen Bild-Slot. Lege die Cover als JPG in einen Ordner
+       "covers" neben dieser Datei — dann erscheinen sie automatisch:
+         covers/01-ein-wenig-leben.jpg
+         covers/02-die-stunde-zwischen-frau-und-gitarre.jpg
+         covers/03-der-distelfink.jpg
+         covers/04-der-stich-der-biene.jpg
+         covers/05-der-anschlag.jpg
+         covers/06-demon-copperhead.jpg
+       Empfehlung: Hochformat, ca. 600 x 800 px. Fehlt eine Datei, zeigt die
+       Seite automatisch das typografische Ersatz-Cover — nichts bricht. -->
+
+  <div class="list" id="list">
+
+    <!-- 01 -->
+    <article class="book" style="--c:#1F1B4D;--tint:#F7F6F3;--r:1.6deg"
+             data-mine="1" data-year="2015" data-pages="960" data-title="Ein wenig Leben">
+      <div class="tile">
+        <img class="cover" src="covers/01-ein-wenig-leben.jpg" alt="Buchcover: Ein wenig Leben von Hanya Yanagihara"
+             loading="lazy" onload="this.parentElement.classList.add('has-cover')" onerror="this.remove()">
+        <span class="idx">01</span>
+        <div>
+          <div class="t">Ein wenig Leben</div>
+          <div class="a">Hanya Yanagihara</div>
+        </div>
+      </div>
+      <div class="body">
+        <div class="head">
+          <div>
+            <h2>Ein wenig Leben</h2>
+            <p class="author">von <em>Hanya Yanagihara</em></p>
+          </div>
+        </div>
+        <p class="synopsis">
+          Vier Freunde, die sich am College kennenlernen, und knapp vier Jahrzehnte New York:
+          der Anwalt Jude, der Schauspieler Willem, der Architekt Malcolm, der Maler JB.
+          Im Zentrum steht Jude St. Francis, dessen Kindheit sich nur in Bruchstücken preisgibt —
+          und das Buch mit jedem Bruchstück dunkler macht.
+        </p>
+        <dl class="meta">
+          <div><dt>Original</dt><dd><i>A Little Life</i>, 2015</dd></div>
+          <div><dt>Deutsche Ausgabe</dt><dd>2017, Hanser Berlin</dd></div>
+          <div><dt>Übersetzung</dt><dd>Stephan Kleiner</dd></div>
+          <div><dt>Umfang</dt><dd>960 Seiten</dd></div>
+        </dl>
+        <ul class="tags">
+          <li>Shortlist Booker Prize 2015</li>
+          <li>Finalist National Book Award 2015</li>
+        </ul>
+      </div>
+    </article>
+
+    <!-- 02 -->
+    <article class="book" style="--c:#5B5F6E;--tint:#F7F6F3;--r:-1.4deg"
+             data-mine="2" data-year="2015" data-pages="1021" data-title="Die Stunde zwischen Frau und Gitarre">
+      <div class="tile">
+        <img class="cover" src="covers/02-die-stunde-zwischen-frau-und-gitarre.jpg" alt="Buchcover: Die Stunde zwischen Frau und Gitarre von Clemens J. Setz"
+             loading="lazy" onload="this.parentElement.classList.add('has-cover')" onerror="this.remove()">
+        <span class="idx">02</span>
+        <div>
+          <div class="t">Die Stunde zwischen Frau und Gitarre</div>
+          <div class="a">Clemens J. Setz</div>
+        </div>
+      </div>
+      <div class="body">
+        <div class="head">
+          <div>
+            <h2>Die Stunde zwischen Frau und Gitarre</h2>
+            <p class="author">von <em>Clemens J. Setz</em></p>
+          </div>
+        </div>
+        <p class="synopsis">
+          Natalie Reinegger arbeitet in einem Wohnheim für Menschen mit Behinderung und wird für
+          Alexander Dorm zuständig — einen Mann, der als Stalker berühmt geworden ist.
+          Jede Woche besucht ihn Christopher Hollberg, dessen Leben er damals zerstört hat.
+          Setz lässt über tausend Seiten offen, wer hier eigentlich wen im Griff hat.
+        </p>
+        <dl class="meta">
+          <div><dt>Original</dt><dd>deutsch, 2015</dd></div>
+          <div><dt>Ausgabe</dt><dd>2015, Suhrkamp</dd></div>
+          <div><dt>Übersetzung</dt><dd>—</dd></div>
+          <div><dt>Umfang</dt><dd>1.021 Seiten</dd></div>
+        </dl>
+        <ul class="tags">
+          <li class="win">Wilhelm Raabe-Literaturpreis 2015</li>
+          <li>Longlist Deutscher Buchpreis 2015</li>
+        </ul>
+      </div>
+    </article>
+
+    <!-- 03 -->
+    <article class="book" style="--c:#E0A81B;--tint:#111110;--r:1.1deg"
+             data-mine="3" data-year="2013" data-pages="1024" data-title="Der Distelfink">
+      <div class="tile">
+        <img class="cover" src="covers/03-der-distelfink.jpg" alt="Buchcover: Der Distelfink von Donna Tartt"
+             loading="lazy" onload="this.parentElement.classList.add('has-cover')" onerror="this.remove()">
+        <span class="idx">03</span>
+        <div>
+          <div class="t">Der Distelfink</div>
+          <div class="a">Donna Tartt</div>
+        </div>
+      </div>
+      <div class="body">
+        <div class="head">
+          <div>
+            <h2>Der Distelfink</h2>
+            <p class="author">von <em>Donna Tartt</em></p>
+          </div>
+        </div>
+        <p class="synopsis">
+          Theo Decker ist dreizehn, als seine Mutter bei einer Explosion im Metropolitan Museum stirbt.
+          Im Chaos nimmt er ein kleines Gemälde mit — den <span class="q">Distelfink</span> von Carel Fabritius —
+          und schleppt es die nächsten vierzehn Jahre durch Las Vegas, den Antiquitätenhandel und Amsterdam.
+        </p>
+        <dl class="meta">
+          <div><dt>Original</dt><dd><i>The Goldfinch</i>, 2013</dd></div>
+          <div><dt>Deutsche Ausgabe</dt><dd>2014, Goldmann</dd></div>
+          <div><dt>Übersetzung</dt><dd>Rainer Schmidt, Kristian Lutze</dd></div>
+          <div><dt>Umfang</dt><dd>1.024 Seiten</dd></div>
+        </dl>
+        <ul class="tags">
+          <li class="win">Pulitzer-Preis 2014</li>
+          <li>Verfilmt 2019</li>
+        </ul>
+      </div>
+    </article>
+
+    <!-- 04 -->
+    <article class="book" style="--c:#2E7D5B;--tint:#F7F6F3;--r:-1.9deg"
+             data-mine="4" data-year="2023" data-pages="700" data-title="Der Stich der Biene">
+      <div class="tile">
+        <img class="cover" src="covers/04-der-stich-der-biene.jpg" alt="Buchcover: Der Stich der Biene von Paul Murray"
+             loading="lazy" onload="this.parentElement.classList.add('has-cover')" onerror="this.remove()">
+        <span class="idx">04</span>
+        <div>
+          <div class="t">Der Stich der Biene</div>
+          <div class="a">Paul Murray</div>
+        </div>
+      </div>
+      <div class="body">
+        <div class="head">
+          <div>
+            <h2>Der Stich der Biene</h2>
+            <p class="author">von <em>Paul Murray</em></p>
+          </div>
+        </div>
+        <p class="synopsis">
+          Das Autohaus der Familie Barnes in der irischen Provinz steht vor dem Aus, und jeder reagiert
+          auf seine Weise: Dickie baut einen Bunker im Wald, Imelda verkauft heimlich ihren Schmuck,
+          Tochter Cass trinkt sich durchs Abschlussjahr, Sohn PJ plant die Flucht.
+          Jedes Kapitel wechselt die Perspektive, bis sichtbar wird, wie weit die Sache zurückreicht.
+        </p>
+        <dl class="meta">
+          <div><dt>Original</dt><dd><i>The Bee Sting</i>, 2023</dd></div>
+          <div><dt>Deutsche Ausgabe</dt><dd>2024, Antje Kunstmann</dd></div>
+          <div><dt>Übersetzung</dt><dd>Wolfgang Müller</dd></div>
+          <div><dt>Umfang</dt><dd>700 Seiten</dd></div>
+        </dl>
+        <ul class="tags">
+          <li>Shortlist Booker Prize 2023</li>
+          <li class="win">Gold Nero 2023 — Gesamtsieger</li>
+          <li class="win">Irish Book of the Year 2023</li>
+        </ul>
+      </div>
+    </article>
+
+    <!-- 05 -->
+    <article class="book" style="--c:#B0281F;--tint:#F7F6F3;--r:1.8deg"
+             data-mine="5" data-year="2011" data-pages="1056" data-title="Der Anschlag">
+      <div class="tile">
+        <img class="cover" src="covers/05-der-anschlag.jpg" alt="Buchcover: Der Anschlag von Stephen King"
+             loading="lazy" onload="this.parentElement.classList.add('has-cover')" onerror="this.remove()">
+        <span class="idx">05</span>
+        <div>
+          <div class="t">Der Anschlag</div>
+          <div class="a">Stephen King</div>
+        </div>
+      </div>
+      <div class="body">
+        <div class="head">
+          <div>
+            <h2>Der Anschlag</h2>
+            <p class="author">von <em>Stephen King</em></p>
+          </div>
+        </div>
+        <p class="synopsis">
+          Der Englischlehrer Jake Epping findet im Hinterzimmer einer Imbissbude ein Zeitportal ins Jahr 1958
+          und bekommt von seinem sterbenden Freund Al einen Auftrag: das Attentat auf John F. Kennedy verhindern.
+          Jake bleibt Jahre in der Vergangenheit, verliebt sich in die Bibliothekarin Sadie — und merkt,
+          dass sich Geschichte nur höchst ungern korrigieren lässt.
+        </p>
+        <dl class="meta">
+          <div><dt>Original</dt><dd><i>11/22/63</i>, 2011</dd></div>
+          <div><dt>Deutsche Ausgabe</dt><dd>2012, Heyne</dd></div>
+          <div><dt>Übersetzung</dt><dd>Wulf Bergner</dd></div>
+          <div><dt>Umfang</dt><dd>1.056 Seiten</dd></div>
+        </dl>
+        <ul class="tags">
+          <li class="win">L.A. Times Book Prize 2011</li>
+          <li class="win">Thriller Award 2012</li>
+          <li>NYT: 10 beste Bücher 2011</li>
+        </ul>
+      </div>
+    </article>
+
+    <!-- 06 -->
+    <article class="book" style="--c:#C1552B;--tint:#F7F6F3;--r:-1.2deg"
+             data-mine="6" data-year="2022" data-pages="864" data-title="Demon Copperhead">
+      <div class="tile">
+        <img class="cover" src="covers/06-demon-copperhead.jpg" alt="Buchcover: Demon Copperhead von Barbara Kingsolver"
+             loading="lazy" onload="this.parentElement.classList.add('has-cover')" onerror="this.remove()">
+        <span class="idx">06</span>
+        <div>
+          <div class="t">Demon Copperhead</div>
+          <div class="a">Barbara Kingsolver</div>
+        </div>
+      </div>
+      <div class="body">
+        <div class="head">
+          <div>
+            <h2>Demon Copperhead</h2>
+            <p class="author">von <em>Barbara Kingsolver</em></p>
+          </div>
+          <span class="now"><i></i>Lese ich grade</span>
+        </div>
+        <p class="synopsis">
+          Ein rothaariger Junge wächst in den Appalachen von Virginia auf: Trailerpark, Pflegefamilien,
+          Football, Opioidkrise. Kingsolver erzählt Dickens' <span class="q">David Copperfield</span> neu
+          und verlegt ihn ins ländliche Amerika der 1990er und 2000er — der Titel bleibt im Deutschen unverändert.
+        </p>
+        <dl class="meta">
+          <div><dt>Original</dt><dd><i>Demon Copperhead</i>, 2022</dd></div>
+          <div><dt>Deutsche Ausgabe</dt><dd>2024, dtv</dd></div>
+          <div><dt>Übersetzung</dt><dd>Dirk van Gunsteren</dd></div>
+          <div><dt>Umfang</dt><dd>864 Seiten</dd></div>
+        </dl>
+        <ul class="tags">
+          <li class="win">Pulitzer-Preis 2023</li>
+          <li class="win">Women's Prize for Fiction 2023</li>
+          <li class="win">James Tait Black Prize</li>
+        </ul>
+      </div>
+    </article>
+
+  </div>
+
+  <section class="outro">
+    <h3>Was auffällt,<br>wenn man<br>die Liste<br>anschaut</h3>
+    <ul>
+      <li><b>Kein Buch unter 700 Seiten.</b> Das kürzeste ist Paul Murray — und das ist ein Ziegelstein.</li>
+      <li><b>Zwei Pulitzer-Preise:</b> Donna Tartt 2014, Barbara Kingsolver 2023 (geteilt mit Hernan Diaz).</li>
+      <li><b>Zwei Booker-Shortlists:</b> Yanagihara 2015, Murray 2023.</li>
+      <li><b>Fünf Übersetzungen aus dem Englischen</b>, ein Original auf Deutsch (Setz).</li>
+      <li><b>Ein Dickens-Remake:</b> Kingsolver erzählt <i>David Copperfield</i> neu — der Nachname Copperhead ist die Anspielung, keine Schreibweise.</li>
+      <li><b>Ältestes Buch der Liste:</b> Stephen King, 2011. <b>Jüngstes:</b> Paul Murray, 2023.</li>
+    </ul>
+    <p>
+      Alle Angaben nach den Verlagsseiten (Hanser Berlin, Suhrkamp, Goldmann, Antje Kunstmann, Heyne, dtv),
+      Perlentaucher und Wikipedia. Seitenzahlen beziehen sich auf die deutschen Erstausgaben,
+      Jahre in Klammern auf die Originalausgaben.
+    </p>
+  </section>
+
+</main>
+
+<footer>
+  <span class="label">© 2026 — Gelesen mit zu wenig Schlaf</span>
+  <nav>
+    <a href="https://www.stefashka.de/">stefashka.de</a>
+    <a href="https://www.instagram.com/stefashkaaaaa/" target="_blank" rel="noopener">Instagram</a>
+    <a href="https://www.stefashka.de/#impressum">Impressum</a>
+    <a href="https://www.stefashka.de/#datenschutz">Datenschutz</a>
+  </nav>
+</footer>
+
+<script>
+(function(){
+  'use strict';
+
+  /* ---------- Versteckte Tasten: F = Farbe, C = Chaos, ESC = zurück ----------
+     Keine Buttons in der Kopfzeile — wer die Tasten kennt, findet sie.
+     Grundfarbe ist Pink (siehe --acc im CSS).                                */
+  var COLORS = ['#E6007A','#FF4A1C','#1B4DFF','#00A37A','#7A3CFF','#111110'];
+  var ci = 0;
+  var root = document.documentElement;
+
+  function nextColor(){
+    ci = (ci + 1) % COLORS.length;
+    root.style.setProperty('--acc', COLORS[ci]);
+  }
+  function toggleChaos(){ document.body.classList.toggle('chaos'); }
+
+  document.addEventListener('keydown', function(e){
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    var t = e.target;
+    if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+    var k = e.key.toLowerCase();
+    if (k === 'f'){ nextColor(); }
+    else if (k === 'c'){ toggleChaos(); }
+    else if (k === 'escape'){
+      document.body.classList.remove('chaos');
+      ci = -1; nextColor();          /* zurück auf Pink */
+    }
+  });
+
+  /* ---------- Sortierung ---------- */
+  var list = document.getElementById('list');
+  var books = Array.prototype.slice.call(list.querySelectorAll('.book'));
+
+  var sorters = {
+    mine:  function(a,b){ return num(a,'mine') - num(b,'mine'); },
+    year:  function(a,b){ return num(a,'year') - num(b,'year'); },
+    pages: function(a,b){ return num(b,'pages') - num(a,'pages'); },
+    title: function(a,b){ return a.dataset.title.localeCompare(b.dataset.title, 'de'); }
+  };
+  function num(el, key){ return parseInt(el.dataset[key], 10) || 0; }
+
+  Array.prototype.forEach.call(document.querySelectorAll('.sort'), function(btn){
+    btn.addEventListener('click', function(){
+      var mode = btn.dataset.sort;
+      books.slice().sort(sorters[mode]).forEach(function(el){ list.appendChild(el); });
+      Array.prototype.forEach.call(document.querySelectorAll('.sort'), function(b){
+        b.setAttribute('aria-current', b === btn ? 'true' : 'false');
+      });
+    });
+  });
+
+  /* ---------- Fortschrittsbalken ---------- */
+  var bar = document.getElementById('bar');
+  var raf = false;
+  function progress(){
+    var h = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.width = (h > 0 ? (window.scrollY / h) * 100 : 0) + '%';
+    raf = false;
+  }
+  window.addEventListener('scroll', function(){
+    if (!raf){ raf = true; window.requestAnimationFrame(progress); }
+  }, {passive:true});
+  progress();
+})();
+</script>
+</body>
+</html>
