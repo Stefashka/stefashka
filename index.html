@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>STEF — CHAOS &amp; KONTROLLE</title>
+<title>Stefashka</title>
 <meta name="description" content="Chaos is a friend of mine. Hundebetreuung, Rezepte, Kräuter, Spielenotizen und noch ein paar Dinge.">
 <meta name="theme-color" content="#F7F6F3">
 <meta property="og:type" content="website">
@@ -15,7 +15,9 @@
 <!-- Für schöne Vorschaubilder in WhatsApp/Instagram: og.jpg (1200×630) in den Hauptordner
      legen und die nächste Zeile einkommentieren.
 <meta property="og:image" content="https://stefashka.de/og.jpg"> -->
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%AA%A9%3C/text%3E%3C/svg%3E">
+<!-- Dampfender Cappuccino, Tinte auf Papier — dieselben Farben wie die stille Seite.
+     Liegt zusätzlich als favicon.svg im Ordner, falls du ihn mal bearbeiten willst. -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='13' fill='%23F7F6F3'/%3E%3Cg fill='none' stroke='%23161614' stroke-width='4.6' stroke-linecap='round'%3E%3Cpath d='M18 25 C15 21 21 18 18 13'/%3E%3Cpath d='M26 24 C23 19 29 16 26 10'/%3E%3Cpath d='M34 25 C31 21 37 18 34 13'/%3E%3C/g%3E%3Cpath d='M11 30 H41 V38 A15 15 0 0 1 26 53 A15 15 0 0 1 11 38 Z' fill='%23161614'/%3E%3Cpath d='M13.5 32.5 H38.5 V36.5 H13.5 Z' fill='%23F7F6F3'/%3E%3Cpath d='M43 34 h3 a7.5 7.5 0 0 1 0 14 h-3' fill='none' stroke='%23161614' stroke-width='5.2' stroke-linecap='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anybody:ital,wdth,wght@0,50..150,100..900;1,50..150,100..900&family=Space+Grotesk:wght@300..700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
@@ -619,8 +621,11 @@ body.shake{ animation:sh .18s infinite; }
       <ul style="list-style:none;padding:0;text-align:left;max-width:44ch;margin:1rem auto">
         <li><a href="https://stefashka.de/dontbehangry">Dont be hangry — Rezepte</a></li>
         <li><a href="https://stefashka.de/padelclub">Padelclub — Padel</a></li>
-        <li>Noch ein Urlaub, Bücher, The Walking Dog, Not to smoke, You are the looser,
-            Hidden Face Game, Bachata Trainingskonzept — in Arbeit.</li>
+        <li><a href="https://stefashka.de/diewelt">Die Welt — Reisen</a></li>
+        <li><a href="https://stefashka.de/books">Bücher — Lesen</a></li>
+        <li><a href="https://stefashka.de/bistdudumm">Bist Du Dumm?! — Spiel</a></li>
+        <li>The Walking Dog, Not to smoke, You are the looser,
+            Bachata Trainingskonzept — in Arbeit.</li>
         <li>Stefanie Eichwald · Oberhofstraße 55 · 88045 Friedrichshafen ·
             <a href="mailto:Stefanie.eichwald@web.de">Stefanie.eichwald@web.de</a></li>
       </ul>
@@ -695,7 +700,7 @@ body.shake{ animation:sh .18s infinite; }
       <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">policies.google.com/privacy</a>.</p>
 
     <h4>Länder-Sammlung</h4>
-    <p>Die Seite <em>Noch ein Urlaub</em> lädt ihre Liste von Supabase. Dabei wird deine
+    <p>Die Seite <em>Die Welt</em> lädt ihre Liste von Supabase. Dabei wird deine
       IP-Adresse an diesen Dienst übertragen. Gespeichert werden ausschließlich Ländernamen
       und Zeitstempel — keine personenbezogenen Inhalte.</p>
 
@@ -795,23 +800,25 @@ const ZITAT = "Du musst das Leben schon anfassen, um davon berührt zu werden.";
    href = Ordnername im Hauptordner. */
 /* href = fertige Seite.   bau:true = noch nicht fertig, wird nicht verlinkt
    und kriegt automatisch „(Under Construction)" dahinter. */
+/* Fertige Seiten stehen oben, die in Arbeit darunter. Wenn eine fertig wird:
+   `bau:true` durch `href:"…"` ersetzen und den Eintrag nach oben schieben. */
 const PROJEKTE = [
   {name:"Dont be hangry", kat:"Rezepte", href:"https://stefashka.de/dontbehangry",
    sub:"Essen, bevor jemand zu Schaden kommt. Meist du."},
   {name:"Padelclub", kat:"Padel", href:"https://stefashka.de/padelclub",
    sub:"Schläger, Termine, Ergebnisse. Und die Leute, die mich regelmäßig schlagen."},
-  {name:"Noch ein Urlaub", kat:"Reisen", bau:true,
+  {name:"Die Welt", kat:"Reisen", href:"https://stefashka.de/diewelt",
    sub:"Alle 197 Länder der Welt. Die pinken war ich. Der Rest ist eine To-do-Liste."},
-  {name:"Bücher", kat:"Lesen", bau:true,
+  {name:"Bücher", kat:"Lesen", href:"https://stefashka.de/books",
    sub:"Was ich lese, was ich abgebrochen habe, und was ich nie zurückgebe."},
+  {name:"Bist Du Dumm?!", kat:"Spiel", href:"https://stefashka.de/bistdudumm",
+   sub:"Mein eigenes Spiel. Die Antwort willst du vermutlich nicht hören."},
   {name:"The Walking Dog", kat:"Hundebetreuung", bau:true,
    sub:"Ich geh mit deinem Hund. Du gehst arbeiten. Beide sind danach glücklicher."},
   {name:"Not to smoke", kat:"Kräutersammlung", bau:true,
    sub:"Kräuter zum Anschauen, Trinken, Riechen. Der Name ist eine Warnung, kein Vorschlag."},
   {name:"You are the looser", kat:"Spielenotizen", bau:true,
    sub:"Punktestände, alte Rechnungen und wer 2019 wirklich betrogen hat."},
-  {name:"Hidden Face Game", kat:"Spiel", bau:true,
-   sub:"Ein eigenes Spiel. Mehr sag ich noch nicht."},
   {name:"Bachata Trainingskonzept", kat:"Tanzen", bau:true,
    sub:"Wie man das lernt, ohne sich zu verkrampfen. Aufgeschrieben, während ich es selbst lerne."},
 ];
