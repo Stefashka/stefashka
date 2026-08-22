@@ -3,7 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#F7F6F3">
+<meta name="theme-color" content="#F7F6F3" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#131410" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 rx=%227%22 fill=%22%23F7F6F3%22/%3E%3Cg fill=%22none%22 stroke=%22%236B665B%22 stroke-width=%221.9%22 stroke-linecap=%22round%22%3E%3Ccircle cx=%2216%22 cy=%2216%22 r=%229.6%22/%3E%3Cpath d=%22M6.4 16h19.2%22/%3E%3Cellipse cx=%2216%22 cy=%2216%22 rx=%224.5%22 ry=%229.6%22/%3E%3Cpath d=%22M8.4 10.4c4.6 2.1 10.6 2.1 15.2 0M8.4 21.6c4.6-2.1 10.6-2.1 15.2 0%22/%3E%3C/g%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/png;base64,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">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Länder">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <title>Die Welt, abgehakt</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,12 +20,12 @@
   --paper:#F7F6F3;
   --paper-2:#EDEBE4;
   --ink:#1A1915;
-  --ink-2:#6E6A5F;
-  --ink-3:#94907F;
+  --ink-2:#595449;
+  --ink-3:#746D5F;
   --rule:#DCD8CD;
   --rule-soft:#E6E3DA;
+  --track:#ACA699;
   --mark:#2C5C4C;
-  --mark-soft:#C6D8CF;
   --focus:#2C5C4C;
   --warn:#8C6217;
   --err:#9E402A;
@@ -32,12 +39,12 @@
     --paper:#131410;
     --paper-2:#1C1E19;
     --ink:#F2F0E8;
-    --ink-2:#9A968A;
-    --ink-3:#726E63;
+    --ink-2:#B5B0A5;
+    --ink-3:#88806F;
     --rule:#2C2F28;
     --rule-soft:#232620;
+    --track:#585248;
     --mark:#7CC1A6;
-    --mark-soft:#28382F;
     --focus:#7CC1A6;
     --warn:#D9A85C;
     --err:#E08A70;
@@ -47,12 +54,12 @@
   --paper:#131410;
   --paper-2:#1C1E19;
   --ink:#F2F0E8;
-  --ink-2:#9A968A;
-  --ink-3:#726E63;
+  --ink-2:#B5B0A5;
+  --ink-3:#88806F;
   --rule:#2C2F28;
   --rule-soft:#232620;
+  --track:#585248;
   --mark:#7CC1A6;
-  --mark-soft:#28382F;
   --focus:#7CC1A6;
   --warn:#D9A85C;
   --err:#E08A70;
@@ -117,12 +124,12 @@ h1 em{font-family:var(--serif);font-style:italic;font-weight:400;letter-spacing:
 }
 
 /* ---------- 195-tick strip ---------- */
-.strip{margin:2.75rem 0 0}
+.strip{margin:2.75rem 0 0;position:relative}
 .strip-bar{display:flex;gap:clamp(6px,1.4vw,14px);align-items:flex-end}
 .strip-grp{display:flex;gap:1px;flex:var(--w) 1 0;min-width:0}
 .tick{
-  flex:1 1 0;min-width:1px;height:38px;background:var(--rule);
-  border-radius:1px;transition:background .18s ease;
+  flex:1 1 0;min-width:1px;height:38px;background:var(--track);
+  border-radius:1px;transform-origin:bottom;transition:background .18s ease;
 }
 .tick.on{background:var(--mark)}
 .strip-key{
@@ -166,16 +173,9 @@ h1 em{font-family:var(--serif);font-style:italic;font-weight:400;letter-spacing:
 }
 .seg button:hover,.linkbtn:hover{color:var(--ink)}
 .seg button[aria-pressed="true"]{color:var(--ink);border-bottom-color:var(--mark)}
-.search{
-  flex:1 1 160px;min-width:120px;background:none;border:0;
-  border-bottom:1px solid var(--rule);padding:.3rem 0;
-  font-family:var(--body);font-size:.9rem;color:var(--ink);
-}
-.search::placeholder{color:var(--ink-3)}
-.search:focus{outline:none;border-bottom-color:var(--mark)}
 .linkbtn.done{color:var(--mark)}
 .sync{
-  margin-left:auto;display:inline-flex;align-items:center;gap:.5rem;
+  margin-left:0;display:inline-flex;align-items:center;gap:.5rem;
   font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);
   white-space:nowrap;
 }
@@ -188,6 +188,29 @@ h1 em{font-family:var(--serif);font-style:italic;font-weight:400;letter-spacing:
 .sync.warn{color:var(--warn)}
 .sync.err::before{background:var(--err)}
 .sync.err{color:var(--err)}
+
+/* ---------- Schloss ---------- */
+.lock{
+  margin-left:auto;appearance:none;background:none;border:0;padding:.2rem 0;
+  display:inline-flex;align-items:center;gap:.45rem;cursor:pointer;
+  font-family:var(--body);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink-3);
+}
+.lock:hover{color:var(--ink)}
+.lock .bow{transition:transform .22s cubic-bezier(.3,1.5,.4,1)}
+.lock[data-step="1"] .bow{transform:translateY(-1.6px)}
+.lock[data-step="2"] .bow{transform:translateY(-3.2px)}
+.lock.offen{color:var(--mark)}
+.lock.offen .bow{transform:translate(3px,-4px)}
+@keyframes ruck{
+  0%,100%{transform:translateX(0)} 20%{transform:translateX(-4px)}
+  45%{transform:translateX(3px)} 70%{transform:translateX(-2px)}
+}
+.lock.ruck{animation:ruck .38s ease}
+
+/* gesperrt: die Liste ist eine Anzeige, kein Formular */
+.locked .tap{cursor:default}
+.locked .tap:hover .box{border-color:var(--ink-3)}
 
 /* ---------- continent sections ---------- */
 .list{padding-bottom:1rem}
@@ -202,14 +225,15 @@ section.cont:last-of-type{border-bottom:0}
   font-size:.78rem;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);
   font-variant-numeric:tabular-nums;margin-left:auto;white-space:nowrap;
 }
-.meter{height:2px;background:var(--rule);margin-bottom:1.4rem}
+.meter{height:2px;background:var(--track);margin-bottom:1.4rem}
 .meter i{display:block;height:100%;background:var(--mark);transition:width .25s ease}
 
 .countries{display:grid;grid-template-columns:repeat(auto-fill,minmax(238px,1fr));gap:.15rem .5rem}
 .row{border-bottom:1px solid var(--rule-soft)}
 .tap{
   display:flex;align-items:center;gap:.7rem;padding:.5rem .25rem .5rem 0;
-  cursor:pointer;user-select:none;
+  cursor:pointer;user-select:none;touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
 }
 .tap input{position:absolute;opacity:0;width:0;height:0}
 .box{
@@ -225,6 +249,9 @@ section.cont:last-of-type{border-bottom:0}
 .tap input:checked+.box{background:var(--mark);border-color:var(--mark)}
 .tap input:checked+.box::after{transform:rotate(-45deg) translate(1px,-1px) scale(1)}
 .tap input:focus-visible+.box{outline:2px solid var(--focus);outline-offset:2px}
+a:focus-visible,button:focus-visible{
+  outline:2px solid var(--focus);outline-offset:3px;border-radius:2px;
+}
 .nm{flex:1 1 auto;font-size:.94rem;line-height:1.3;color:var(--ink-2);transition:color .15s ease}
 .tap input:checked~.nm{color:var(--ink);font-weight:500}
 .cd{
@@ -256,7 +283,8 @@ section.cont:last-of-type{border-bottom:0}
 footer{border-top:1px solid var(--rule);margin-top:3rem}
 footer .shell{
   display:flex;flex-wrap:wrap;gap:.6rem 1.5rem;justify-content:space-between;
-  padding:1.5rem 0 3rem;font-size:.78rem;color:var(--ink-3);
+  padding:1.5rem 0 calc(3rem + env(safe-area-inset-bottom,0px));
+  font-size:.78rem;color:var(--ink-3);
 }
 footer a{color:var(--ink-2);text-decoration:none;border-bottom:1px solid var(--rule)}
 footer a:hover{color:var(--ink);border-bottom-color:var(--ink)}
@@ -272,18 +300,115 @@ footer .legal{display:flex;gap:1.4rem;flex-wrap:wrap}
   .strip-grp{gap:0}
   .tick{height:30px;border-radius:0}
   .masthead nav{gap:.9rem;font-size:.72rem}
-  .controls .shell{gap:.55rem 1rem;padding:.7rem 0}
+  .controls .shell{gap:.5rem .9rem;padding:.6rem 0}
+  .seg{order:0;flex:1 0 100%}
+  .lock{order:1}
+  /* wenn alles stimmt, reicht auf dem Handy der grüne Punkt — bei Problemen
+     erscheint der Text wieder und die Leiste darf dafür zweizeilig werden */
+  .sync{order:2}
+  .linkbtn{order:3}
+  .sync.ok{font-size:0;letter-spacing:0;gap:0}
+  .lock span{display:none}
+  .lock{gap:0}
+  /* der Zähler erscheint nur, solange gezählt wird */
+  .lock[data-step="1"] span,
+  .lock[data-step="2"] span{display:inline}
+  .lock[data-step="1"],
+  .lock[data-step="2"]{gap:.45rem}
   .seg{order:0}
   .sync{order:1}
-  .search{order:2;flex:1 1 140px}
-  .linkbtn{order:3}
+  .linkbtn{order:2}
 }
+@media (pointer:coarse){
+  .tap{padding:.75rem .25rem;min-height:44px}
+  .seg button,.linkbtn{padding:.4rem 0;min-height:34px}
+  /* dreimal antippen will eine ordentliche Fläche */
+  .lock{min-height:44px;min-width:44px;justify-content:flex-end}
+}
+/* ================= Bewegung =================
+   Ein Auftritt beim Laden, ein Tooltip auf der Leiste, Enthüllen beim
+   Scrollen. Ohne JS und bei prefers-reduced-motion bleibt alles sichtbar
+   und still: die .anim-Klasse wird erst gesetzt, wenn beides erlaubt ist. */
+
+/* --- Auftritt: Kopfbereich staffeln --- */
+.intro .hero h1,
+.intro .hero .lede,
+.intro .count,
+.intro .strip{opacity:0;transform:translateY(14px)}
+.intro.go .hero h1,
+.intro.go .hero .lede,
+.intro.go .count,
+.intro.go .strip{
+  opacity:1;transform:none;
+  transition:opacity .6s ease, transform .6s cubic-bezier(.22,.7,.2,1);
+}
+.intro.go .hero .lede{transition-delay:.09s}
+.intro.go .count     {transition-delay:.18s}
+.intro.go .strip     {transition-delay:.26s}
+
+/* --- Auftritt: die 195 Striche ziehen sich von links nach rechts --- */
+.intro .tick{transform:scaleY(.05)}
+.intro.go .tick{
+  transform:scaleY(1);
+  transition:transform .55s cubic-bezier(.2,.8,.2,1) calc(.42s + var(--i) * 2.2ms),
+             background .18s ease;
+}
+
+/* --- Enthüllen beim Scrollen (Klasse kommt aus JS) --- */
+.rv{opacity:0;transform:translateY(12px)}
+.rv.in{
+  opacity:1;transform:none;
+  transition:opacity .5s ease, transform .5s cubic-bezier(.22,.7,.2,1);
+}
+.rv.in .row{opacity:1;transform:none;transition:opacity .45s ease var(--d,0ms), transform .45s cubic-bezier(.22,.7,.2,1) var(--d,0ms)}
+.rv .row{opacity:0;transform:translateY(8px)}
+
+/* --- Strich unter dem Zeiger: anheben und benennen --- */
+.tick{transition:background .18s ease, transform .18s ease}
+.tick.hot{transform:scaleY(1.3)}
+.tip{
+  position:absolute;left:0;top:-.35rem;z-index:2;
+  transform:translate(var(--x,0),-100%) translateY(-6px);
+  display:flex;align-items:baseline;gap:.55rem;white-space:nowrap;
+  padding:.4rem .6rem;background:var(--paper);
+  border:1px solid var(--rule);border-radius:3px;
+  opacity:0;pointer-events:none;
+  transition:opacity .14s ease, transform .14s ease;
+}
+.tip.on{opacity:1;transform:translate(var(--x,0),-100%) translateY(0)}
+.tip b{font-family:var(--display);font-weight:700;font-size:.86rem;letter-spacing:-.01em}
+.tip i{
+  font-style:normal;font-size:.62rem;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--ink-3);
+}
+.tip i.ja{color:var(--mark)}
+
+/* --- Puls: gerade gesetzter Haken blitzt in der Leiste auf --- */
+@keyframes puls{
+  0%{transform:scaleY(1)} 35%{transform:scaleY(1.7)} 100%{transform:scaleY(1)}
+}
+.tick.puls{animation:puls .45s cubic-bezier(.3,1.3,.4,1)}
+
+/* --- Leiste zeigt, dass sie klebt --- */
+.controls{transition:box-shadow .2s ease}
+.controls.stuck{box-shadow:0 10px 24px -22px rgba(0,0,0,.5)}
+
+/* --- Kästchen nimmt beim Zeigen die Akzentfarbe an --- */
+.tap:hover .box{border-color:var(--mark)}
+
 @media (prefers-reduced-motion:reduce){
-  *{transition:none!important}
+  *{transition:none!important;animation:none!important}
 }
 </style>
 </head>
 <body>
+<script>
+/* früh und synchron, damit der Kopfbereich nicht erst auftaucht und dann verschwindet */
+if(!matchMedia("(prefers-reduced-motion: reduce)").matches){
+  document.documentElement.classList.add("anim","intro");
+}
+</script>
+
 <header class="masthead">
   <div class="shell">
     <div class="wordmark">Stef <span>/ Länder</span></div>
@@ -308,6 +433,7 @@ footer .legal{display:flex;gap:1.4rem;flex-wrap:wrap}
     </div>
 
     <div class="strip">
+      <div class="tip" id="tip" aria-hidden="true"></div>
       <div class="strip-bar" id="strip"></div>
       <div class="strip-key" id="strip-key"></div>
     </div>
@@ -326,7 +452,16 @@ footer .legal{display:flex;gap:1.4rem;flex-wrap:wrap}
         <button data-f="besucht" aria-pressed="false">Abgehakt</button>
         <button data-f="fehlt" aria-pressed="false">Fehlt</button>
       </div>
-      <input class="search" id="q" type="search" placeholder="Land suchen …" aria-label="Land suchen">
+      <button class="lock" id="lock" type="button" data-step="0"
+              aria-label="Bearbeiten freischalten — dreimal klicken">
+        <svg viewBox="0 0 16 16" width="13" height="13" aria-hidden="true">
+          <path class="bow" d="M4.7 7.2V5.3a3.3 3.3 0 0 1 6.6 0v1.9" fill="none"
+                stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <rect x="2.9" y="7.2" width="10.2" height="6.6" rx="1.5" fill="none"
+                stroke="currentColor" stroke-width="1.5"/>
+        </svg>
+        <span id="lockText">gesperrt</span>
+      </button>
       <span class="sync" id="sync"></span>
       <button class="linkbtn" id="copy">Liste kopieren</button>
     </div>
@@ -374,12 +509,32 @@ let pending = new Map(readLS(QUEUE, []));
 const save      = ()=> writeLS(CACHE, [...vis]);
 const saveQueue = ()=> writeLS(QUEUE, [...pending]);
 
+/* Prozentzahl läuft auf den neuen Wert zu statt zu springen */
+const pctEl = () => document.getElementById("pct");
+let pctVon = 0, pctLauf = null;
+function setPct(ziel, ms){
+  const bewegung = document.documentElement.classList.contains("anim");
+  const dauer = ms != null ? ms : (pctVon === 0 && ziel > 0 ? 900 : 260);
+  const schreib = v => pctEl().innerHTML = nf(v,1) + '<sub>%</sub>';
+  if(pctLauf) cancelAnimationFrame(pctLauf);
+  if(!bewegung || dauer === 0){ pctVon = ziel; schreib(ziel); return; }
+  const start = performance.now(), ab = pctVon;
+  const schritt = now => {
+    const p = Math.min(1, (now - start) / dauer);
+    const e = 1 - Math.pow(1 - p, 3);
+    schreib(ab + (ziel - ab) * e);
+    if(p < 1) pctLauf = requestAnimationFrame(schritt); else { pctVon = ziel; schreib(ziel); pctLauf = null; }
+  };
+  pctLauf = requestAnimationFrame(schritt);
+}
+
 const TOTAL = DATA.length;
 const AREA_ALL = DATA.reduce((s,c)=>s+c.a,0);
 const POP_ALL  = DATA.reduce((s,c)=>s+c.p,0);
 const byCode = new Map(DATA.map(c=>[c.c,c]));
 
 /* ---------- build the list ---------- */
+let tickNr = 0;
 const list = document.getElementById("list");
 const strip = document.getElementById("strip");
 const stripKey = document.getElementById("strip-key");
@@ -400,7 +555,6 @@ KONT.forEach(k=>{
     const row = document.createElement("div");
     row.className = "row";
     row.dataset.c = c.c;
-    row.dataset.n = c.n.toLowerCase();
     row.innerHTML =
       '<label class="tap"><input type="checkbox">'+
       '<span class="box" aria-hidden="true"></span>'+
@@ -419,7 +573,7 @@ KONT.forEach(k=>{
     const t = document.createElement("i");
     t.className = "tick";
     t.dataset.c = c.c;
-    t.title = c.n;
+    t.style.setProperty("--i", tickNr++);
     g.appendChild(t);
   });
   strip.appendChild(g);
@@ -452,7 +606,7 @@ function render(){
   const n = visited.length;
   const pctAll = n/TOTAL*100;
 
-  document.getElementById("pct").innerHTML = nf(pctAll,1).replace(".",",")+'<sub>%</sub>';
+  setPct(pctAll);
   document.getElementById("n-vis").textContent = nf(n);
   document.getElementById("n-miss").textContent = nf(TOTAL-n);
 
@@ -521,8 +675,48 @@ function renderObs(visited, area, pop, konts, nachbarn){
   ul.innerHTML = li.map(([b,t])=>'<li><b>'+b+'</b><span>'+t+'</span></li>').join("");
 }
 
+/* ---------- Schloss: drei Klicks schalten das Bearbeiten frei ----------
+   Kein Sicherheitsmerkmal — der Schlüssel steht im Quelltext und die drei
+   Klicks kann jeder ausführen. Es verhindert beiläufige und versehentliche
+   Änderungen durch Besucher. Wirklich dicht wird es erst über eine
+   Policy, die Schreibrechte an eine Anmeldung bindet. */
+const lockBtn  = document.getElementById("lock");
+const lockText = document.getElementById("lockText");
+let offen = false, stufe = 0, stufeAb = null;
+
+function zeigeSchloss(){
+  document.documentElement.classList.toggle("locked", !offen);
+  lockBtn.classList.toggle("offen", offen);
+  lockBtn.dataset.step = offen ? "3" : String(stufe);
+  lockText.textContent = offen ? "offen"
+    : stufe === 0 ? "gesperrt" : "noch " + (3 - stufe) + "×";
+  lockBtn.setAttribute("aria-label", offen
+    ? "Bearbeiten ist frei. Klicken, um wieder zu sperren."
+    : "Bearbeiten freischalten — noch " + (3 - stufe) + " von 3 Klicks");
+  rows.forEach(r=>{ r.querySelector("input[type=checkbox]").disabled = !offen; });
+}
+
+lockBtn.addEventListener("click", ()=>{
+  if(stufeAb) clearTimeout(stufeAb);
+  if(offen){ offen = false; stufe = 0; zeigeSchloss(); return; }
+  stufe++;
+  if(stufe >= 3){ offen = true; stufe = 0; }
+  else stufeAb = setTimeout(()=>{ stufe = 0; zeigeSchloss(); }, 2600);
+  zeigeSchloss();
+});
+
+/* Klick auf eine gesperrte Zeile zeigt zum Schloss */
+list.addEventListener("click", e=>{
+  if(offen || !e.target.closest(".tap")) return;
+  lockBtn.classList.remove("ruck");
+  void lockBtn.offsetWidth;
+  lockBtn.classList.add("ruck");
+  lockBtn.addEventListener("animationend", ()=>lockBtn.classList.remove("ruck"), { once:true });
+});
+
 /* ---------- interaction ---------- */
 list.addEventListener("change", e=>{
+  if(!offen) return;                     // zweite Absicherung neben disabled
   if(e.target.type === "checkbox"){
     const row = e.target.closest(".row");
     const code = row.dataset.c;
@@ -530,24 +724,30 @@ list.addEventListener("change", e=>{
     else { vis.delete(code); pending.set(code,"del"); }
     saveQueue();
     paintRow(row);
+    const t = ticks.get(code);
+    if(t && e.target.checked && document.documentElement.classList.contains("anim")){
+      t.classList.remove("puls");
+      void t.offsetWidth;
+      t.classList.add("puls");
+      t.addEventListener("animationend", ()=>t.classList.remove("puls"), { once:true });
+    }
     render();
     applyFilter();
     sync();
   }
 });
 
-let filter = "alle", query = "";
+let filter = "alle";
 function applyFilter(){
   rows.forEach(row=>{
     const on = vis.has(row.dataset.c);
-    const okF = filter === "alle" || (filter === "besucht" ? on : !on);
-    const okQ = !query || row.dataset.n.includes(query) || row.dataset.c.toLowerCase() === query;
-    row.hidden = !(okF && okQ);
+    row.hidden = !(filter === "alle" || (filter === "besucht" ? on : !on));
   });
   document.querySelectorAll("section.cont").forEach(sec=>{
     const any = [...sec.querySelectorAll(".row")].some(r=>!r.hidden);
     sec.hidden = !any;
   });
+  if(window.enthuellenPruefen) window.enthuellenPruefen();
 }
 document.getElementById("filters").addEventListener("click", e=>{
   const b = e.target.closest("button"); if(!b) return;
@@ -555,11 +755,6 @@ document.getElementById("filters").addEventListener("click", e=>{
   document.querySelectorAll("#filters button").forEach(x=>x.setAttribute("aria-pressed", String(x===b)));
   applyFilter();
 });
-document.getElementById("q").addEventListener("input", e=>{
-  query = e.target.value.trim().toLowerCase();
-  applyFilter();
-});
-
 document.getElementById("copy").addEventListener("click", async ()=>{
   const visited = DATA.filter(c=>vis.has(c.c));
   const lines = KONT.map(k=>{
@@ -582,24 +777,46 @@ document.getElementById("copy").addEventListener("click", async ()=>{
 const syncEl = document.getElementById("sync");
 function setSync(text, cls){ syncEl.textContent = text; syncEl.className = "sync" + (cls ? " " + cls : ""); }
 
+async function req(url, init){
+  let r;
+  try{ r = await fetch(url, init); }
+  catch(e){ const err = new Error("Netzwerk: " + e.message); err.kind = "net"; throw err; }
+  if(!r.ok){
+    const err = new Error((await r.text().catch(()=>"")).slice(0,180));
+    err.status = r.status;
+    throw err;
+  }
+  return r;
+}
+
+function grund(err){
+  const s = err.status;
+  if(err.kind === "net")   return "keine Verbindung";
+  if(err.kind === "parse") return "unerwartete Antwort";
+  if(s === 401 || s === 403) return "Zugriff verweigert";
+  if(s === 404) return "Tabelle nicht gefunden";
+  if(s === 409) return "Konflikt in der Tabelle";
+  if(s >= 500) return "Server antwortet nicht";
+  return "Fehler " + (s || "unbekannt");
+}
+
 async function pull(){
-  const r = await fetch(SB_URL + "?select=code", { headers:{ apikey:SB_KEY }, cache:"no-store" });
-  if(!r.ok) throw new Error("HTTP " + r.status + " — " + (await r.text()).slice(0,140));
-  return (await r.json()).map(x=>x.code);
+  const r = await req(SB_URL + "?select=code", { headers:{ apikey:SB_KEY }, cache:"no-store" });
+  try{ return (await r.json()).map(x=>x.code); }
+  catch(e){ const err = new Error("kein JSON"); err.kind = "parse"; throw err; }
 }
 
 async function push(code, op){
-  const r = op === "add"
-    ? await fetch(SB_URL, {
+  return op === "add"
+    ? await req(SB_URL, {
         method:"POST",
         headers:{ apikey:SB_KEY, "Content-Type":"application/json", Prefer:"resolution=merge-duplicates,return=minimal" },
         body: JSON.stringify([{ code }])
       })
-    : await fetch(SB_URL + "?code=eq." + encodeURIComponent(code), {
+    : await req(SB_URL + "?code=eq." + encodeURIComponent(code), {
         method:"DELETE",
         headers:{ apikey:SB_KEY, Prefer:"return=minimal" }
       });
-  if(!r.ok) throw new Error("HTTP " + r.status + " — " + (await r.text()).slice(0,140));
 }
 
 let busy = false, again = false;
@@ -623,20 +840,109 @@ async function sync(full){
       rows.forEach(paintRow);
       render();
       applyFilter();
+      zeigeSchloss();
     }
     setSync(pending.size ? pending.size + " offen" : "synchron", pending.size ? "warn" : "ok");
   }catch(err){
-    setSync(pending.size ? pending.size + " nicht gespeichert" : "keine Verbindung", "err");
-    console.warn("Supabase:", err.message);
+    setSync(grund(err) + (pending.size ? " · " + pending.size + " offen" : ""), "err");
+    console.warn("Supabase " + (err.status || err.kind || "") + ":", err.message);
   }finally{
     busy = false;
     if(again){ again = false; sync(full); }
   }
 }
 
+/* ---------- Name des Landes unter dem Zeiger ---------- */
+(function tooltip(){
+  if(!matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+  const tip = document.getElementById("tip"), stripEl = document.getElementById("strip");
+  const wrap = stripEl.parentElement;
+  let heiss = null;
+
+  const zeige = (t) => {
+    if(t === heiss) return;
+    if(heiss) heiss.classList.remove("hot");
+    heiss = t;
+    if(!t){ tip.classList.remove("on"); return; }
+    t.classList.add("hot");
+    const c = byCode.get(t.dataset.c);
+    const da = vis.has(c.c);
+    tip.innerHTML = "<b>" + c.n + "</b><i class='" + (da ? "ja" : "") + "'>" + (da ? "abgehakt" : "fehlt") + "</i>";
+    // erst einsetzen, dann messen, dann mittig über den Strich klemmen
+    tip.classList.add("on");
+    const w = tip.offsetWidth, breite = wrap.clientWidth;
+    const mitte = t.getBoundingClientRect().left - wrap.getBoundingClientRect().left + t.offsetWidth / 2;
+    tip.style.setProperty("--x", Math.max(0, Math.min(breite - w, mitte - w / 2)) + "px");
+  };
+
+  stripEl.addEventListener("pointermove", e => {
+    const grp = e.target.closest(".strip-grp");
+    if(!grp){ zeige(null); return; }
+    // nächstgelegener Strich, damit die 1-px-Lücken nicht flackern
+    let beste = null, ab = Infinity;
+    for(const t of grp.children){
+      const r = t.getBoundingClientRect(), d = Math.abs(e.clientX - (r.left + r.width / 2));
+      if(d < ab){ ab = d; beste = t; }
+    }
+    zeige(beste);
+  });
+  stripEl.addEventListener("pointerleave", ()=>zeige(null));
+  window.addEventListener("scroll", ()=>{ if(heiss) zeige(null); }, { passive:true });
+})();
+
+/* ---------- Beim Scrollen einblenden ----------
+   Bewusst ohne IntersectionObserver: bei einem Sprung (⌘+Ende, wieder-
+   hergestellte Scrollposition, Filterwechsel) meldet der Beobachter
+   übersprungene Abschnitte nicht und sie bleiben unsichtbar. Diese
+   Prüfung läuft über alle noch versteckten Elemente — höchstens sieben. */
+(function enthuellen(){
+  if(!document.documentElement.classList.contains("anim")) return;
+  const ziele = [...document.querySelectorAll("section.cont"), document.querySelector(".notes")].filter(Boolean);
+  ziele.forEach(el=>{
+    el.classList.add("rv");
+    [...el.querySelectorAll(".row")].forEach((r,i)=>r.style.setProperty("--d", Math.min(i,22) * 14 + "ms"));
+  });
+  let offen = ziele.slice(), geplant = false;
+  const pruefen = ()=>{
+    geplant = false;
+    const grenze = innerHeight * 0.94;
+    offen = offen.filter(el=>{
+      if(el.getBoundingClientRect().top < grenze){ el.classList.add("in"); return false; }
+      return true;
+    });
+    if(!offen.length){
+      removeEventListener("scroll", anstossen);
+      removeEventListener("resize", anstossen);
+    }
+  };
+  function anstossen(){ if(!geplant){ geplant = true; requestAnimationFrame(pruefen); } }
+  addEventListener("scroll", anstossen, { passive:true });
+  addEventListener("resize", anstossen);
+  window.enthuellenPruefen = anstossen;   // nach Filterwechsel erneut prüfen
+  pruefen();
+})();
+
+/* ---------- klebende Leiste kenntlich machen ---------- */
+(function kleben(){
+  if(!("IntersectionObserver" in window)) return;
+  const bar = document.querySelector(".controls");
+  const mess = document.createElement("div");
+  mess.style.cssText = "position:absolute;height:1px;width:1px";
+  bar.parentNode.insertBefore(mess, bar);
+  new IntersectionObserver(([e])=>bar.classList.toggle("stuck", !e.isIntersecting), { threshold:1 }).observe(mess);
+})();
+
 rows.forEach(paintRow);
 render();
 applyFilter();
+zeigeSchloss();
+
+/* ---------- Auftritt starten, danach die Staffelung wieder abräumen ---------- */
+if(document.documentElement.classList.contains("intro")){
+  requestAnimationFrame(()=>requestAnimationFrame(()=>document.documentElement.classList.add("go")));
+  setTimeout(()=>document.documentElement.classList.remove("intro","go"), 1600);
+}
+
 setSync("verbinde …");
 sync(true);
 addEventListener("online", ()=>sync(true));
