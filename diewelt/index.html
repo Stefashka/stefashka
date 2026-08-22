@@ -24,9 +24,9 @@
   --ink-3:#746D5F;
   --rule:#DCD8CD;
   --rule-soft:#E6E3DA;
-  --track:#ACA699;
-  --mark:#2C5C4C;
-  --focus:#2C5C4C;
+  --track:#C9C5BD;
+  --mark:#D60052;
+  --focus:#D60052;
   --warn:#8C6217;
   --err:#9E402A;
   --display:"Anybody","Space Grotesk",system-ui,sans-serif;
@@ -44,8 +44,8 @@
     --rule:#2C2F28;
     --rule-soft:#232620;
     --track:#585248;
-    --mark:#7CC1A6;
-    --focus:#7CC1A6;
+    --mark:#FF75AC;
+    --focus:#FF75AC;
     --warn:#D9A85C;
     --err:#E08A70;
   }
@@ -59,8 +59,8 @@
   --rule:#2C2F28;
   --rule-soft:#232620;
   --track:#585248;
-  --mark:#7CC1A6;
-  --focus:#7CC1A6;
+  --mark:#FF75AC;
+  --focus:#FF75AC;
   --warn:#D9A85C;
   --err:#E08A70;
 }
@@ -269,14 +269,16 @@ a:focus-visible,button:focus-visible{
 .notes ul{list-style:none;margin:0;padding:0;display:grid;gap:0;max-width:74ch}
 .notes li{
   padding:.95rem 0;border-top:1px solid var(--rule-soft);
-  display:flex;gap:1rem;align-items:baseline;
+  display:grid;grid-template-columns:var(--labelw,5.4rem) 1fr;
+  gap:0 1rem;align-items:baseline;
 }
 .notes li:first-child{border-top:0}
 .notes li b{
-  flex:0 0 3.4rem;font-family:var(--display);font-weight:700;font-size:.72rem;
-  letter-spacing:.1em;text-transform:uppercase;color:var(--mark);padding-top:.15rem;
+  font-family:var(--display);font-weight:700;font-size:.72rem;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--mark);
+  padding-top:.15rem;white-space:nowrap;
 }
-.notes li span{flex:1 1 auto}
+.notes li span{min-width:0}
 .notes li span em{font-family:var(--serif);font-style:italic;font-size:1.05em}
 
 /* ---------- footer ---------- */
@@ -310,11 +312,6 @@ footer .legal{display:flex;gap:1.4rem;flex-wrap:wrap}
   .sync.ok{font-size:0;letter-spacing:0;gap:0}
   .lock span{display:none}
   .lock{gap:0}
-  /* der Zähler erscheint nur, solange gezählt wird */
-  .lock[data-step="1"] span,
-  .lock[data-step="2"] span{display:inline}
-  .lock[data-step="1"],
-  .lock[data-step="2"]{gap:.45rem}
   .seg{order:0}
   .sync{order:1}
   .linkbtn{order:2}
@@ -453,7 +450,7 @@ if(!matchMedia("(prefers-reduced-motion: reduce)").matches){
         <button data-f="fehlt" aria-pressed="false">Fehlt</button>
       </div>
       <button class="lock" id="lock" type="button" data-step="0"
-              aria-label="Bearbeiten freischalten — dreimal klicken">
+              aria-label="Gesperrt. Bearbeiten ist nicht möglich.">
         <svg viewBox="0 0 16 16" width="13" height="13" aria-hidden="true">
           <path class="bow" d="M4.7 7.2V5.3a3.3 3.3 0 0 1 6.6 0v1.9" fill="none"
                 stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
@@ -635,6 +632,21 @@ function render(){
   save();
 }
 
+/* Jede Beobachtungszeile ist ein eigenes Raster, deshalb richtet max-content
+   die Spalten nicht aneinander aus. Also einmal die breiteste Beschriftung
+   messen und die Breite allen Zeilen mitgeben. */
+function labelBreite(){
+  const ul = document.getElementById("obs");
+  const bs = [...ul.querySelectorAll("li > b")];
+  if(!bs.length) return;
+  ul.style.setProperty("--labelw", "max-content");   // erst frei messen
+  const w = Math.max(...bs.map(b=>b.getBoundingClientRect().width));
+  ul.style.setProperty("--labelw", Math.ceil(w) + "px");
+}
+/* Die Schriften kommen später — dann stimmen die Breiten neu */
+if(document.fonts && document.fonts.ready) document.fonts.ready.then(labelBreite);
+addEventListener("resize", labelBreite);
+
 function renderObs(visited, area, pop, konts, nachbarn){
   const ul = document.getElementById("obs");
   const n = visited.length;
@@ -673,6 +685,7 @@ function renderObs(visited, area, pop, konts, nachbarn){
 
 
   ul.innerHTML = li.map(([b,t])=>'<li><b>'+b+'</b><span>'+t+'</span></li>').join("");
+  labelBreite();
 }
 
 /* ---------- Schloss: drei Klicks schalten das Bearbeiten frei ----------
@@ -688,11 +701,12 @@ function zeigeSchloss(){
   document.documentElement.classList.toggle("locked", !offen);
   lockBtn.classList.toggle("offen", offen);
   lockBtn.dataset.step = offen ? "3" : String(stufe);
-  lockText.textContent = offen ? "offen"
-    : stufe === 0 ? "gesperrt" : "noch " + (3 - stufe) + "×";
+  /* Rückmeldung gibt nur der Bügel, der sich hebt — die Zahl der Klicks
+     steht bewusst nirgends, sonst wäre die Geste keine Geste mehr */
+  lockText.textContent = offen ? "offen" : "gesperrt";
   lockBtn.setAttribute("aria-label", offen
     ? "Bearbeiten ist frei. Klicken, um wieder zu sperren."
-    : "Bearbeiten freischalten — noch " + (3 - stufe) + " von 3 Klicks");
+    : "Gesperrt. Bearbeiten ist nicht möglich.");
   rows.forEach(r=>{ r.querySelector("input[type=checkbox]").disabled = !offen; });
 }
 
