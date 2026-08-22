@@ -1,0 +1,646 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#F7F6F3">
+<title>Die Welt, abgehakt</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anybody:wght@500;700;800&family=Space+Grotesk:wght@400;500;700&family=Instrument+Serif:ital@0;1&display=swap">
+<style>
+:root{
+  --paper:#F7F6F3;
+  --paper-2:#EDEBE4;
+  --ink:#1A1915;
+  --ink-2:#6E6A5F;
+  --ink-3:#94907F;
+  --rule:#DCD8CD;
+  --rule-soft:#E6E3DA;
+  --mark:#2C5C4C;
+  --mark-soft:#C6D8CF;
+  --focus:#2C5C4C;
+  --warn:#8C6217;
+  --err:#9E402A;
+  --display:"Anybody","Space Grotesk",system-ui,sans-serif;
+  --body:"Space Grotesk",system-ui,-apple-system,sans-serif;
+  --serif:"Instrument Serif",Georgia,serif;
+  --shell:min(1060px,100% - 3rem);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#131410;
+    --paper-2:#1C1E19;
+    --ink:#F2F0E8;
+    --ink-2:#9A968A;
+    --ink-3:#726E63;
+    --rule:#2C2F28;
+    --rule-soft:#232620;
+    --mark:#7CC1A6;
+    --mark-soft:#28382F;
+    --focus:#7CC1A6;
+    --warn:#D9A85C;
+    --err:#E08A70;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#131410;
+  --paper-2:#1C1E19;
+  --ink:#F2F0E8;
+  --ink-2:#9A968A;
+  --ink-3:#726E63;
+  --rule:#2C2F28;
+  --rule-soft:#232620;
+  --mark:#7CC1A6;
+  --mark-soft:#28382F;
+  --focus:#7CC1A6;
+  --warn:#D9A85C;
+  --err:#E08A70;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--body);
+  font-size:16px;
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+.shell{width:var(--shell);margin-inline:auto}
+
+/* ---------- header ---------- */
+.masthead{border-bottom:1px solid var(--rule)}
+.masthead .shell{
+  display:flex;align-items:baseline;justify-content:space-between;
+  flex-wrap:wrap;gap:.4rem 1.5rem;padding:1.1rem 0;
+}
+.wordmark{
+  font-family:var(--display);font-weight:800;font-size:.9rem;
+  letter-spacing:.14em;text-transform:uppercase;white-space:nowrap;
+}
+.wordmark span{color:var(--ink-3);font-weight:500}
+.masthead nav{display:flex;gap:1.25rem;font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2)}
+.masthead nav a{color:inherit;text-decoration:none;border-bottom:1px solid transparent;padding-bottom:2px}
+.masthead nav a:hover{color:var(--ink);border-bottom-color:var(--ink)}
+
+/* ---------- hero ---------- */
+.hero{padding:clamp(2.5rem,6vw,4.5rem) 0 2rem}
+h1{
+  font-family:var(--display);font-weight:800;
+  font-size:clamp(2.1rem,5.6vw,3.6rem);line-height:1.02;
+  letter-spacing:-.02em;margin:0 0 1.6rem;text-wrap:balance;max-width:22ch;
+}
+h1 em{font-family:var(--serif);font-style:italic;font-weight:400;letter-spacing:0}
+.lede{max-width:60ch;color:var(--ink-2);margin:0 0 2.5rem;font-size:1.02rem}
+
+.count{
+  display:flex;align-items:flex-end;gap:clamp(1.5rem,4vw,3rem);
+  flex-wrap:wrap;
+}
+.pct{
+  font-family:var(--display);font-weight:800;
+  font-size:clamp(4rem,13vw,8.5rem);line-height:.82;
+  letter-spacing:-.045em;font-variant-numeric:tabular-nums;
+}
+.pct sub{font-size:.28em;font-weight:700;letter-spacing:-.01em;vertical-align:baseline;color:var(--ink-3)}
+.count dl{margin:0 0 .5rem;display:flex;gap:clamp(1.25rem,3vw,2.25rem)}
+.count dl div{display:flex;flex-direction:column-reverse}
+.count dt{
+  font-size:.68rem;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);
+  margin-top:.35rem;
+}
+.count dd{
+  margin:0;font-family:var(--display);font-weight:700;font-size:1.5rem;
+  font-variant-numeric:tabular-nums;letter-spacing:-.01em;
+}
+
+/* ---------- 195-tick strip ---------- */
+.strip{margin:2.75rem 0 0}
+.strip-bar{display:flex;gap:clamp(6px,1.4vw,14px);align-items:flex-end}
+.strip-grp{display:flex;gap:1px;flex:var(--w) 1 0;min-width:0}
+.tick{
+  flex:1 1 0;min-width:1px;height:38px;background:var(--rule);
+  border-radius:1px;transition:background .18s ease;
+}
+.tick.on{background:var(--mark)}
+.strip-key{
+  display:flex;gap:clamp(6px,1.4vw,14px);margin-top:.6rem;
+  font-size:.63rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);
+}
+.strip-key span{flex:var(--w) 1 0;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* ---------- band of figures ---------- */
+.figures{border-top:1px solid var(--rule);margin-top:2rem}
+.figures .grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+}
+.fig{padding:1.5rem 1.25rem 1.6rem;border-right:1px solid var(--rule-soft)}
+.fig:last-child{border-right:0}
+.fig b{
+  display:block;font-family:var(--display);font-weight:700;
+  font-size:1.75rem;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.1;
+}
+.fig i{
+  display:block;font-style:normal;font-size:.68rem;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--ink-3);margin-top:.4rem;
+}
+.fig small{display:block;color:var(--ink-2);font-size:.8rem;margin-top:.5rem}
+.fig:first-child{padding-left:0}
+
+/* ---------- controls ---------- */
+.controls{
+  position:sticky;top:0;z-index:5;background:var(--paper);
+  border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);
+  margin-top:3.25rem;
+}
+.controls .shell{
+  display:flex;align-items:center;gap:.5rem 1.5rem;flex-wrap:wrap;padding:.85rem 0;
+}
+.seg{display:flex;gap:1.1rem}
+.seg button,.linkbtn{
+  appearance:none;background:none;border:0;padding:0 0 3px;cursor:pointer;
+  font-family:var(--body);font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink-3);border-bottom:1px solid transparent;
+}
+.seg button:hover,.linkbtn:hover{color:var(--ink)}
+.seg button[aria-pressed="true"]{color:var(--ink);border-bottom-color:var(--mark)}
+.search{
+  flex:1 1 160px;min-width:120px;background:none;border:0;
+  border-bottom:1px solid var(--rule);padding:.3rem 0;
+  font-family:var(--body);font-size:.9rem;color:var(--ink);
+}
+.search::placeholder{color:var(--ink-3)}
+.search:focus{outline:none;border-bottom-color:var(--mark)}
+.linkbtn.done{color:var(--mark)}
+.sync{
+  margin-left:auto;display:inline-flex;align-items:center;gap:.5rem;
+  font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);
+  white-space:nowrap;
+}
+.sync::before{
+  content:"";width:5px;height:5px;border-radius:50%;
+  background:var(--ink-3);flex:0 0 auto;
+}
+.sync.ok::before{background:var(--mark)}
+.sync.warn::before{background:var(--warn)}
+.sync.warn{color:var(--warn)}
+.sync.err::before{background:var(--err)}
+.sync.err{color:var(--err)}
+
+/* ---------- continent sections ---------- */
+.list{padding-bottom:1rem}
+section.cont{padding:2.75rem 0 .5rem;border-bottom:1px solid var(--rule-soft)}
+section.cont:last-of-type{border-bottom:0}
+.cont-head{display:flex;align-items:baseline;gap:1rem;margin-bottom:.9rem}
+.cont-head h2{
+  font-family:var(--display);font-weight:700;font-size:1.22rem;
+  letter-spacing:-.01em;margin:0;
+}
+.cont-head .of{
+  font-size:.78rem;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);
+  font-variant-numeric:tabular-nums;margin-left:auto;white-space:nowrap;
+}
+.meter{height:2px;background:var(--rule);margin-bottom:1.4rem}
+.meter i{display:block;height:100%;background:var(--mark);transition:width .25s ease}
+
+.countries{display:grid;grid-template-columns:repeat(auto-fill,minmax(238px,1fr));gap:.15rem .5rem}
+.row{border-bottom:1px solid var(--rule-soft)}
+.tap{
+  display:flex;align-items:center;gap:.7rem;padding:.5rem .25rem .5rem 0;
+  cursor:pointer;user-select:none;
+}
+.tap input{position:absolute;opacity:0;width:0;height:0}
+.box{
+  flex:0 0 auto;width:15px;height:15px;border:1px solid var(--ink-3);border-radius:2px;
+  display:grid;place-items:center;transition:background .15s ease,border-color .15s ease;
+}
+.box::after{
+  content:"";width:7px;height:4px;border-left:1.6px solid var(--paper);
+  border-bottom:1.6px solid var(--paper);transform:rotate(-45deg) translate(1px,-1px) scale(0);
+  transition:transform .15s cubic-bezier(.3,1.5,.5,1);
+}
+.tap:hover .box{border-color:var(--ink)}
+.tap input:checked+.box{background:var(--mark);border-color:var(--mark)}
+.tap input:checked+.box::after{transform:rotate(-45deg) translate(1px,-1px) scale(1)}
+.tap input:focus-visible+.box{outline:2px solid var(--focus);outline-offset:2px}
+.nm{flex:1 1 auto;font-size:.94rem;line-height:1.3;color:var(--ink-2);transition:color .15s ease}
+.tap input:checked~.nm{color:var(--ink);font-weight:500}
+.cd{
+  font-size:.66rem;letter-spacing:.1em;color:var(--ink-3);
+  font-variant-numeric:tabular-nums;
+}
+
+/* ---------- observations ---------- */
+.notes{border-top:1px solid var(--rule);padding:3rem 0 1rem}
+.notes h2{
+  font-family:var(--display);font-weight:700;font-size:1.35rem;
+  letter-spacing:-.01em;margin:0 0 1.6rem;
+}
+.notes h2 em{font-family:var(--serif);font-style:italic;font-weight:400}
+.notes ul{list-style:none;margin:0;padding:0;display:grid;gap:0;max-width:74ch}
+.notes li{
+  padding:.95rem 0;border-top:1px solid var(--rule-soft);
+  display:flex;gap:1rem;align-items:baseline;
+}
+.notes li:first-child{border-top:0}
+.notes li b{
+  flex:0 0 3.4rem;font-family:var(--display);font-weight:700;font-size:.72rem;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--mark);padding-top:.15rem;
+}
+.notes li span{flex:1 1 auto}
+.notes li span em{font-family:var(--serif);font-style:italic;font-size:1.05em}
+
+/* ---------- footer ---------- */
+footer{border-top:1px solid var(--rule);margin-top:3rem}
+footer .shell{
+  display:flex;flex-wrap:wrap;gap:.6rem 1.5rem;justify-content:space-between;
+  padding:1.5rem 0 3rem;font-size:.78rem;color:var(--ink-3);
+}
+footer a{color:var(--ink-2);text-decoration:none;border-bottom:1px solid var(--rule)}
+footer a:hover{color:var(--ink);border-bottom-color:var(--ink)}
+footer p{margin:0;max-width:52ch}
+footer .legal{display:flex;gap:1.4rem;flex-wrap:wrap}
+
+@media (max-width:640px){
+  :root{--shell:min(1060px,100% - 2rem)}
+  .fig{padding-left:0;padding-right:1rem;border-right:0;border-bottom:1px solid var(--rule-soft)}
+  .figures .grid{grid-template-columns:1fr 1fr}
+  .strip-key{display:none}
+  .strip-bar{gap:5px}
+  .strip-grp{gap:0}
+  .tick{height:30px;border-radius:0}
+  .masthead nav{gap:.9rem;font-size:.72rem}
+  .controls .shell{gap:.55rem 1rem;padding:.7rem 0}
+  .seg{order:0}
+  .sync{order:1}
+  .search{order:2;flex:1 1 140px}
+  .linkbtn{order:3}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important}
+}
+</style>
+</head>
+<body>
+<header class="masthead">
+  <div class="shell">
+    <div class="wordmark">Stef <span>/ Länder</span></div>
+    <nav>
+      <a href="https://www.stefashka.de" target="_blank" rel="noopener">stefashka.de</a>
+      <a href="https://www.instagram.com/stefashkaaaaa/" target="_blank" rel="noopener">Instagram</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="shell hero">
+    <h1>195 Länder. Und die <em>Frage</em>, wie viele davon ich schon angefasst habe.</h1>
+    <p class="lede">Alle Staaten der Erde, nach Kontinent sortiert.</p>
+
+    <div class="count">
+      <div class="pct" id="pct">0,0<sub>%</sub></div>
+      <dl>
+        <div><dt>abgehakt</dt><dd id="n-vis">0</dd></div>
+        <div><dt>fehlen noch</dt><dd id="n-miss">195</dd></div>
+      </dl>
+    </div>
+
+    <div class="strip">
+      <div class="strip-bar" id="strip"></div>
+      <div class="strip-key" id="strip-key"></div>
+    </div>
+  </div>
+
+  <div class="figures">
+    <div class="shell">
+      <div class="grid" id="figures"></div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <div class="shell">
+      <div class="seg" id="filters">
+        <button data-f="alle" aria-pressed="true">Alle</button>
+        <button data-f="besucht" aria-pressed="false">Abgehakt</button>
+        <button data-f="fehlt" aria-pressed="false">Fehlt</button>
+      </div>
+      <input class="search" id="q" type="search" placeholder="Land suchen …" aria-label="Land suchen">
+      <span class="sync" id="sync"></span>
+      <button class="linkbtn" id="copy">Liste kopieren</button>
+    </div>
+  </div>
+
+  <div class="shell list" id="list"></div>
+
+  <div class="shell notes">
+    <h2>Was <em>auffällt</em>, wenn man die Liste anschaut</h2>
+    <ul id="obs"></ul>
+  </div>
+</main>
+
+<footer>
+  <div class="shell">
+    <p>Flächen und Grenzen aus dem Datensatz <em>world-countries</em>; Einwohnerzahlen gerundete Schätzungen für 2024/25. Gezählt werden die 193 UN-Mitglieder plus Vatikanstadt und Palästina.</p>
+    <nav class="legal">
+      <a href="https://www.stefashka.de/#impressum" target="_blank" rel="noopener">Impressum</a>
+      <a href="https://www.stefashka.de/#datenschutz" target="_blank" rel="noopener">Datenschutz</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+const DATA = [{"c":"AL","n":"Albanien","f":"🇦🇱","k":"Europa","a":28748,"p":2745000,"b":["ME","GR","MK","XK"],"l":["Albanian"],"y":41},{"c":"AD","n":"Andorra","f":"🇦🇩","k":"Europa","a":468,"p":80000,"b":["FR","ES"],"l":["Catalan"],"y":42.5},{"c":"BY","n":"Belarus","f":"🇧🇾","k":"Europa","a":207600,"p":9150000,"b":["LV","LT","PL","RU","UA"],"l":["Belarusian","Russian"],"y":53},{"c":"BE","n":"Belgien","f":"🇧🇪","k":"Europa","a":30528,"p":11750000,"b":["FR","DE","LU","NL"],"l":["German","French","Dutch"],"y":50.8},{"c":"BA","n":"Bosnien und Herzegowina","f":"🇧🇦","k":"Europa","a":51209,"p":3160000,"b":["HR","ME","RS"],"l":["Bosnian","Croatian","Serbian"],"y":44},{"c":"BG","n":"Bulgarien","f":"🇧🇬","k":"Europa","a":110879,"p":6450000,"b":["GR","MK","RO","RS","TR"],"l":["Bulgarian"],"y":43},{"c":"DK","n":"Dänemark","f":"🇩🇰","k":"Europa","a":43094,"p":5980000,"b":["DE"],"l":["Danish"],"y":56},{"c":"DE","n":"Deutschland","f":"🇩🇪","k":"Europa","a":357114,"p":84500000,"b":["AT","BE","CZ","DK","FR","LU","NL","PL","CH"],"l":["German"],"y":51},{"c":"EE","n":"Estland","f":"🇪🇪","k":"Europa","a":45227,"p":1370000,"b":["LV","RU"],"l":["Estonian"],"y":59},{"c":"FI","n":"Finnland","f":"🇫🇮","k":"Europa","a":338424,"p":5620000,"b":["NO","SE","RU"],"l":["Finnish","Swedish"],"y":64},{"c":"FR","n":"Frankreich","f":"🇫🇷","k":"Europa","a":551695,"p":68600000,"b":["AD","BE","DE","IT","LU","MC","ES","CH"],"l":["French"],"y":46},{"c":"GR","n":"Griechenland","f":"🇬🇷","k":"Europa","a":131990,"p":10400000,"b":["AL","BG","TR","MK"],"l":["Greek"],"y":39},{"c":"IE","n":"Irland","f":"🇮🇪","k":"Europa","a":70273,"p":5350000,"b":["GB"],"l":["English","Irish"],"y":53},{"c":"IS","n":"Island","f":"🇮🇸","k":"Europa","a":103000,"p":390000,"b":[],"l":["Icelandic"],"y":65},{"c":"IT","n":"Italien","f":"🇮🇹","k":"Europa","a":301336,"p":58900000,"b":["AT","FR","SM","SI","CH","VA"],"l":["Italian"],"y":42.8},{"c":"HR","n":"Kroatien","f":"🇭🇷","k":"Europa","a":56594,"p":3850000,"b":["BA","HU","ME","RS","SI"],"l":["Croatian"],"y":45.2},{"c":"LV","n":"Lettland","f":"🇱🇻","k":"Europa","a":64559,"p":1870000,"b":["BY","EE","LT","RU"],"l":["Latvian"],"y":57},{"c":"LI","n":"Liechtenstein","f":"🇱🇮","k":"Europa","a":160,"p":40000,"b":["AT","CH"],"l":["German"],"y":47.3},{"c":"LT","n":"Litauen","f":"🇱🇹","k":"Europa","a":65300,"p":2860000,"b":["BY","LV","PL","RU"],"l":["Lithuanian"],"y":56},{"c":"LU","n":"Luxemburg","f":"🇱🇺","k":"Europa","a":2586,"p":670000,"b":["BE","FR","DE"],"l":["German","French","Luxembourgish"],"y":49.8},{"c":"MT","n":"Malta","f":"🇲🇹","k":"Europa","a":316,"p":540000,"b":[],"l":["English","Maltese"],"y":35.8},{"c":"MD","n":"Moldawien","f":"🇲🇩","k":"Europa","a":33846,"p":3040000,"b":["RO","UA"],"l":["Moldavian"],"y":47},{"c":"MC","n":"Monaco","f":"🇲🇨","k":"Europa","a":2.02,"p":39000,"b":["FR"],"l":["French"],"y":43.7},{"c":"ME","n":"Montenegro","f":"🇲🇪","k":"Europa","a":13812,"p":630000,"b":["AL","BA","HR","XK","RS"],"l":["Montenegrin"],"y":42.5},{"c":"NL","n":"Niederlande","f":"🇳🇱","k":"Europa","a":41850,"p":18200000,"b":["BE","DE"],"l":["Dutch"],"y":52.5},{"c":"MK","n":"Nordmazedonien","f":"🇲🇰","k":"Europa","a":25713,"p":1830000,"b":["AL","BG","GR","XK","RS"],"l":["Macedonian"],"y":41.8},{"c":"NO","n":"Norwegen","f":"🇳🇴","k":"Europa","a":323802,"p":5570000,"b":["FI","SE","RU"],"l":["Norwegian Nynorsk","Norwegian Bokmål","Sami"],"y":62},{"c":"AT","n":"Österreich","f":"🇦🇹","k":"Europa","a":83871,"p":9150000,"b":["CZ","DE","HU","IT","LI","SK","SI","CH"],"l":["Austro-Bavarian German"],"y":47.3},{"c":"PL","n":"Polen","f":"🇵🇱","k":"Europa","a":312679,"p":36600000,"b":["BY","CZ","DE","LT","RU","SK","UA"],"l":["Polish"],"y":52},{"c":"PT","n":"Portugal","f":"🇵🇹","k":"Europa","a":92090,"p":10400000,"b":["ES"],"l":["Portuguese"],"y":39.5},{"c":"RO","n":"Rumänien","f":"🇷🇴","k":"Europa","a":238391,"p":19000000,"b":["BG","HU","MD","RS","UA"],"l":["Romanian"],"y":46},{"c":"RU","n":"Russland","f":"🇷🇺","k":"Europa","a":17098242,"p":144000000,"b":["AZ","BY","CN","EE","FI","GE","KZ","KP","LV","LT","MN","NO","PL","UA"],"l":["Russian"],"y":60},{"c":"SM","n":"San Marino","f":"🇸🇲","k":"Europa","a":61,"p":34000,"b":["IT"],"l":["Italian"],"y":43.8},{"c":"SE","n":"Schweden","f":"🇸🇪","k":"Europa","a":450295,"p":10600000,"b":["FI","NO"],"l":["Swedish"],"y":62},{"c":"CH","n":"Schweiz","f":"🇨🇭","k":"Europa","a":41284,"p":8900000,"b":["AT","FR","IT","LI","DE"],"l":["French","Swiss German","Italian","Romansh"],"y":47},{"c":"RS","n":"Serbien","f":"🇷🇸","k":"Europa","a":88361,"p":6600000,"b":["BA","BG","HR","HU","XK","MK","ME","RO"],"l":["Serbian"],"y":44},{"c":"SK","n":"Slowakei","f":"🇸🇰","k":"Europa","a":49037,"p":5500000,"b":["AT","CZ","HU","PL","UA"],"l":["Slovak"],"y":48.7},{"c":"SI","n":"Slowenien","f":"🇸🇮","k":"Europa","a":20273,"p":2120000,"b":["AT","HR","IT","HU"],"l":["Slovene"],"y":46.1},{"c":"ES","n":"Spanien","f":"🇪🇸","k":"Europa","a":505992,"p":47900000,"b":["AD","FR","GI","PT","MA"],"l":["Spanish"],"y":40},{"c":"CZ","n":"Tschechien","f":"🇨🇿","k":"Europa","a":78865,"p":10900000,"b":["AT","DE","PL","SK"],"l":["Czech","Slovak"],"y":49.8},{"c":"UA","n":"Ukraine","f":"🇺🇦","k":"Europa","a":603500,"p":37900000,"b":["BY","HU","MD","PL","RO","RU","SK"],"l":["Ukrainian"],"y":49},{"c":"HU","n":"Ungarn","f":"🇭🇺","k":"Europa","a":93028,"p":9600000,"b":["AT","HR","RO","RS","SK","SI","UA"],"l":["Hungarian"],"y":47},{"c":"VA","n":"Vatikanstadt","f":"🇻🇦","k":"Europa","a":0.44,"p":800,"b":["IT"],"l":["Italian","Latin"],"y":41.9},{"c":"GB","n":"Vereinigtes Königreich","f":"🇬🇧","k":"Europa","a":242900,"p":69100000,"b":["IE"],"l":["English"],"y":54},{"c":"CY","n":"Zypern","f":"🇨🇾","k":"Europa","a":9251,"p":1360000,"b":[],"l":["Greek","Turkish"],"y":35},{"c":"EG","n":"Ägypten","f":"🇪🇬","k":"Afrika","a":1002450,"p":116500000,"b":["IL","LY","PS","SD"],"l":["Arabic"],"y":27},{"c":"DZ","n":"Algerien","f":"🇩🇿","k":"Afrika","a":2381741,"p":46800000,"b":["TN","LY","NE","EH","MR","ML","MA"],"l":["Arabic"],"y":28},{"c":"AO","n":"Angola","f":"🇦🇴","k":"Afrika","a":1246700,"p":37900000,"b":["CG","CD","ZM","NA"],"l":["Portuguese"],"y":-12.5},{"c":"GQ","n":"Äquatorialguinea","f":"🇬🇶","k":"Afrika","a":28051,"p":1800000,"b":["CM","GA"],"l":["French","Portuguese","Spanish"],"y":2},{"c":"ET","n":"Äthiopien","f":"🇪🇹","k":"Afrika","a":1104300,"p":132100000,"b":["DJ","ER","KE","SO","SS","SD"],"l":["Amharic"],"y":8},{"c":"BJ","n":"Benin","f":"🇧🇯","k":"Afrika","a":112622,"p":14100000,"b":["BF","NE","NG","TG"],"l":["French"],"y":9.5},{"c":"BW","n":"Botswana","f":"🇧🇼","k":"Afrika","a":582000,"p":2520000,"b":["NA","ZA","ZM","ZW"],"l":["English","Tswana"],"y":-22},{"c":"BF","n":"Burkina Faso","f":"🇧🇫","k":"Afrika","a":272967,"p":23500000,"b":["BJ","CI","GH","ML","NE","TG"],"l":["French"],"y":13},{"c":"BI","n":"Burundi","f":"🇧🇮","k":"Afrika","a":27834,"p":13200000,"b":["CD","RW","TZ"],"l":["French","Kirundi"],"y":-3.5},{"c":"CI","n":"Côte d'Ivoire","f":"🇨🇮","k":"Afrika","a":322463,"p":31900000,"b":["BF","GH","GN","LR","ML"],"l":["French"],"y":8},{"c":"DJ","n":"Dschibuti","f":"🇩🇯","k":"Afrika","a":23200,"p":1140000,"b":["ER","ET","SO"],"l":["Arabic","French"],"y":11.5},{"c":"ER","n":"Eritrea","f":"🇪🇷","k":"Afrika","a":117600,"p":3550000,"b":["DJ","ET","SD"],"l":["Arabic","English","Tigrinya"],"y":15},{"c":"GA","n":"Gabun","f":"🇬🇦","k":"Afrika","a":267668,"p":2500000,"b":["CM","CG","GQ"],"l":["French"],"y":-1},{"c":"GM","n":"Gambia","f":"🇬🇲","k":"Afrika","a":10689,"p":2770000,"b":["SN"],"l":["English"],"y":13.5},{"c":"GH","n":"Ghana","f":"🇬🇭","k":"Afrika","a":238533,"p":34400000,"b":["BF","CI","TG"],"l":["English"],"y":8},{"c":"GN","n":"Guinea","f":"🇬🇳","k":"Afrika","a":245857,"p":14800000,"b":["CI","GW","LR","ML","SN","SL"],"l":["French"],"y":11},{"c":"GW","n":"Guinea-Bissau","f":"🇬🇼","k":"Afrika","a":36125,"p":2200000,"b":["GN","SN"],"l":["Portuguese","Upper Guinea Creole"],"y":12},{"c":"CM","n":"Kamerun","f":"🇨🇲","k":"Afrika","a":475442,"p":28600000,"b":["CF","TD","CG","GQ","GA","NG"],"l":["English","French"],"y":6},{"c":"CV","n":"Kap Verde","f":"🇨🇻","k":"Afrika","a":4033,"p":525000,"b":[],"l":["Portuguese"],"y":16},{"c":"KE","n":"Kenia","f":"🇰🇪","k":"Afrika","a":580367,"p":56400000,"b":["ET","SO","SS","TZ","UG"],"l":["English","Swahili"],"y":1},{"c":"KM","n":"Komoren","f":"🇰🇲","k":"Afrika","a":1862,"p":860000,"b":[],"l":["Arabic","French","Comorian"],"y":-12.2},{"c":"CG","n":"Kongo (Rep.)","f":"🇨🇬","k":"Afrika","a":342000,"p":6100000,"b":["AO","CM","CF","CD","GA"],"l":["French","Kikongo","Lingala"],"y":-1},{"c":"CD","n":"Kongo (Dem. Rep.)","f":"🇨🇩","k":"Afrika","a":2344858,"p":105800000,"b":["AO","BI","CF","CG","RW","SS","TZ","UG","ZM"],"l":["French","Kikongo","Lingala","Tshiluba","Swahili"],"y":0},{"c":"LS","n":"Lesotho","f":"🇱🇸","k":"Afrika","a":30355,"p":2340000,"b":["ZA"],"l":["English","Sotho"],"y":-29.5},{"c":"LR","n":"Liberia","f":"🇱🇷","k":"Afrika","a":111369,"p":5600000,"b":["GN","CI","SL"],"l":["English"],"y":6.5},{"c":"LY","n":"Libyen","f":"🇱🇾","k":"Afrika","a":1759540,"p":7400000,"b":["DZ","TD","EG","NE","SD","TN"],"l":["Arabic"],"y":25},{"c":"MG","n":"Madagaskar","f":"🇲🇬","k":"Afrika","a":587041,"p":31900000,"b":[],"l":["French","Malagasy"],"y":-20},{"c":"MW","n":"Malawi","f":"🇲🇼","k":"Afrika","a":118484,"p":21700000,"b":["MZ","TZ","ZM"],"l":["English","Chewa"],"y":-13.5},{"c":"ML","n":"Mali","f":"🇲🇱","k":"Afrika","a":1240192,"p":24500000,"b":["DZ","BF","GN","CI","MR","NE","SN"],"l":["French"],"y":17},{"c":"MA","n":"Marokko","f":"🇲🇦","k":"Afrika","a":446550,"p":38100000,"b":["DZ","EH","ES"],"l":["Arabic","Berber"],"y":32},{"c":"MR","n":"Mauretanien","f":"🇲🇷","k":"Afrika","a":1030700,"p":5200000,"b":["DZ","ML","SN","EH"],"l":["Arabic"],"y":20},{"c":"MU","n":"Mauritius","f":"🇲🇺","k":"Afrika","a":2040,"p":1270000,"b":[],"l":["English","French","Mauritian Creole"],"y":-20.3},{"c":"MZ","n":"Mosambik","f":"🇲🇿","k":"Afrika","a":801590,"p":34600000,"b":["MW","ZA","SZ","TZ","ZM","ZW"],"l":["Portuguese"],"y":-18.2},{"c":"NA","n":"Namibia","f":"🇳🇦","k":"Afrika","a":825615,"p":3100000,"b":["AO","BW","ZA","ZM"],"l":["Afrikaans","German","English","Herero","Khoekhoe","Kwangali","Lozi","Ndonga","Tswana"],"y":-22},{"c":"NE","n":"Niger","f":"🇳🇪","k":"Afrika","a":1267000,"p":27200000,"b":["DZ","BJ","BF","TD","LY","ML","NG"],"l":["French"],"y":16},{"c":"NG","n":"Nigeria","f":"🇳🇬","k":"Afrika","a":923768,"p":232700000,"b":["BJ","CM","TD","NE"],"l":["English"],"y":10},{"c":"RW","n":"Ruanda","f":"🇷🇼","k":"Afrika","a":26338,"p":14300000,"b":["BI","CD","TZ","UG"],"l":["English","French","Kinyarwanda"],"y":-2},{"c":"ZM","n":"Sambia","f":"🇿🇲","k":"Afrika","a":752612,"p":21300000,"b":["AO","BW","CD","MW","MZ","NA","TZ","ZW"],"l":["English"],"y":-15},{"c":"ST","n":"São Tomé und Príncipe","f":"🇸🇹","k":"Afrika","a":964,"p":240000,"b":[],"l":["Portuguese"],"y":1},{"c":"SN","n":"Senegal","f":"🇸🇳","k":"Afrika","a":196722,"p":18500000,"b":["GM","GN","GW","ML","MR"],"l":["French"],"y":14},{"c":"SC","n":"Seychellen","f":"🇸🇨","k":"Afrika","a":452,"p":130000,"b":[],"l":["Seychellois Creole","English","French"],"y":-4.6},{"c":"SL","n":"Sierra Leone","f":"🇸🇱","k":"Afrika","a":71740,"p":8600000,"b":["GN","LR"],"l":["English"],"y":8.5},{"c":"ZW","n":"Simbabwe","f":"🇿🇼","k":"Afrika","a":390757,"p":16600000,"b":["BW","MZ","ZA","ZM"],"l":["Chibarwe","English","Kalanga","Khoisan","Ndau","Northern Ndebele","Chewa","Shona","Sotho","Tonga","Tswana","Tsonga","Venda","Xhosa","Zimbabwean Sign Language"],"y":-20},{"c":"SO","n":"Somalia","f":"🇸🇴","k":"Afrika","a":637657,"p":19000000,"b":["DJ","ET","KE"],"l":["Arabic","Somali"],"y":10},{"c":"ZA","n":"Südafrika","f":"🇿🇦","k":"Afrika","a":1221037,"p":63600000,"b":["BW","LS","MZ","NA","SZ","ZW"],"l":["Afrikaans","English","Southern Ndebele","Northern Sotho","Southern Sotho","Swazi","Tswana","Tsonga","Venda","Xhosa","Zulu"],"y":-29},{"c":"SD","n":"Sudan","f":"🇸🇩","k":"Afrika","a":1886068,"p":50000000,"b":["CF","TD","EG","ER","ET","LY","SS"],"l":["Arabic","English"],"y":15},{"c":"SS","n":"Südsudan","f":"🇸🇸","k":"Afrika","a":619745,"p":11900000,"b":["CF","CD","ET","KE","SD","UG"],"l":["English"],"y":7},{"c":"SZ","n":"Eswatini","f":"🇸🇿","k":"Afrika","a":17364,"p":1240000,"b":["MZ","ZA"],"l":["English","Swazi"],"y":-26.5},{"c":"TZ","n":"Tansania","f":"🇹🇿","k":"Afrika","a":945087,"p":68600000,"b":["BI","CD","KE","MW","MZ","RW","UG","ZM"],"l":["English","Swahili"],"y":-6},{"c":"TG","n":"Togo","f":"🇹🇬","k":"Afrika","a":56785,"p":9500000,"b":["BJ","BF","GH"],"l":["French"],"y":8},{"c":"TD","n":"Tschad","f":"🇹🇩","k":"Afrika","a":1284000,"p":19300000,"b":["CM","CF","LY","NE","NG","SD"],"l":["Arabic","French"],"y":15},{"c":"TN","n":"Tunesien","f":"🇹🇳","k":"Afrika","a":163610,"p":12300000,"b":["DZ","LY"],"l":["Arabic"],"y":34},{"c":"UG","n":"Uganda","f":"🇺🇬","k":"Afrika","a":241550,"p":50000000,"b":["CD","KE","RW","SS","TZ"],"l":["English","Swahili"],"y":1},{"c":"CF","n":"Zentralafrikanische Republik","f":"🇨🇫","k":"Afrika","a":622984,"p":5650000,"b":["CM","TD","CD","CG","SS","SD"],"l":["French","Sango"],"y":7},{"c":"AF","n":"Afghanistan","f":"🇦🇫","k":"Asien","a":652230,"p":42600000,"b":["IR","PK","TM","UZ","TJ","CN"],"l":["Dari","Pashto","Turkmen"],"y":33},{"c":"AM","n":"Armenien","f":"🇦🇲","k":"Asien","a":29743,"p":2780000,"b":["AZ","GE","IR","TR"],"l":["Armenian"],"y":40},{"c":"AZ","n":"Aserbaidschan","f":"🇦🇿","k":"Asien","a":86600,"p":10150000,"b":["AM","GE","IR","RU","TR"],"l":["Azerbaijani","Russian"],"y":40.5},{"c":"BH","n":"Bahrain","f":"🇧🇭","k":"Asien","a":765,"p":1580000,"b":[],"l":["Arabic"],"y":26},{"c":"BD","n":"Bangladesch","f":"🇧🇩","k":"Asien","a":147570,"p":173600000,"b":["MM","IN"],"l":["Bengali"],"y":24},{"c":"BT","n":"Bhutan","f":"🇧🇹","k":"Asien","a":38394,"p":790000,"b":["CN","IN"],"l":["Dzongkha"],"y":27.5},{"c":"BN","n":"Brunei","f":"🇧🇳","k":"Asien","a":5765,"p":460000,"b":["MY"],"l":["Malay"],"y":4.5},{"c":"CN","n":"China","f":"🇨🇳","k":"Asien","a":9706961,"p":1416000000,"b":["AF","BT","MM","HK","IN","KZ","NP","KP","KG","LA","MO","MN","PK","RU","TJ","VN"],"l":["Chinese"],"y":35},{"c":"GE","n":"Georgien","f":"🇬🇪","k":"Asien","a":69700,"p":3800000,"b":["AM","AZ","RU","TR"],"l":["Georgian"],"y":42},{"c":"IN","n":"Indien","f":"🇮🇳","k":"Asien","a":3287590,"p":1450000000,"b":["BD","BT","MM","CN","NP","PK"],"l":["English","Hindi","Tamil"],"y":20},{"c":"ID","n":"Indonesien","f":"🇮🇩","k":"Asien","a":1904569,"p":283500000,"b":["TL","MY","PG"],"l":["Indonesian"],"y":-5},{"c":"IQ","n":"Irak","f":"🇮🇶","k":"Asien","a":438317,"p":46000000,"b":["IR","JO","KW","SA","SY","TR"],"l":["Arabic","Aramaic","Sorani"],"y":33},{"c":"IR","n":"Iran","f":"🇮🇷","k":"Asien","a":1648195,"p":91600000,"b":["AF","AM","AZ","IQ","PK","TR","TM"],"l":["Persian (Farsi)"],"y":32},{"c":"IL","n":"Israel","f":"🇮🇱","k":"Asien","a":20770,"p":9400000,"b":["EG","JO","LB","PS","SY"],"l":["Arabic","Hebrew"],"y":31.5},{"c":"JP","n":"Japan","f":"🇯🇵","k":"Asien","a":377930,"p":123700000,"b":[],"l":["Japanese"],"y":36},{"c":"YE","n":"Jemen","f":"🇾🇪","k":"Asien","a":527968,"p":40600000,"b":["OM","SA"],"l":["Arabic"],"y":15},{"c":"JO","n":"Jordanien","f":"🇯🇴","k":"Asien","a":89342,"p":11500000,"b":["IQ","IL","PS","SA","SY"],"l":["Arabic"],"y":31},{"c":"KH","n":"Kambodscha","f":"🇰🇭","k":"Asien","a":181035,"p":17400000,"b":["LA","TH","VN"],"l":["Khmer"],"y":13},{"c":"KZ","n":"Kasachstan","f":"🇰🇿","k":"Asien","a":2724900,"p":20600000,"b":["CN","KG","RU","TM","UZ"],"l":["Kazakh","Russian"],"y":48},{"c":"QA","n":"Katar","f":"🇶🇦","k":"Asien","a":11586,"p":3050000,"b":["SA"],"l":["Arabic"],"y":25.5},{"c":"KG","n":"Kirgisistan","f":"🇰🇬","k":"Asien","a":199951,"p":7200000,"b":["CN","KZ","TJ","UZ"],"l":["Kyrgyz","Russian"],"y":41},{"c":"KW","n":"Kuwait","f":"🇰🇼","k":"Asien","a":17818,"p":4900000,"b":["IQ","SA"],"l":["Arabic"],"y":29.5},{"c":"LA","n":"Laos","f":"🇱🇦","k":"Asien","a":236800,"p":7800000,"b":["MM","KH","CN","TH","VN"],"l":["Lao"],"y":18},{"c":"LB","n":"Libanon","f":"🇱🇧","k":"Asien","a":10452,"p":5800000,"b":["IL","SY"],"l":["Arabic","French"],"y":33.8},{"c":"MY","n":"Malaysia","f":"🇲🇾","k":"Asien","a":330803,"p":35600000,"b":["BN","ID","TH"],"l":["English","Malay"],"y":2.5},{"c":"MV","n":"Malediven","f":"🇲🇻","k":"Asien","a":300,"p":530000,"b":[],"l":["Maldivian"],"y":3.3},{"c":"MN","n":"Mongolei","f":"🇲🇳","k":"Asien","a":1564110,"p":3500000,"b":["CN","RU"],"l":["Mongolian"],"y":46},{"c":"MM","n":"Myanmar","f":"🇲🇲","k":"Asien","a":676578,"p":54500000,"b":["BD","CN","IN","LA","TH"],"l":["Burmese"],"y":22},{"c":"NP","n":"Nepal","f":"🇳🇵","k":"Asien","a":147181,"p":29700000,"b":["CN","IN"],"l":["Nepali"],"y":28},{"c":"KP","n":"Nordkorea","f":"🇰🇵","k":"Asien","a":120538,"p":26500000,"b":["CN","KR","RU"],"l":["Korean"],"y":40},{"c":"OM","n":"Oman","f":"🇴🇲","k":"Asien","a":309500,"p":5400000,"b":["SA","AE","YE"],"l":["Arabic"],"y":21},{"c":"TL","n":"Osttimor","f":"🇹🇱","k":"Asien","a":14874,"p":1400000,"b":["ID"],"l":["Portuguese","Tetum"],"y":-8.8},{"c":"PK","n":"Pakistan","f":"🇵🇰","k":"Asien","a":881912,"p":251300000,"b":["AF","CN","IN","IR"],"l":["English","Urdu"],"y":30},{"c":"PS","n":"Palästina","f":"🇵🇸","k":"Asien","a":6220,"p":5500000,"b":["IL","EG","JO"],"l":["Arabic"],"y":31.9},{"c":"PH","n":"Philippinen","f":"🇵🇭","k":"Asien","a":342353,"p":115800000,"b":[],"l":["English","Filipino"],"y":13},{"c":"SA","n":"Saudi-Arabien","f":"🇸🇦","k":"Asien","a":2149690,"p":33900000,"b":["IQ","JO","KW","OM","QA","AE","YE"],"l":["Arabic"],"y":25},{"c":"SG","n":"Singapur","f":"🇸🇬","k":"Asien","a":710,"p":6000000,"b":[],"l":["English","Malay","Tamil","Chinese"],"y":1.4},{"c":"LK","n":"Sri Lanka","f":"🇱🇰","k":"Asien","a":65610,"p":23100000,"b":["IN"],"l":["Sinhala","Tamil"],"y":7},{"c":"KR","n":"Südkorea","f":"🇰🇷","k":"Asien","a":100210,"p":51700000,"b":["KP"],"l":["Korean"],"y":37},{"c":"SY","n":"Syrien","f":"🇸🇾","k":"Asien","a":185180,"p":24700000,"b":["IQ","IL","JO","LB","TR"],"l":["Arabic"],"y":35},{"c":"TJ","n":"Tadschikistan","f":"🇹🇯","k":"Asien","a":143100,"p":10600000,"b":["AF","CN","KG","UZ"],"l":["Russian","Tajik"],"y":39},{"c":"TH","n":"Thailand","f":"🇹🇭","k":"Asien","a":513120,"p":71700000,"b":["MM","KH","LA","MY"],"l":["Thai"],"y":15},{"c":"TR","n":"Türkei","f":"🇹🇷","k":"Asien","a":783562,"p":85700000,"b":["AM","AZ","BG","GE","GR","IR","IQ","SY"],"l":["Turkish"],"y":39},{"c":"TM","n":"Turkmenistan","f":"🇹🇲","k":"Asien","a":488100,"p":7500000,"b":["AF","IR","KZ","UZ"],"l":["Russian","Turkmen"],"y":40},{"c":"UZ","n":"Usbekistan","f":"🇺🇿","k":"Asien","a":447400,"p":36400000,"b":["AF","KZ","KG","TJ","TM"],"l":["Russian","Uzbek"],"y":41},{"c":"AE","n":"Vereinigte Arabische Emirate","f":"🇦🇪","k":"Asien","a":83600,"p":11000000,"b":["OM","SA"],"l":["Arabic"],"y":24},{"c":"VN","n":"Vietnam","f":"🇻🇳","k":"Asien","a":331212,"p":100900000,"b":["KH","CN","LA"],"l":["Vietnamese"],"y":16.2},{"c":"AG","n":"Antigua und Barbuda","f":"🇦🇬","k":"Nordamerika","a":442,"p":94000,"b":[],"l":["English"],"y":17.1},{"c":"BS","n":"Bahamas","f":"🇧🇸","k":"Nordamerika","a":13943,"p":400000,"b":[],"l":["English"],"y":24.3},{"c":"BB","n":"Barbados","f":"🇧🇧","k":"Nordamerika","a":430,"p":282000,"b":[],"l":["English"],"y":13.2},{"c":"BZ","n":"Belize","f":"🇧🇿","k":"Nordamerika","a":22966,"p":410000,"b":["GT","MX"],"l":["Belizean Creole","English","Spanish"],"y":17.3},{"c":"CR","n":"Costa Rica","f":"🇨🇷","k":"Nordamerika","a":51100,"p":5150000,"b":["NI","PA"],"l":["Spanish"],"y":10},{"c":"DM","n":"Dominica","f":"🇩🇲","k":"Nordamerika","a":751,"p":67000,"b":[],"l":["English"],"y":15.4},{"c":"DO","n":"Dominikanische Republik","f":"🇩🇴","k":"Nordamerika","a":48671,"p":11340000,"b":["HT"],"l":["Spanish"],"y":19},{"c":"SV","n":"El Salvador","f":"🇸🇻","k":"Nordamerika","a":21041,"p":6340000,"b":["GT","HN"],"l":["Spanish"],"y":13.8},{"c":"GD","n":"Grenada","f":"🇬🇩","k":"Nordamerika","a":344,"p":117000,"b":[],"l":["English"],"y":12.1},{"c":"GT","n":"Guatemala","f":"🇬🇹","k":"Nordamerika","a":108889,"p":18400000,"b":["BZ","SV","HN","MX"],"l":["Spanish"],"y":15.5},{"c":"HT","n":"Haiti","f":"🇭🇹","k":"Nordamerika","a":27750,"p":11800000,"b":["DO"],"l":["French","Haitian Creole"],"y":19},{"c":"HN","n":"Honduras","f":"🇭🇳","k":"Nordamerika","a":112492,"p":10800000,"b":["GT","SV","NI"],"l":["Spanish"],"y":15},{"c":"JM","n":"Jamaika","f":"🇯🇲","k":"Nordamerika","a":10991,"p":2830000,"b":[],"l":["English","Jamaican Patois"],"y":18.3},{"c":"CA","n":"Kanada","f":"🇨🇦","k":"Nordamerika","a":9984670,"p":41300000,"b":["US"],"l":["English","French"],"y":60},{"c":"CU","n":"Kuba","f":"🇨🇺","k":"Nordamerika","a":109884,"p":10980000,"b":[],"l":["Spanish"],"y":21.5},{"c":"MX","n":"Mexiko","f":"🇲🇽","k":"Nordamerika","a":1964375,"p":130900000,"b":["BZ","GT","US"],"l":["Spanish"],"y":23},{"c":"NI","n":"Nicaragua","f":"🇳🇮","k":"Nordamerika","a":130373,"p":6700000,"b":["CR","HN"],"l":["Spanish"],"y":13},{"c":"PA","n":"Panama","f":"🇵🇦","k":"Nordamerika","a":75417,"p":4500000,"b":["CO","CR"],"l":["Spanish"],"y":9},{"c":"KN","n":"St. Kitts und Nevis","f":"🇰🇳","k":"Nordamerika","a":261,"p":47000,"b":[],"l":["English"],"y":17.3},{"c":"LC","n":"St. Lucia","f":"🇱🇨","k":"Nordamerika","a":616,"p":180000,"b":[],"l":["English"],"y":13.9},{"c":"VC","n":"St. Vincent und die Grenadinen","f":"🇻🇨","k":"Nordamerika","a":389,"p":100000,"b":[],"l":["English"],"y":13.3},{"c":"TT","n":"Trinidad und Tobago","f":"🇹🇹","k":"Nordamerika","a":5130,"p":1510000,"b":[],"l":["English"],"y":11},{"c":"US","n":"Vereinigte Staaten","f":"🇺🇸","k":"Nordamerika","a":9372610,"p":340100000,"b":["CA","MX"],"l":["English"],"y":38},{"c":"AR","n":"Argentinien","f":"🇦🇷","k":"Südamerika","a":2780400,"p":45700000,"b":["BO","BR","CL","PY","UY"],"l":["Guaraní","Spanish"],"y":-34},{"c":"BO","n":"Bolivien","f":"🇧🇴","k":"Südamerika","a":1098581,"p":12400000,"b":["AR","BR","CL","PY","PE"],"l":["Aymara","Guaraní","Quechua","Spanish"],"y":-17},{"c":"BR","n":"Brasilien","f":"🇧🇷","k":"Südamerika","a":8515767,"p":212600000,"b":["AR","BO","CO","GF","GY","PY","PE","SR","UY","VE"],"l":["Portuguese"],"y":-10},{"c":"CL","n":"Chile","f":"🇨🇱","k":"Südamerika","a":756102,"p":19800000,"b":["AR","BO","PE"],"l":["Spanish"],"y":-30},{"c":"EC","n":"Ecuador","f":"🇪🇨","k":"Südamerika","a":276841,"p":18100000,"b":["CO","PE"],"l":["Spanish"],"y":-2},{"c":"GY","n":"Guyana","f":"🇬🇾","k":"Südamerika","a":214969,"p":830000,"b":["BR","SR","VE"],"l":["English"],"y":5},{"c":"CO","n":"Kolumbien","f":"🇨🇴","k":"Südamerika","a":1141748,"p":52300000,"b":["BR","EC","PA","PE","VE"],"l":["Spanish"],"y":4},{"c":"PY","n":"Paraguay","f":"🇵🇾","k":"Südamerika","a":406752,"p":6900000,"b":["AR","BO","BR"],"l":["Guaraní","Spanish"],"y":-23},{"c":"PE","n":"Peru","f":"🇵🇪","k":"Südamerika","a":1285216,"p":34200000,"b":["BO","BR","CL","CO","EC"],"l":["Aymara","Quechua","Spanish"],"y":-10},{"c":"SR","n":"Suriname","f":"🇸🇷","k":"Südamerika","a":163820,"p":630000,"b":["BR","GF","GY"],"l":["Dutch"],"y":4},{"c":"UY","n":"Uruguay","f":"🇺🇾","k":"Südamerika","a":181034,"p":3390000,"b":["AR","BR"],"l":["Spanish"],"y":-33},{"c":"VE","n":"Venezuela","f":"🇻🇪","k":"Südamerika","a":916445,"p":28500000,"b":["BR","CO","GY"],"l":["Spanish"],"y":8},{"c":"AU","n":"Australien","f":"🇦🇺","k":"Ozeanien","a":7692024,"p":26700000,"b":[],"l":["English"],"y":-27},{"c":"FJ","n":"Fidschi","f":"🇫🇯","k":"Ozeanien","a":18272,"p":930000,"b":[],"l":["English","Fijian","Fiji Hindi"],"y":-18},{"c":"KI","n":"Kiribati","f":"🇰🇮","k":"Ozeanien","a":811,"p":135000,"b":[],"l":["English","Gilbertese"],"y":1.4},{"c":"MH","n":"Marshallinseln","f":"🇲🇭","k":"Ozeanien","a":181,"p":38000,"b":[],"l":["English","Marshallese"],"y":9},{"c":"FM","n":"Mikronesien","f":"🇫🇲","k":"Ozeanien","a":702,"p":115000,"b":[],"l":["English"],"y":6.9},{"c":"NR","n":"Nauru","f":"🇳🇷","k":"Ozeanien","a":21,"p":12000,"b":[],"l":["English","Nauru"],"y":-0.5},{"c":"NZ","n":"Neuseeland","f":"🇳🇿","k":"Ozeanien","a":270467,"p":5250000,"b":[],"l":["English","Māori","New Zealand Sign Language"],"y":-41},{"c":"PW","n":"Palau","f":"🇵🇼","k":"Ozeanien","a":459,"p":18000,"b":[],"l":["English","Palauan"],"y":7.5},{"c":"PG","n":"Papua-Neuguinea","f":"🇵🇬","k":"Ozeanien","a":462840,"p":10600000,"b":["ID"],"l":["English","Hiri Motu","Tok Pisin"],"y":-6},{"c":"SB","n":"Salomonen","f":"🇸🇧","k":"Ozeanien","a":28896,"p":820000,"b":[],"l":["English"],"y":-8},{"c":"WS","n":"Samoa","f":"🇼🇸","k":"Ozeanien","a":2842,"p":220000,"b":[],"l":["English","Samoan"],"y":-13.6},{"c":"TO","n":"Tonga","f":"🇹🇴","k":"Ozeanien","a":747,"p":105000,"b":[],"l":["English","Tongan"],"y":-20},{"c":"TV","n":"Tuvalu","f":"🇹🇻","k":"Ozeanien","a":26,"p":11000,"b":[],"l":["English","Tuvaluan"],"y":-8},{"c":"VU","n":"Vanuatu","f":"🇻🇺","k":"Ozeanien","a":12189,"p":335000,"b":[],"l":["Bislama","English","French"],"y":-16}];
+const VISITED = [];
+
+const KONT = ["Europa","Afrika","Asien","Nordamerika","Südamerika","Ozeanien"];
+const nf = (n,d=0)=>n.toLocaleString("de-DE",{minimumFractionDigits:d,maximumFractionDigits:d});
+const menschen = n => n >= 1e9 ? nf(n/1e9,2)+" Mrd" : n >= 1e6 ? nf(n/1e6,n/1e6<10?1:0)+" Mio" : nf(n/1e3)+" Tsd";
+
+/* ---------- Supabase ---------- */
+const SB_URL = "https://dczolqwshfapsnpwsasy.supabase.co/rest/v1/laender";
+const SB_KEY = "sb_publishable_xG0wEf8XnASCRpENcnvg6w_RMTDiJVS";
+const CACHE  = "stef-laender-cache";
+const QUEUE  = "stef-laender-queue";
+
+const readLS  = (k,f)=>{ try{ const r = localStorage.getItem(k); return r ? JSON.parse(r) : f; }catch(e){ return f; } };
+const writeLS = (k,v)=>{ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} };
+
+const vis   = new Set(readLS(CACHE, VISITED) || []);
+const notes = {};
+let pending = new Map(readLS(QUEUE, []));
+
+const save      = ()=> writeLS(CACHE, [...vis]);
+const saveQueue = ()=> writeLS(QUEUE, [...pending]);
+
+const TOTAL = DATA.length;
+const AREA_ALL = DATA.reduce((s,c)=>s+c.a,0);
+const POP_ALL  = DATA.reduce((s,c)=>s+c.p,0);
+const byCode = new Map(DATA.map(c=>[c.c,c]));
+
+/* ---------- build the list ---------- */
+const list = document.getElementById("list");
+const strip = document.getElementById("strip");
+const stripKey = document.getElementById("strip-key");
+
+KONT.forEach(k=>{
+  const group = DATA.filter(c=>c.k===k);
+
+  const sec = document.createElement("section");
+  sec.className = "cont";
+  sec.dataset.k = k;
+  sec.innerHTML =
+    '<div class="cont-head"><h2>'+k+'</h2><span class="of" data-of="'+k+'"></span></div>'+
+    '<div class="meter"><i data-meter="'+k+'" style="width:0"></i></div>'+
+    '<div class="countries"></div>';
+  const wrap = sec.querySelector(".countries");
+
+  group.forEach(c=>{
+    const row = document.createElement("div");
+    row.className = "row";
+    row.dataset.c = c.c;
+    row.dataset.n = c.n.toLowerCase();
+    row.innerHTML =
+      '<label class="tap"><input type="checkbox">'+
+      '<span class="box" aria-hidden="true"></span>'+
+      '<span class="nm">'+c.n+'</span>'+
+      '<span class="cd">'+c.c+'</span></label>'+
+      '';
+    wrap.appendChild(row);
+  });
+
+  list.appendChild(sec);
+
+  const g = document.createElement("div");
+  g.className = "strip-grp";
+  g.style.setProperty("--w", group.length);
+  group.forEach(c=>{
+    const t = document.createElement("i");
+    t.className = "tick";
+    t.dataset.c = c.c;
+    t.title = c.n;
+    g.appendChild(t);
+  });
+  strip.appendChild(g);
+
+  const kl = document.createElement("span");
+  kl.style.setProperty("--w", group.length);
+  kl.textContent = (k === "Südamerika" ? "Südam." : k);
+  stripKey.appendChild(kl);
+});
+
+const rows = [...document.querySelectorAll(".row")];
+const ticks = new Map([...document.querySelectorAll(".tick")].map(t=>[t.dataset.c,t]));
+
+/* ---------- paint ---------- */
+function paintRow(row){
+  const code = row.dataset.c;
+  const on = vis.has(code);
+  row.classList.toggle("on", on);
+  row.querySelector("input[type=checkbox]").checked = on;
+  const t = ticks.get(code);
+  if(t) t.classList.toggle("on", on);
+}
+
+function figure(value, label, sub){
+  return '<div class="fig"><b>'+value+'</b><i>'+label+'</i>'+(sub?'<small>'+sub+'</small>':'')+'</div>';
+}
+
+function render(){
+  const visited = DATA.filter(c=>vis.has(c.c));
+  const n = visited.length;
+  const pctAll = n/TOTAL*100;
+
+  document.getElementById("pct").innerHTML = nf(pctAll,1).replace(".",",")+'<sub>%</sub>';
+  document.getElementById("n-vis").textContent = nf(n);
+  document.getElementById("n-miss").textContent = nf(TOTAL-n);
+
+  const area = visited.reduce((s,c)=>s+c.a,0);
+  const pop  = visited.reduce((s,c)=>s+c.p,0);
+  const konts = new Set(visited.map(c=>c.k));
+  const langs = new Set(visited.flatMap(c=>c.l));
+  const nachbarn = new Set();
+  visited.forEach(c=>c.b.forEach(b=>{ if(!vis.has(b) && byCode.has(b)) nachbarn.add(b); }));
+
+  document.getElementById("figures").innerHTML =
+    figure(nf(area/1e6,1)+" Mio", "km² Landfläche", nf(area/AREA_ALL*100,1)+" % der Landfläche der Erde") +
+    figure(menschen(pop), "Menschen", nf(pop/POP_ALL*100,1)+" % der Menschheit") +
+    figure(konts.size+"<span style='color:var(--ink-3)'> / 6</span>", "Kontinente", konts.size===6?"vollständig":"noch Luft") +
+    figure(nf(langs.size), "Amtssprachen", "in deinen Ländern gesprochen") +
+    figure(nf(nachbarn.size), "Länder nebenan", "grenzen an, fehlen aber noch");
+
+  KONT.forEach(k=>{
+    const g = DATA.filter(c=>c.k===k);
+    const hit = g.filter(c=>vis.has(c.c)).length;
+    document.querySelector('[data-of="'+k+'"]').textContent = hit+" von "+g.length;
+    document.querySelector('[data-meter="'+k+'"]').style.width = (hit/g.length*100)+"%";
+  });
+
+  renderObs(visited, area, pop, konts, nachbarn);
+  save();
+}
+
+function renderObs(visited, area, pop, konts, nachbarn){
+  const ul = document.getElementById("obs");
+  const n = visited.length;
+  if(n === 0){
+    ul.innerHTML = '<li><b>Noch</b><span>Kein Haken gesetzt.</span></li>';
+    return;
+  }
+  const li = [];
+  const rest = DATA.filter(c=>!vis.has(c.c));
+
+  li.push(["Fläche", "Deine "+nf(n)+" Länder ergeben zusammen <em>"+nf(area/1e6,2)+" Mio km²</em> — "+nf(area/AREA_ALL*100,1)+" % der bewohnten Landfläche der Erde."]);
+  li.push(["Menschen", "Dort leben rund <em>"+menschen(pop)+" Menschen</em>, also "+nf(pop/POP_ALL*100,1)+" % der Weltbevölkerung — im Schnitt "+menschen(pop/n)+" pro abgehaktem Land."]);
+
+  const biggest = rest.slice().sort((a,b)=>b.a-a.a)[0];
+  if(biggest) li.push(["Lücke", "Das größte Land, das noch fehlt: <em>"+biggest.n+"</em> mit "+nf(biggest.a/1e6,2)+" Mio km². Es allein wäre ein Sprung von "+nf(biggest.a/AREA_ALL*100,1)+" Prozentpunkten Fläche."]);
+
+  const mostPop = rest.slice().sort((a,b)=>b.p-a.p)[0];
+  if(mostPop) li.push(["Menge", "Das volkreichste fehlende Land: <em>"+mostPop.n+"</em> mit "+menschen(mostPop.p)+" Einwohnern."]);
+
+  if(nachbarn.size){
+    const near = [...nachbarn].map(c=>byCode.get(c)).sort((a,b)=>b.a-a.a);
+    const show = near.slice(0,3).map(c=>c.n).join(", ");
+    li.push(["Nebenan", nf(nachbarn.size)+" Länder grenzen direkt an eines deiner besuchten und sind noch offen — flächenmäßig voran <em>"+show+"</em>. Das ist die kurze Liste für die nächste Fahrt."]);
+  }
+
+  const gaps = KONT.map(k=>{
+    const g = DATA.filter(c=>c.k===k);
+    return {k, hit:g.filter(c=>vis.has(c.c)).length, tot:g.length};
+  }).sort((a,b)=>(a.hit/a.tot)-(b.hit/b.tot));
+  const worst = gaps[0], best = gaps[gaps.length-1];
+  li.push(["Verteilt", "Am weitesten bist du in <em>"+best.k+"</em>: "+best.hit+" von "+best.tot+". Die größte weiße Fläche liegt in <em>"+worst.k+"</em> mit "+worst.hit+" von "+worst.tot+"."]);
+
+  const north = visited.slice().sort((a,b)=>b.y-a.y)[0];
+  const south = visited.slice().sort((a,b)=>a.y-b.y)[0];
+  if(north && south && north!==south) li.push(["Spanne", "Nördlichster Haken: <em>"+north.n+"</em>, südlichster: <em>"+south.n+"</em>. Das sind rund "+nf(Math.round((north.y-south.y)*111/10)*10)+" km Nord-Süd-Spanne."]);
+
+
+  ul.innerHTML = li.map(([b,t])=>'<li><b>'+b+'</b><span>'+t+'</span></li>').join("");
+}
+
+/* ---------- interaction ---------- */
+list.addEventListener("change", e=>{
+  if(e.target.type === "checkbox"){
+    const row = e.target.closest(".row");
+    const code = row.dataset.c;
+    if(e.target.checked){ vis.add(code); pending.set(code,"add"); }
+    else { vis.delete(code); pending.set(code,"del"); }
+    saveQueue();
+    paintRow(row);
+    render();
+    applyFilter();
+    sync();
+  }
+});
+
+let filter = "alle", query = "";
+function applyFilter(){
+  rows.forEach(row=>{
+    const on = vis.has(row.dataset.c);
+    const okF = filter === "alle" || (filter === "besucht" ? on : !on);
+    const okQ = !query || row.dataset.n.includes(query) || row.dataset.c.toLowerCase() === query;
+    row.hidden = !(okF && okQ);
+  });
+  document.querySelectorAll("section.cont").forEach(sec=>{
+    const any = [...sec.querySelectorAll(".row")].some(r=>!r.hidden);
+    sec.hidden = !any;
+  });
+}
+document.getElementById("filters").addEventListener("click", e=>{
+  const b = e.target.closest("button"); if(!b) return;
+  filter = b.dataset.f;
+  document.querySelectorAll("#filters button").forEach(x=>x.setAttribute("aria-pressed", String(x===b)));
+  applyFilter();
+});
+document.getElementById("q").addEventListener("input", e=>{
+  query = e.target.value.trim().toLowerCase();
+  applyFilter();
+});
+
+document.getElementById("copy").addEventListener("click", async ()=>{
+  const visited = DATA.filter(c=>vis.has(c.c));
+  const lines = KONT.map(k=>{
+    const g = visited.filter(c=>c.k===k);
+    if(!g.length) return null;
+    return k+": "+g.map(c=>c.n).join(", ");
+  }).filter(Boolean);
+  const txt = "Besucht: "+visited.length+" von "+TOTAL+" Ländern ("+nf(visited.length/TOTAL*100,1)+" %)\n\n"+lines.join("\n");
+  const btn = document.getElementById("copy");
+  try{
+    await navigator.clipboard.writeText(txt);
+    btn.textContent = "Kopiert"; btn.classList.add("done");
+  }catch(e){
+    btn.textContent = "Kopieren ging nicht";
+  }
+  setTimeout(()=>{ btn.textContent = "Liste kopieren"; btn.classList.remove("done"); }, 2200);
+});
+
+/* ---------- Abgleich ---------- */
+const syncEl = document.getElementById("sync");
+function setSync(text, cls){ syncEl.textContent = text; syncEl.className = "sync" + (cls ? " " + cls : ""); }
+
+async function pull(){
+  const r = await fetch(SB_URL + "?select=code", { headers:{ apikey:SB_KEY }, cache:"no-store" });
+  if(!r.ok) throw new Error("HTTP " + r.status + " — " + (await r.text()).slice(0,140));
+  return (await r.json()).map(x=>x.code);
+}
+
+async function push(code, op){
+  const r = op === "add"
+    ? await fetch(SB_URL, {
+        method:"POST",
+        headers:{ apikey:SB_KEY, "Content-Type":"application/json", Prefer:"resolution=merge-duplicates,return=minimal" },
+        body: JSON.stringify([{ code }])
+      })
+    : await fetch(SB_URL + "?code=eq." + encodeURIComponent(code), {
+        method:"DELETE",
+        headers:{ apikey:SB_KEY, Prefer:"return=minimal" }
+      });
+  if(!r.ok) throw new Error("HTTP " + r.status + " — " + (await r.text()).slice(0,140));
+}
+
+let busy = false, again = false;
+async function sync(full){
+  if(busy){ again = true; return; }
+  busy = true;
+  try{
+    if(pending.size){
+      setSync("wird gespeichert …");
+      for(const [code, op] of [...pending]){
+        await push(code, op);
+        pending.delete(code);
+        saveQueue();
+      }
+    }
+    if(full){
+      const codes = await pull();
+      vis.clear();
+      codes.forEach(c=>{ if(byCode.has(c)) vis.add(c); });
+      for(const [code, op] of pending){ if(op === "add") vis.add(code); else vis.delete(code); }
+      rows.forEach(paintRow);
+      render();
+      applyFilter();
+    }
+    setSync(pending.size ? pending.size + " offen" : "synchron", pending.size ? "warn" : "ok");
+  }catch(err){
+    setSync(pending.size ? pending.size + " nicht gespeichert" : "keine Verbindung", "err");
+    console.warn("Supabase:", err.message);
+  }finally{
+    busy = false;
+    if(again){ again = false; sync(full); }
+  }
+}
+
+rows.forEach(paintRow);
+render();
+applyFilter();
+setSync("verbinde …");
+sync(true);
+addEventListener("online", ()=>sync(true));
+document.addEventListener("visibilitychange", ()=>{ if(!document.hidden) sync(true); });
+</script>
+</body>
+</html>
